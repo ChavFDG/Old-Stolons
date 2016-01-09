@@ -1,0 +1,72 @@
+﻿@model IEnumerable<Test_ASP_MVC.Models.Speaker>
+@{
+    ViewBag.Title = "Speakers";
+}
+
+<h2>@ViewBag.Title</h2>
+<p>
+    <a asp-action="Add">ASP : Add a new speaker</a>
+</p>
+
+<!-- POPUP version 1 using JQuery-->
+
+<button id="opener">Jquery : Add a new speaker</button>
+<script type="text/javascript">
+     $(function () {
+        $('#dialog').dialog({
+            autoOpen: false,
+            width: 400,
+            height:500,
+            resizable: true,
+            title: 'Add speacker',
+            modal: true,
+            open: function(event, ui) {
+                $(this).load("@Url.Action("Add", "Speaker")");
+            }
+        });
+         $("#opener").click(function () {
+             $("#dialog").dialog("open");
+         });
+     });
+</script>
+<div id="dialog" title="Basic dialog">Please wait</div>
+
+<!--POPUP version 2 using Bootstrap-->
+<!-- La popup en elle même est dans _Layout
+    http://www.codeproject.com/Tips/826002/Bootstrap-Modal-Dialog-Loading-Content-from-MVC-Pa
+    -->
+
+@Html.ActionLink("Add", "Add", "Speaker",
+null, new { @class = "modal-link btn btn-success" })
+
+<!--Grid-->
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Name)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Bio)
+        </th>
+        <th></th>
+    </tr>
+    @foreach (var item in Model)
+    {
+
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Bio)
+
+            </td>
+            <td>
+                <a asp-action="Detail" asp-route-speakerId="@item.SpeakerId">Detail</a> |
+                <a asp-action="Edit" asp-route-speakerId="@item.SpeakerId">Edit</a> |
+                <a asp-action="Delete" asp-route-speakerId="@item.SpeakerId">Delete</a>
+            </td>
+        </tr>
+    }
+</table>
