@@ -8,7 +8,7 @@ using Stolons.Models;
 namespace Stolons.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20160109134042_InitBase")]
+    [Migration("20160109164049_InitBase")]
     partial class InitBase
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -131,6 +131,8 @@ namespace Stolons.Migrations
                     b.Property<string>("SecurityStamp");
 
                     b.Property<bool>("TwoFactorEnabled");
+
+                    b.Property<int?>("UserId");
 
                     b.Property<string>("UserName")
                         .HasAnnotation("MaxLength", 256);
@@ -383,6 +385,13 @@ namespace Stolons.Migrations
                         .HasForeignKey("RoleId");
 
                     b.HasOne("Stolons.Models.ApplicationUser")
+                        .WithMany()
+                        .HasForeignKey("UserId");
+                });
+
+            modelBuilder.Entity("Stolons.Models.ApplicationUser", b =>
+                {
+                    b.HasOne("Stolons.Models.User")
                         .WithMany()
                         .HasForeignKey("UserId");
                 });

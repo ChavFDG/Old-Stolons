@@ -29,8 +29,6 @@ namespace Stolons.Models
         [Display(Name = "Courriel")]
         [EmailAddress]
         public string Email { get; set; }
-        [Display(Name = "Mot de passe")]
-        public string Password { get; set; }
         [Display(Name = "Téléphone")]
         public string PhoneNumber { get; set; }
         [Display(Name = "Cotisation réglée")]

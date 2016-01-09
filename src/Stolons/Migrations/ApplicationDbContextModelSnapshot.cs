@@ -131,6 +131,8 @@ namespace Stolons.Migrations
 
                     b.Property<bool>("TwoFactorEnabled");
 
+                    b.Property<int?>("UserId");
+
                     b.Property<string>("UserName")
                         .HasAnnotation("MaxLength", 256);
 
@@ -382,6 +384,13 @@ namespace Stolons.Migrations
                         .HasForeignKey("RoleId");
 
                     b.HasOne("Stolons.Models.ApplicationUser")
+                        .WithMany()
+                        .HasForeignKey("UserId");
+                });
+
+            modelBuilder.Entity("Stolons.Models.ApplicationUser", b =>
+                {
+                    b.HasOne("Stolons.Models.User")
                         .WithMany()
                         .HasForeignKey("UserId");
                 });
