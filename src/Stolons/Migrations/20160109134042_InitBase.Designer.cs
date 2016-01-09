@@ -98,7 +98,7 @@ namespace Stolons.Migrations
                     b.HasAnnotation("Relational:TableName", "AspNetUserRoles");
                 });
 
-            modelBuilder.Entity("Test_ASP_MVC.Models.ApplicationUser", b =>
+            modelBuilder.Entity("Stolons.Models.ApplicationUser", b =>
                 {
                     b.Property<string>("Id");
 
@@ -146,7 +146,7 @@ namespace Stolons.Migrations
                     b.HasAnnotation("Relational:TableName", "AspNetUsers");
                 });
 
-            modelBuilder.Entity("Test_ASP_MVC.Models.Bill", b =>
+            modelBuilder.Entity("Stolons.Models.Bill", b =>
                 {
                     b.Property<string>("BillNumber");
 
@@ -159,7 +159,7 @@ namespace Stolons.Migrations
                     b.HasKey("BillNumber");
                 });
 
-            modelBuilder.Entity("Test_ASP_MVC.Models.BillEntry", b =>
+            modelBuilder.Entity("Stolons.Models.BillEntry", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
@@ -175,7 +175,7 @@ namespace Stolons.Migrations
                     b.HasKey("Id");
                 });
 
-            modelBuilder.Entity("Test_ASP_MVC.Models.Label", b =>
+            modelBuilder.Entity("Stolons.Models.Label", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
@@ -189,7 +189,7 @@ namespace Stolons.Migrations
                     b.HasKey("Id");
                 });
 
-            modelBuilder.Entity("Test_ASP_MVC.Models.Product", b =>
+            modelBuilder.Entity("Stolons.Models.Product", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
@@ -225,7 +225,7 @@ namespace Stolons.Migrations
                     b.HasKey("Id");
                 });
 
-            modelBuilder.Entity("Test_ASP_MVC.Models.ProductFamilly", b =>
+            modelBuilder.Entity("Stolons.Models.ProductFamilly", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
@@ -237,7 +237,7 @@ namespace Stolons.Migrations
                     b.HasKey("Id");
                 });
 
-            modelBuilder.Entity("Test_ASP_MVC.Models.ProductType", b =>
+            modelBuilder.Entity("Stolons.Models.ProductType", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
@@ -247,7 +247,7 @@ namespace Stolons.Migrations
                     b.HasKey("Id");
                 });
 
-            modelBuilder.Entity("Test_ASP_MVC.Models.Speaker", b =>
+            modelBuilder.Entity("Stolons.Models.Speaker", b =>
                 {
                     b.Property<Guid>("SpeakerId")
                         .ValueGeneratedOnAdd();
@@ -260,7 +260,7 @@ namespace Stolons.Migrations
                     b.HasKey("SpeakerId");
                 });
 
-            modelBuilder.Entity("Test_ASP_MVC.Models.Topic", b =>
+            modelBuilder.Entity("Stolons.Models.Topic", b =>
                 {
                     b.Property<Guid>("TopicId")
                         .ValueGeneratedOnAdd();
@@ -273,7 +273,7 @@ namespace Stolons.Migrations
                     b.HasKey("TopicId");
                 });
 
-            modelBuilder.Entity("Test_ASP_MVC.Models.User", b =>
+            modelBuilder.Entity("Stolons.Models.User", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
@@ -316,7 +316,7 @@ namespace Stolons.Migrations
                     b.HasAnnotation("Relational:DiscriminatorValue", "User");
                 });
 
-            modelBuilder.Entity("Test_ASP_MVC.Models.WeekBasket", b =>
+            modelBuilder.Entity("Stolons.Models.WeekBasket", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
@@ -326,17 +326,17 @@ namespace Stolons.Migrations
                     b.HasKey("Id");
                 });
 
-            modelBuilder.Entity("Test_ASP_MVC.Models.Consumer", b =>
+            modelBuilder.Entity("Stolons.Models.Consumer", b =>
                 {
-                    b.HasBaseType("Test_ASP_MVC.Models.User");
+                    b.HasBaseType("Stolons.Models.User");
 
 
                     b.HasAnnotation("Relational:DiscriminatorValue", "Consumer");
                 });
 
-            modelBuilder.Entity("Test_ASP_MVC.Models.Producer", b =>
+            modelBuilder.Entity("Stolons.Models.Producer", b =>
                 {
-                    b.HasBaseType("Test_ASP_MVC.Models.User");
+                    b.HasBaseType("Stolons.Models.User");
 
                     b.Property<int>("Area");
 
@@ -364,14 +364,14 @@ namespace Stolons.Migrations
 
             modelBuilder.Entity("Microsoft.AspNet.Identity.EntityFramework.IdentityUserClaim<string>", b =>
                 {
-                    b.HasOne("Test_ASP_MVC.Models.ApplicationUser")
+                    b.HasOne("Stolons.Models.ApplicationUser")
                         .WithMany()
                         .HasForeignKey("UserId");
                 });
 
             modelBuilder.Entity("Microsoft.AspNet.Identity.EntityFramework.IdentityUserLogin<string>", b =>
                 {
-                    b.HasOne("Test_ASP_MVC.Models.ApplicationUser")
+                    b.HasOne("Stolons.Models.ApplicationUser")
                         .WithMany()
                         .HasForeignKey("UserId");
                 });
@@ -382,70 +382,70 @@ namespace Stolons.Migrations
                         .WithMany()
                         .HasForeignKey("RoleId");
 
-                    b.HasOne("Test_ASP_MVC.Models.ApplicationUser")
+                    b.HasOne("Stolons.Models.ApplicationUser")
                         .WithMany()
                         .HasForeignKey("UserId");
                 });
 
-            modelBuilder.Entity("Test_ASP_MVC.Models.Bill", b =>
+            modelBuilder.Entity("Stolons.Models.Bill", b =>
                 {
-                    b.HasOne("Test_ASP_MVC.Models.Consumer")
+                    b.HasOne("Stolons.Models.Consumer")
                         .WithMany()
                         .HasForeignKey("ConsumerId");
 
-                    b.HasOne("Test_ASP_MVC.Models.Producer")
+                    b.HasOne("Stolons.Models.Producer")
                         .WithMany()
                         .HasForeignKey("UserId");
                 });
 
-            modelBuilder.Entity("Test_ASP_MVC.Models.BillEntry", b =>
+            modelBuilder.Entity("Stolons.Models.BillEntry", b =>
                 {
-                    b.HasOne("Test_ASP_MVC.Models.Product")
+                    b.HasOne("Stolons.Models.Product")
                         .WithMany()
                         .HasForeignKey("ProductId");
 
-                    b.HasOne("Test_ASP_MVC.Models.WeekBasket")
+                    b.HasOne("Stolons.Models.WeekBasket")
                         .WithMany()
                         .HasForeignKey("WeekBasketId");
                 });
 
-            modelBuilder.Entity("Test_ASP_MVC.Models.Label", b =>
+            modelBuilder.Entity("Stolons.Models.Label", b =>
                 {
-                    b.HasOne("Test_ASP_MVC.Models.Product")
+                    b.HasOne("Stolons.Models.Product")
                         .WithMany()
                         .HasForeignKey("ProductId");
                 });
 
-            modelBuilder.Entity("Test_ASP_MVC.Models.Product", b =>
+            modelBuilder.Entity("Stolons.Models.Product", b =>
                 {
-                    b.HasOne("Test_ASP_MVC.Models.ProductFamilly")
+                    b.HasOne("Stolons.Models.ProductFamilly")
                         .WithMany()
                         .HasForeignKey("FamillyId");
 
-                    b.HasOne("Test_ASP_MVC.Models.Producer")
+                    b.HasOne("Stolons.Models.Producer")
                         .WithMany()
                         .HasForeignKey("ProducerId");
                 });
 
-            modelBuilder.Entity("Test_ASP_MVC.Models.ProductFamilly", b =>
+            modelBuilder.Entity("Stolons.Models.ProductFamilly", b =>
                 {
-                    b.HasOne("Test_ASP_MVC.Models.ProductType")
+                    b.HasOne("Stolons.Models.ProductType")
                         .WithMany()
                         .HasForeignKey("TypeId");
                 });
 
-            modelBuilder.Entity("Test_ASP_MVC.Models.Topic", b =>
+            modelBuilder.Entity("Stolons.Models.Topic", b =>
                 {
-                    b.HasOne("Test_ASP_MVC.Models.Speaker")
+                    b.HasOne("Stolons.Models.Speaker")
                         .WithMany()
                         .HasForeignKey("SpeakerId");
                 });
 
-            modelBuilder.Entity("Test_ASP_MVC.Models.WeekBasket", b =>
+            modelBuilder.Entity("Stolons.Models.WeekBasket", b =>
                 {
-                    b.HasOne("Test_ASP_MVC.Models.Consumer")
+                    b.HasOne("Stolons.Models.Consumer")
                         .WithOne()
-                        .HasForeignKey("Test_ASP_MVC.Models.WeekBasket", "ConsumerId");
+                        .HasForeignKey("Stolons.Models.WeekBasket", "ConsumerId");
                 });
         }
     }
