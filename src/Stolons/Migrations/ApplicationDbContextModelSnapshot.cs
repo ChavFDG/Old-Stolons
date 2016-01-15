@@ -347,7 +347,7 @@ namespace Stolons.Migrations
 
                     b.Property<string>("Production");
 
-                    b.Property<DateTime>("StartDate");
+                    b.Property<int>("StartDate");
 
                     b.Property<string>("WebSiteLink");
 

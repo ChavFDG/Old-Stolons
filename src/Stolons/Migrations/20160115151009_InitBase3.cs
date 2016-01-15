@@ -4,7 +4,7 @@ using Microsoft.Data.Entity.Migrations;
 
 namespace Stolons.Migrations
 {
-    public partial class InitBase2 : Migration
+    public partial class InitBase3 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -68,7 +68,7 @@ namespace Stolons.Migrations
                     ExploitationPicuresSerialized = table.Column<string>(nullable: true),
                     OpenText = table.Column<string>(nullable: true),
                     Production = table.Column<string>(nullable: true),
-                    StartDate = table.Column<DateTime>(nullable: true),
+                    StartDate = table.Column<int>(nullable: true),
                     WebSiteLink = table.Column<string>(nullable: true)
                 },
                 constraints: table =>

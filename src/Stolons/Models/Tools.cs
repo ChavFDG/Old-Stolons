@@ -9,7 +9,14 @@ namespace Stolons.Models
     {
         public static IList<string> SerializeStringToList( string stringToSerialize)
         {
-             return stringToSerialize.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries).ToList();
+            if (String.IsNullOrWhiteSpace(stringToSerialize))
+            {
+                return null;
+            }
+            else
+            {
+                return stringToSerialize.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries).ToList();
+            }
         }
 
         public static string SerializeListToString(IList<string> listToSerialize)

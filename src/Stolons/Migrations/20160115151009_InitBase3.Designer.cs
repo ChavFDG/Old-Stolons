@@ -8,8 +8,8 @@ using Stolons.Models;
 namespace Stolons.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20160115131459_InitBase2")]
-    partial class InitBase2
+    [Migration("20160115151009_InitBase3")]
+    partial class InitBase3
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -348,7 +348,7 @@ namespace Stolons.Migrations
 
                     b.Property<string>("Production");
 
-                    b.Property<DateTime>("StartDate");
+                    b.Property<int>("StartDate");
 
                     b.Property<string>("WebSiteLink");
 

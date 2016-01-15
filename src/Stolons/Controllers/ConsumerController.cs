@@ -52,11 +52,19 @@ namespace Stolons.Controllers
         #region Detail
 
         [HttpGet]
-        public IActionResult Detail(Guid topicId)
+        public IActionResult PartialDetail(int consumerId)
         {
-            Topic topic = _db.Topics.Include(s => s.Speaker).FirstOrDefault(t => t.TopicId == topicId);
+            Consumer consumer = _db.Consumers.FirstOrDefault(x => x.Id == consumerId);
 
-            return View(topic);
+            return PartialView(consumer);
+        }
+
+        [HttpGet]
+        public IActionResult Detail(int consumerId)
+        {
+            Consumer consumer = _db.Consumers.FirstOrDefault(x => x.Id == consumerId);
+
+            return View(consumer);
         }
 
         #endregion Detail
@@ -74,7 +82,6 @@ namespace Stolons.Controllers
         [HttpPost]
         public IActionResult Edit(Consumer consumer)
         {
-
             if (ModelState.IsValid)
             {
                 _db.Consumers.Update(consumer);

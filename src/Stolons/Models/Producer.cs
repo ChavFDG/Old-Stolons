@@ -34,12 +34,19 @@ namespace Stolons.Models
         {
             get
             {
-                return String.Join(";", _ExploitationPictures);
+                if (_ExploitationPictures == null)
+                {
+                    return null;
+                }
+                else
+                {
+                    return String.Join(";", _ExploitationPictures);
+                }
             }
             set
             {
                 _ExploitationPictures = Tools.SerializeStringToList(value);
-             }
+            }
         }
 
         [Display(Name = "Production")]
@@ -47,8 +54,9 @@ namespace Stolons.Models
         [Display(Name = "Texte libre")]
         public string OpenText { get; set; }
         [Display(Name = "Année d'installation")]
-        public DateTime StartDate { get; set; }
+        public int StartDate { get; set; }
         [Display(Name = "Lien vers le site web")]
+        [Url]
         public string WebSiteLink { get; set; }
         [Display(Name = "Factures")]
         public List<Bill> Bills { get; set; }

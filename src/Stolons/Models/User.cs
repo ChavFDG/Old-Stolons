@@ -30,6 +30,7 @@ namespace Stolons.Models
         [EmailAddress]
         public string Email { get; set; }
         [Display(Name = "Téléphone")]
+        [Phone]
         public string PhoneNumber { get; set; }
         [Display(Name = "Cotisation réglée")]
         public bool Cotisation { get; set; }
