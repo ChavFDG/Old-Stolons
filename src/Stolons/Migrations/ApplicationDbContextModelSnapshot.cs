@@ -297,13 +297,11 @@ namespace Stolons.Migrations
                     b.Property<string>("Name")
                         .IsRequired();
 
-                    b.Property<string>("Password");
-
                     b.Property<string>("PhoneNumber");
 
                     b.Property<string>("PostCode");
 
-                    b.Property<bool>("RegistrationDate");
+                    b.Property<DateTime>("RegistrationDate");
 
                     b.Property<string>("Surname")
                         .IsRequired();

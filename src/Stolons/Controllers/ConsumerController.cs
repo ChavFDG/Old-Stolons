@@ -39,6 +39,7 @@ namespace Stolons.Controllers
         {
             if (ModelState.IsValid)
             {
+                consumer.RegistrationDate = DateTime.Now;
                 _db.Consumers.Add(consumer);
                 _db.SaveChanges();
                 return RedirectToAction("Index");
@@ -73,6 +74,7 @@ namespace Stolons.Controllers
         [HttpPost]
         public IActionResult Edit(Consumer consumer)
         {
+
             if (ModelState.IsValid)
             {
                 _db.Consumers.Update(consumer);

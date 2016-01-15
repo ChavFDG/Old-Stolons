@@ -8,8 +8,8 @@ using Stolons.Models;
 namespace Stolons.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20160109164049_InitBase")]
-    partial class InitBase
+    [Migration("20160115131459_InitBase2")]
+    partial class InitBase2
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -298,13 +298,11 @@ namespace Stolons.Migrations
                     b.Property<string>("Name")
                         .IsRequired();
 
-                    b.Property<string>("Password");
-
                     b.Property<string>("PhoneNumber");
 
                     b.Property<string>("PostCode");
 
-                    b.Property<bool>("RegistrationDate");
+                    b.Property<DateTime>("RegistrationDate");
 
                     b.Property<string>("Surname")
                         .IsRequired();

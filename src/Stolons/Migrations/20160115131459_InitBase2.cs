@@ -4,11 +4,10 @@ using Microsoft.Data.Entity.Migrations;
 
 namespace Stolons.Migrations
 {
-    public partial class InitBase : Migration
+    public partial class InitBase2 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            Down(migrationBuilder);
             migrationBuilder.CreateTable(
                 name: "AspNetRoles",
                 columns: table => new
@@ -59,10 +58,9 @@ namespace Stolons.Migrations
                     Email = table.Column<string>(nullable: true),
                     Enable = table.Column<bool>(nullable: false),
                     Name = table.Column<string>(nullable: false),
-                    Password = table.Column<string>(nullable: true),
                     PhoneNumber = table.Column<string>(nullable: true),
                     PostCode = table.Column<string>(nullable: true),
-                    RegistrationDate = table.Column<bool>(nullable: false),
+                    RegistrationDate = table.Column<DateTime>(nullable: false),
                     Surname = table.Column<string>(nullable: false),
                     UserRole = table.Column<int>(nullable: false),
                     Area = table.Column<int>(nullable: true),

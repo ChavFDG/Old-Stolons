@@ -1,11 +1,11 @@
 ﻿@model Stolons.Models.Consumer
 @{
-    ViewBag.Title = "Ajouter un nouvel adhérant";
+    ViewBag.Title = "Edition de l'adhérent : " + Model.Name;
 }
 
 <h2>@ViewBag.Title</h2>
 <div>
-    <form asp-controller="Consumer" asp-action="Add" method="post">
+    <form asp-controller="Consumer" asp-action="Edit" method="post" asp-route-consumerId="@Model.Id">
         <div asp-validation-summary="ValidationSummary.All" class="text-danger"></div>
         <div class="form-group">
             <label asp-for="Name"></label>
@@ -51,6 +51,11 @@
             <select asp-for="UserRole" asp-items="Html.GetEnumSelectList<User.Role>()" class="form-control"></select>
             <span asp-validation-for="UserRole" class="text-danger"></span>
         </div>
-        <input type="submit" class="btn btn-default" value="Ajouter" />
+        <div class="form-group">
+            <label asp-for="Enable"></label>
+            <input asp-for="Enable" class="form-control" />
+            <span asp-validation-for="Enable" class="text-danger"></span>
+        </div>
+        <input type="submit" class="btn btn-default" value="Editer" />
     </form>
 </div>

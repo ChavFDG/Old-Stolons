@@ -36,16 +36,21 @@ namespace Stolons.Models
         [Display(Name = "Actif / Inactif")]
         public bool Enable { get; set; }
         [Display(Name = "Date d'enregistrement")]
-        public bool RegistrationDate { get; set; }
+        public DateTime RegistrationDate { get; set; }
         //Droits utilisateurs qui définie les droits en plus du type d'utilisateur
         [Display(Name = "Droits utilisateurs")]
         public Role UserRole { get; set; }
 
         public enum Role
         {
+            [Display(Name = "Adhérent")]
             SimpleUser = 0,
-            Volunteer = 1,
-            Administrator = 2
+            [Display(Name = "Adhérent consomateur")]
+            ConsumerUser = 1,
+            [Display(Name = "Adhérent bénévole")]
+            Volunteer = 2,
+            [Display(Name = "Adhérent administrateur")]
+            Administrator = 3
         }
     }
 
