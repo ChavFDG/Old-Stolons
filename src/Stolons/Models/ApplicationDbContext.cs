@@ -9,9 +9,7 @@ namespace Stolons.Models
 {
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
-        public DbSet<Speaker> Speakers { get; set; }
-        public DbSet<Topic> Topics { get; set; }
-
+        public DbSet<News> News { get; set; }
         public DbSet<Bill> Bills { get; set; }
         public DbSet<BillEntry> BillEntrys { get; set; }
         public DbSet<Consumer> Consumers { get; set; }

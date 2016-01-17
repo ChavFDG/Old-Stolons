@@ -42,6 +42,8 @@ namespace Stolons.Models
         [Display(Name = "Droits utilisateurs")]
         public Role UserRole { get; set; }
 
+        public List<News> News { get; set; }
+
         public enum Role
         {
             [Display(Name = "Adhérent")]

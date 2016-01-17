@@ -10,5 +10,7 @@ namespace Stolons.Models
     public class ApplicationUser : IdentityUser
     {
         public User User { get; set; }
+        
+
     }
 }

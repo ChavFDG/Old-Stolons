@@ -190,6 +190,24 @@ namespace Stolons.Migrations
                     b.HasKey("Id");
                 });
 
+            modelBuilder.Entity("Stolons.Models.News", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<DateTime>("DateOfPublication");
+
+                    b.Property<string>("ImageLink");
+
+                    b.Property<string>("Message");
+
+                    b.Property<string>("Title");
+
+                    b.Property<int?>("UserId");
+
+                    b.HasKey("Id");
+                });
+
             modelBuilder.Entity("Stolons.Models.Product", b =>
                 {
                     b.Property<Guid>("Id")
@@ -246,32 +264,6 @@ namespace Stolons.Migrations
                     b.Property<string>("Name");
 
                     b.HasKey("Id");
-                });
-
-            modelBuilder.Entity("Stolons.Models.Speaker", b =>
-                {
-                    b.Property<Guid>("SpeakerId")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<string>("Bio");
-
-                    b.Property<string>("Name")
-                        .IsRequired();
-
-                    b.HasKey("SpeakerId");
-                });
-
-            modelBuilder.Entity("Stolons.Models.Topic", b =>
-                {
-                    b.Property<Guid>("TopicId")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<Guid>("SpeakerId");
-
-                    b.Property<string>("Title")
-                        .IsRequired();
-
-                    b.HasKey("TopicId");
                 });
 
             modelBuilder.Entity("Stolons.Models.User", b =>
@@ -422,6 +414,13 @@ namespace Stolons.Migrations
                         .HasForeignKey("ProductId");
                 });
 
+            modelBuilder.Entity("Stolons.Models.News", b =>
+                {
+                    b.HasOne("Stolons.Models.User")
+                        .WithMany()
+                        .HasForeignKey("UserId");
+                });
+
             modelBuilder.Entity("Stolons.Models.Product", b =>
                 {
                     b.HasOne("Stolons.Models.ProductFamilly")
@@ -438,13 +437,6 @@ namespace Stolons.Migrations
                     b.HasOne("Stolons.Models.ProductType")
                         .WithMany()
                         .HasForeignKey("TypeId");
-                });
-
-            modelBuilder.Entity("Stolons.Models.Topic", b =>
-                {
-                    b.HasOne("Stolons.Models.Speaker")
-                        .WithMany()
-                        .HasForeignKey("SpeakerId");
                 });
 
             modelBuilder.Entity("Stolons.Models.WeekBasket", b =>

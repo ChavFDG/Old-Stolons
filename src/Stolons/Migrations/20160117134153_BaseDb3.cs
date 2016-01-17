@@ -4,7 +4,7 @@ using Microsoft.Data.Entity.Migrations;
 
 namespace Stolons.Migrations
 {
-    public partial class InitBase3 : Migration
+    public partial class BaseDb3 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -31,18 +31,6 @@ namespace Stolons.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_ProductType", x => x.Id);
-                });
-            migrationBuilder.CreateTable(
-                name: "Speaker",
-                columns: table => new
-                {
-                    SpeakerId = table.Column<Guid>(nullable: false),
-                    Bio = table.Column<string>(nullable: true),
-                    Name = table.Column<string>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Speaker", x => x.SpeakerId);
                 });
             migrationBuilder.CreateTable(
                 name: "User",
@@ -114,24 +102,6 @@ namespace Stolons.Migrations
                         onDelete: ReferentialAction.Restrict);
                 });
             migrationBuilder.CreateTable(
-                name: "Topic",
-                columns: table => new
-                {
-                    TopicId = table.Column<Guid>(nullable: false),
-                    SpeakerId = table.Column<Guid>(nullable: false),
-                    Title = table.Column<string>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Topic", x => x.TopicId);
-                    table.ForeignKey(
-                        name: "FK_Topic_Speaker_SpeakerId",
-                        column: x => x.SpeakerId,
-                        principalTable: "Speaker",
-                        principalColumn: "SpeakerId",
-                        onDelete: ReferentialAction.Cascade);
-                });
-            migrationBuilder.CreateTable(
                 name: "AspNetUsers",
                 columns: table => new
                 {
@@ -182,6 +152,27 @@ namespace Stolons.Migrations
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Bill_Producer_UserId",
+                        column: x => x.UserId,
+                        principalTable: "User",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+            migrationBuilder.CreateTable(
+                name: "News",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(nullable: false),
+                    DateOfPublication = table.Column<DateTime>(nullable: false),
+                    ImageLink = table.Column<string>(nullable: true),
+                    Message = table.Column<string>(nullable: true),
+                    Title = table.Column<string>(nullable: true),
+                    UserId = table.Column<int>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_News", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_News_User_UserId",
                         column: x => x.UserId,
                         principalTable: "User",
                         principalColumn: "Id",
@@ -370,12 +361,11 @@ namespace Stolons.Migrations
             migrationBuilder.DropTable("Bill");
             migrationBuilder.DropTable("BillEntry");
             migrationBuilder.DropTable("Label");
-            migrationBuilder.DropTable("Topic");
+            migrationBuilder.DropTable("News");
             migrationBuilder.DropTable("AspNetRoles");
             migrationBuilder.DropTable("AspNetUsers");
             migrationBuilder.DropTable("WeekBasket");
             migrationBuilder.DropTable("Product");
-            migrationBuilder.DropTable("Speaker");
             migrationBuilder.DropTable("ProductFamilly");
             migrationBuilder.DropTable("User");
             migrationBuilder.DropTable("ProductType");
