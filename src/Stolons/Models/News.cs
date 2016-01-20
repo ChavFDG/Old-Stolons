@@ -14,9 +14,11 @@ namespace Stolons.Models
 
         public User User { get; set; }
 
+        [Required]
         [Display(Name = "Titre")]
         public string Title { get; set; }
 
+        [Required]
         [Display(Name = "Message")]
         public string Message { get; set; }
 

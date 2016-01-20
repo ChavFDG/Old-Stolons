@@ -16,14 +16,21 @@
         <a asp-action="Create">Ajouter une nouvelle</a>
     </p>
 }
+<table class="table">
+        @foreach (var item in Model.OrderByDescending(x => x.DateOfPublication))
+            {
+            <tr>
+                <td>
+                    <img src="@Html.DisplayFor(modelItem => item.ImageLink)" class="responsiveImage" style="float:left;width:375px;height:216px;margin-right:5px" />
+                    <h3>@Html.DisplayFor(modelItem => item.Title)</h3>
+                    <p>
+                        Publi&eacute; par ??? le @Html.DisplayFor(modelItem => item.DateOfPublication)
+                        <a asp-action="Edit" asp-route-id="@item.Id">Editer</a> |
+                        <a asp-action="Delete" asp-route-id="@item.Id">Supprimer</a>
+                    </p>
+                    @Html.DisplayFor(modelItem => item.Message)
 
-@foreach (var item in Model.OrderByDescending(x=>x.DateOfPublication))
-{
-    <h4>@Html.DisplayFor(modelItem => item.Title)</h4>
-    <p>@Html.DisplayFor(modelItem => item.DateOfPublication) par </p>
-    <p>@Html.DisplayFor(modelItem => item.Message)</p>
-    <p>
-        <a asp-action="Edit" asp-route-id="@item.Id">Editer</a> |
-        <a asp-action="Delete" asp-route-id="@item.Id">Supprimer</a>
-    </p>    
-}
+                </td>
+            </tr>
+        }
+</table>
