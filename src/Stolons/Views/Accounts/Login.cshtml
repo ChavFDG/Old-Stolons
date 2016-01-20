@@ -12,7 +12,7 @@
 <div class="row">
     <div class="col-md-8">
         <section>
-            <form asp-controller="Account" asp-action="Login" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post" class="form-horizontal" role="form">
+            <form asp-controller="Accounts" asp-action="Login" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post" class="form-horizontal" role="form">
                 <hr />
                 <div asp-validation-summary="ValidationSummary.All" class="text-danger"></div>
                 <div class="form-group">
@@ -39,12 +39,12 @@
                 </div>
                 <div class="form-group">
                     <div class="col-md-offset-2 col-md-10">
-                        <button type="submit" class="btn btn-default">Log in</button>
+                        <button type="submit" class="btn btn-default">Se connecter</button>
                     </div>
                 </div>
                 <p>
                     <a asp-action="FirstVisit">Première visite ?</a>
-                    <a asp-action="ForgotPassword">J'ai oublié mon mot de passe?</a>
+                    <a asp-action="ForgotPassword">J'ai oublié mon mot de passe</a>
                 </p>
             </form>
         </section>

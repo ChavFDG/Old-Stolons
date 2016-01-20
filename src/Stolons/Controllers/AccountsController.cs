@@ -61,8 +61,8 @@ namespace Stolons.Controllers
             if (ModelState.IsValid)
             {
                 //D'abord on regarde si il existe bien un User avec ce mail
-                User user = _context.StolonsUsers.FirstOrDefault(x => x.Email.Equals(model.Email, StringComparison.CurrentCultureIgnoreCase));
-                if(user == null)
+                User stolonsUser = _context.StolonsUsers.FirstOrDefault(x => x.Email.Equals(model.Email, StringComparison.CurrentCultureIgnoreCase));
+                if(stolonsUser == null)
                 {
                     ModelState.AddModelError(string.Empty, "L'adresse email saisie n'existe pas");
                     return View(model);
@@ -73,6 +73,7 @@ namespace Stolons.Controllers
                     // This doesn't count login failures towards account lockout
                     // To enable password failures to trigger account lockout, set lockoutOnFailure: true
                     var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, lockoutOnFailure: false);
+                    
                     if (result.Succeeded)
                     {
                         _logger.LogInformation(1, "User logged in.");

@@ -10,6 +10,7 @@ namespace Stolons.Controllers
     {
         public IActionResult Index()
         {
+
             return View();
         }
 
@@ -24,6 +25,10 @@ namespace Stolons.Controllers
         {
             ViewData["Message"] = "Your contact page.";
 
+            return View();
+        }
+        public IActionResult HowItsWork()
+        {
             return View();
         }
 

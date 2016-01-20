@@ -1,0 +1,29 @@
+@using System.Security.Claims
+@using Stolons.Services
+@model IEnumerable<Stolons.Models.News>
+
+
+@{
+    ViewData["Title"] = "Nouvelles de l'association et de ces producteurs";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+
+@if (User.IsSignedIn())
+{
+    <p>
+        <a asp-action="Create">Ajouter une nouvelle</a>
+    </p>
+}
+
+@foreach (var item in Model.OrderByDescending(x=>x.DateOfPublication))
+{
+    <h4>@Html.DisplayFor(modelItem => item.Title)</h4>
+    <p>@Html.DisplayFor(modelItem => item.DateOfPublication) par </p>
+    <p>@Html.DisplayFor(modelItem => item.Message)</p>
+    <p>
+        <a asp-action="Edit" asp-route-id="@item.Id">Editer</a> |
+        <a asp-action="Delete" asp-route-id="@item.Id">Supprimer</a>
+    </p>    
+}
