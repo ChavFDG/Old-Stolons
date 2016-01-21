@@ -22,6 +22,7 @@ namespace Stolons.Models
         [Display(Name = "Message")]
         public string Message { get; set; }
 
+        [Display(Name = "Image d'illustration")]
         public string ImageLink { get; set; }
 
         [Display(Name = "Publié le ")]
