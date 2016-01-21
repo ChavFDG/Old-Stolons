@@ -149,6 +149,11 @@ namespace Stolons.Controllers
         public IActionResult DeleteConfirmed(Guid id)
         {
             News news = _context.News.Single(m => m.Id == id);
+            //Deleting image
+            string uploads = Path.Combine(_environment.WebRootPath, _newsStockagePath);
+            string image = Path.Combine(uploads, news.ImageLink);
+            if (System.IO.File.Exists(image) && news.ImageLink != Path.Combine(_newsStockagePath, _defaultFileName))
+                System.IO.File.Delete(Path.Combine(uploads, news.ImageLink));
             _context.News.Remove(news);
             _context.SaveChanges();
             return RedirectToAction("Index");

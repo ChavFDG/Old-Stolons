@@ -1,7 +1,7 @@
 @model IEnumerable<Stolons.Models.Consumer>
 
 @{
-    ViewData["Title"] = "List des adhérents";
+    ViewData["Title"] = "List des adh&eacute;rents";
 }
 
 <h2>@ViewData["Title"]</h2>
@@ -13,6 +13,9 @@
     <tr>
         <th>
             @Html.DisplayNameFor(item => item.Id)
+        </th>
+        <th>
+            @Html.DisplayNameFor(item => item.Avatar)
         </th>
         <th>
             @Html.DisplayNameFor(item => item.Name)
@@ -36,6 +39,9 @@
         <tr>
             <td>
                 @Html.DisplayFor(modelItem => item.Id)
+            </td>
+            <td>
+                <img src="@Html.DisplayFor(modelItem => item.Avatar)" class="responsiveImage" style="width:25px;height:25px;" />
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Name)
