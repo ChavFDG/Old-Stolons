@@ -1,4 +1,4 @@
-@model Stolons.Models.Consumer
+@model Stolons.ViewModels.Users.UserStolonViewModel
 
 @{
     ViewData["Title"] = "Ajouter un nouvel adhérent";
@@ -11,82 +11,82 @@
         <hr />
         <div asp-validation-summary="ValidationSummary.All" class="text-danger"></div>
         <div class="form-group">
-            <label asp-for="Name" class="col-md-2 control-label"></label>
+            <label asp-for="Consumer.Name" class="col-md-2 control-label"></label>
             <div class="col-md-10">
-                <input asp-for="Name" class="form-control" />
-                <span asp-validation-for="Name" class="text-danger" />
+                <input asp-for="Consumer.Name" class="form-control" />
+                <span asp-validation-for="Consumer.Name" class="text-danger" />
             </div>
         </div>
         <div class="form-group">
-            <label asp-for="Surname" class="col-md-2 control-label"></label>
+            <label asp-for="Consumer.Surname" class="col-md-2 control-label"></label>
             <div class="col-md-10">
-                <input asp-for="Surname" class="form-control" />
-                <span asp-validation-for="Surname" class="text-danger" />
+                <input asp-for="Consumer.Surname" class="form-control" />
+                <span asp-validation-for="Consumer.Surname" class="text-danger" />
             </div>
         </div>
         <div class="form-group">
-            <label asp-for="Email" class="col-md-2 control-label"></label>
+            <label asp-for="Consumer.Email" class="col-md-2 control-label"></label>
             <div class="col-md-10">
-                <input asp-for="Email" class="form-control" />
-                <span asp-validation-for="Email" class="text-danger" />
+                <input asp-for="Consumer.Email" class="form-control" />
+                <span asp-validation-for="Consumer.Email" class="text-danger" />
             </div>
         </div>
         <div class="form-group">
-            <label asp-for="Avatar" class="col-md-2 control-label"></label>
+            <label asp-for="Consumer.Avatar" class="col-md-2 control-label"></label>
             <div class="col-md-10">
                 <input type="file" accept="image/*" name="uploadFile" class="form-control" />
             </div>
         </div>
         <div class="form-group">
-            <label asp-for="PhoneNumber" class="col-md-2 control-label"></label>
+            <label asp-for="Consumer.PhoneNumber" class="col-md-2 control-label"></label>
             <div class="col-md-10">
-                <input asp-for="PhoneNumber" class="form-control" />
-                <span asp-validation-for="PhoneNumber" class="text-danger" />
+                <input asp-for="Consumer.PhoneNumber" class="form-control" />
+                <span asp-validation-for="Consumer.PhoneNumber" class="text-danger" />
             </div>
         </div>
         <div class="form-group">
-            <label asp-for="Address" class="col-md-2 control-label"></label>
+            <label asp-for="Consumer.Address" class="col-md-2 control-label"></label>
             <div class="col-md-10">
-                <input asp-for="Address" class="form-control" />
-                <span asp-validation-for="Address" class="text-danger" />
+                <input asp-for="Consumer.Address" class="form-control" />
+                <span asp-validation-for="Consumer.Address" class="text-danger" />
             </div>
         </div>
         <div class="form-group">
-            <label asp-for="PostCode" class="col-md-2 control-label"></label>
+            <label asp-for="Consumer.PostCode" class="col-md-2 control-label"></label>
             <div class="col-md-10">
-                <input asp-for="PostCode" class="form-control" />
-                <span asp-validation-for="PostCode" class="text-danger" />
+                <input asp-for="Consumer.PostCode" class="form-control" />
+                <span asp-validation-for="Consumer.PostCode" class="text-danger" />
             </div>
         </div>
         <div class="form-group">
-            <label asp-for="City" class="col-md-2 control-label"></label>
+            <label asp-for="Consumer.City" class="col-md-2 control-label"></label>
             <div class="col-md-10">
-                <input asp-for="City" class="form-control" />
-                <span asp-validation-for="City" class="text-danger" />
+                <input asp-for="Consumer.City" class="form-control" />
+                <span asp-validation-for="Consumer.City" class="text-danger" />
             </div>
         </div>
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
                 <div class="checkbox">
-                    <input asp-for="Cotisation" />
-                    <label asp-for="Cotisation"></label>
+                    <input asp-for="Consumer.Cotisation" />
+                    <label asp-for="Consumer.Cotisation"></label>
                 </div>
             </div>
         </div>
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
                 <div class="checkbox">
-                    <input asp-for="Enable" />
-                    <label asp-for="Enable"></label>
+                    <input asp-for="Consumer.Enable" />
+                    <label asp-for="Consumer.Enable"></label>
                 </div>
             </div>
         </div>
         <div class="form-group">
             <label asp-for="UserRole" class="col-md-2 control-label"></label>
             <div class="col-md-10">
-                <select asp-for="UserRole" asp-items="Html.GetEnumSelectList<User.Role>()" class="form-control"></select>
+                <select asp-for="UserRole" asp-items="Html.GetEnumSelectList<Configurations.Role>()" class="form-control"></select>
                 <span asp-validation-for="UserRole" class="text-danger"></span>
-            </div>           
+            </div>
         </div>
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">

@@ -1,0 +1,211 @@
+using System.Linq;
+using Microsoft.AspNet.Mvc;
+using Microsoft.AspNet.Mvc.Rendering;
+using Microsoft.Data.Entity;
+using Stolons.Models;
+using System;
+using Microsoft.AspNet.Hosting;
+using System.IO;
+using Microsoft.AspNet.Http;
+using Microsoft.Net.Http.Headers;
+using System.Threading.Tasks;
+using Microsoft.AspNet.Identity;
+using Microsoft.Extensions.Logging;
+using System.Collections.Generic;
+using Stolons.ViewModels.Users;
+
+namespace Stolons.Controllers
+{
+    public class UsersController : Controller
+    {
+        private ApplicationDbContext _context;
+        private IHostingEnvironment _environment;
+        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly SignInManager<ApplicationUser> _signInManager;
+        private readonly ILogger _logger;
+        private string _userStockagePath = Path.Combine("uploads", "images", "avatars");
+        private string _defaultFileName = "Default.png";
+
+        public UsersController(ApplicationDbContext context, IHostingEnvironment environment,
+            UserManager<ApplicationUser> userManager,
+            SignInManager<ApplicationUser> signInManager,
+            ILoggerFactory loggerFactory)
+        {
+            _environment = environment;
+            _context = context;
+            _userManager = userManager;
+            _signInManager = signInManager;
+            _logger = loggerFactory.CreateLogger<AccountController>();
+        }
+
+        // GET: Consumers
+        public IActionResult Index()
+        {
+            return View(_context.Consumers.ToList());
+        }
+
+        // GET: Consumers/Details/5
+        public async Task<IActionResult> Details(int? id)
+        {
+            if (id == null)
+            {
+                return HttpNotFound();
+            }
+
+            Consumer consumer = _context.Consumers.Single(m => m.Id == id);
+            if (consumer == null)
+            {
+                return HttpNotFound();
+            }
+            ApplicationUser appUser = _context.Users.First(x => x.Email == consumer.Email);
+            IList<string> roles = await _userManager.GetRolesAsync(appUser);
+            string role = roles.FirstOrDefault(x => Configurations.GetRoles().Contains(x));
+            return View(new UserStolonViewModel(consumer, (Configurations.Role)Enum.Parse(typeof(Configurations.Role), role)));
+        }
+
+        // GET: Consumers/Create
+        public IActionResult Create()
+        {
+            return View(new UserStolonViewModel(new Consumer(),Configurations.Role.User));
+        }
+
+        // POST: Consumers/Create
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create(UserStolonViewModel vmConsumer, IFormFile uploadFile)
+        {
+            if (ModelState.IsValid)
+            {
+                #region Creating Consumer
+                string fileName = _defaultFileName;
+                if (uploadFile != null)
+                {
+                    //Image uploading
+                    string uploads = Path.Combine(_environment.WebRootPath, _userStockagePath);
+                    fileName = Guid.NewGuid().ToString() + "_" + ContentDispositionHeaderValue.Parse(uploadFile.ContentDisposition).FileName.Trim('"');
+                    await uploadFile.SaveAsAsync(Path.Combine(uploads, fileName));
+                }
+                //Setting value for creation
+                vmConsumer.Consumer.Avatar = Path.Combine(_userStockagePath, fileName);
+                vmConsumer.Consumer.RegistrationDate = DateTime.Now;
+                _context.Consumers.Add(vmConsumer.Consumer);
+                #endregion Creating Consumer
+
+                #region Creating linked application data
+                var appUser = new ApplicationUser { UserName = vmConsumer.Consumer.Email, Email = vmConsumer.Consumer.Email };
+                appUser.User = vmConsumer.Consumer;
+                
+                var result = await _userManager.CreateAsync(appUser, vmConsumer.Consumer.Email);
+                if (result.Succeeded)
+                {
+                    //Add user role
+                    result = await _userManager.AddToRoleAsync(appUser, vmConsumer.UserRole.ToString());
+                    //Add user type
+                    result = await _userManager.AddToRoleAsync(appUser, Configurations.UserType.Consumer.ToString());
+                }
+                #endregion Creating linked application data
+
+                _context.SaveChanges();
+                return RedirectToAction("Index");
+            }
+            return View(vmConsumer);
+        }
+
+        // GET: Consumers/Edit/5
+        public async Task<IActionResult> Edit(int? id)
+        {
+            if (id == null)
+            {
+                return HttpNotFound();
+            }
+
+            Consumer consumer = _context.Consumers.Single(m => m.Id == id);
+            if (consumer == null)
+            {
+                return HttpNotFound();
+            }
+            ApplicationUser appUser = _context.Users.First(x => x.Email == consumer.Email);
+            IList<string> roles = await _userManager.GetRolesAsync(appUser);
+            string role = roles.FirstOrDefault(x => Configurations.GetRoles().Contains(x));
+            return View(new UserStolonViewModel(consumer, (Configurations.Role)Enum.Parse(typeof(Configurations.Role), role)));
+        }
+
+        // POST: Consumers/Edit/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(UserStolonViewModel consumerVm, IFormFile uploadFile, Configurations.Role UserRole)
+        {
+            if (ModelState.IsValid)
+            {
+                if (uploadFile != null)
+                {
+                    string uploads = Path.Combine(_environment.WebRootPath, _userStockagePath);
+                    //Deleting old image
+                    string oldImage = Path.Combine(uploads, consumerVm.Consumer.Avatar);
+                    if (System.IO.File.Exists(oldImage) && consumerVm.Consumer.Avatar != Path.Combine(_userStockagePath, _defaultFileName))
+                        System.IO.File.Delete(Path.Combine(uploads, consumerVm.Consumer.Avatar));
+                    //Image uploading
+                    string fileName = Guid.NewGuid().ToString() + "_" + ContentDispositionHeaderValue.Parse(uploadFile.ContentDisposition).FileName.Trim('"');
+                    await uploadFile.SaveAsAsync(Path.Combine(uploads, fileName));
+                    //Setting new value, saving
+                    consumerVm.Consumer.Avatar = Path.Combine(_userStockagePath, fileName);
+                }
+                ApplicationUser appUser = _context.Users.First(x => x.Email == consumerVm.Consumer.Email);
+                //Getting actual roles
+                IList<string> roles = await _userManager.GetRolesAsync(appUser);
+                if (!roles.Contains(UserRole.ToString()))
+                {
+                    string roleToRemove = roles.FirstOrDefault(x => Configurations.GetRoles().Contains(x));
+                    await _userManager.RemoveFromRoleAsync(appUser, roleToRemove);
+                    //Add user role
+                    await _userManager.AddToRoleAsync(appUser, UserRole.ToString());
+                }
+                _context.Update(consumerVm.Consumer);
+                _context.SaveChanges();
+                return RedirectToAction("Index");
+            }
+            return View(consumerVm);
+        }
+
+        // GET: Consumers/Delete/5
+        [ActionName("Delete")]
+        public async Task<IActionResult> Delete(int? id)
+        {
+            if (id == null)
+            {
+                return HttpNotFound();
+            }
+
+            Consumer consumer = _context.Consumers.Single(m => m.Id == id);
+            if (consumer == null)
+            {
+                return HttpNotFound();
+            }
+            ApplicationUser appUser = _context.Users.First(x => x.Email == consumer.Email);
+            IList<string> roles = await _userManager.GetRolesAsync(appUser);
+            string role = roles.FirstOrDefault(x => Configurations.GetRoles().Contains(x));
+            return View(new UserStolonViewModel(consumer, (Configurations.Role)Enum.Parse(typeof(Configurations.Role), role)));
+        }
+
+        // POST: Consumers/Delete/5
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public IActionResult DeleteConfirmed(int id)
+        {
+            Consumer consumer = _context.Consumers.Single(m => m.Id == id);
+            //Deleting image
+            string uploads = Path.Combine(_environment.WebRootPath, _userStockagePath);
+            string image = Path.Combine(uploads, consumer.Avatar);
+            if (System.IO.File.Exists(image) && consumer.Avatar != Path.Combine(_userStockagePath, _defaultFileName))
+                System.IO.File.Delete(Path.Combine(uploads, consumer.Avatar));
+            //Delete App User
+            ApplicationUser appUser = _context.Users.First(x => x.Email == consumer.Email);
+            _context.Users.Remove(appUser);
+            //Delete User
+            _context.Consumers.Remove(consumer);
+            //Save
+            _context.SaveChanges();
+            return RedirectToAction("Index");
+        }
+    }
+}

@@ -130,11 +130,13 @@ namespace Stolons.Controllers
                 }
                 else
                 {
-                    var appUser = new ApplicationUser { UserName = model.Email, Email = model.Email };
+                    var appUser = new ApplicationUser { UserName = stolonsUser.Email, Email = stolonsUser.Email };
                     appUser.User = stolonsUser;
                     var result = await _userManager.CreateAsync(appUser, model.Password);
                     if (result.Succeeded)
                     {
+                        //result = await _userManager.AddToRoleAsync(appUser, appUser.User.UserRole.ToString());
+                        
                         // For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=532713
                         // Send an email with this link
                         //var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);

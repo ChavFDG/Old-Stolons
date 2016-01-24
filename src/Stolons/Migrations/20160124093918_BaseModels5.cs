@@ -4,7 +4,7 @@ using Microsoft.Data.Entity.Migrations;
 
 namespace Stolons.Migrations
 {
-    public partial class BaseDb3 : Migration
+    public partial class BaseModels5 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -50,7 +50,6 @@ namespace Stolons.Migrations
                     PostCode = table.Column<string>(nullable: true),
                     RegistrationDate = table.Column<DateTime>(nullable: false),
                     Surname = table.Column<string>(nullable: false),
-                    UserRole = table.Column<int>(nullable: false),
                     Area = table.Column<int>(nullable: true),
                     CompanyName = table.Column<string>(nullable: true),
                     ExploitationPicuresSerialized = table.Column<string>(nullable: true),
@@ -164,8 +163,8 @@ namespace Stolons.Migrations
                     Id = table.Column<Guid>(nullable: false),
                     DateOfPublication = table.Column<DateTime>(nullable: false),
                     ImageLink = table.Column<string>(nullable: true),
-                    Message = table.Column<string>(nullable: true),
-                    Title = table.Column<string>(nullable: true),
+                    Message = table.Column<string>(nullable: false),
+                    Title = table.Column<string>(nullable: false),
                     UserId = table.Column<int>(nullable: true)
                 },
                 constraints: table =>

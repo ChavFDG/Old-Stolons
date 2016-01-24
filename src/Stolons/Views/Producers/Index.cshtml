@@ -46,8 +46,10 @@
         <td>
             @Html.DisplayFor(modelItem => item.CompanyName)
         </td>
-        <td>
-            <img src="@Html.DisplayFor(modelItem => item.Avatar)" class="responsiveImage" style="width:25px;height:25px;" />
+        <td class="tdAvatarList">
+            <div class="userListAvatar">
+                <img src="@Html.DisplayFor(modelItem => item.Avatar)" class="responsiveImage circleAvatarDiv" />
+            </div>
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.Name)

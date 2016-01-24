@@ -11,6 +11,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Stolons.Models;
 using Stolons.Services;
+using Microsoft.AspNet.Identity;
 
 namespace Stolons
 {
@@ -67,7 +68,7 @@ namespace Stolons
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
+        public async void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, IServiceProvider serviceProvider)
         {
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
@@ -109,6 +110,28 @@ namespace Stolons
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
+
+            await CreateRoles(serviceProvider);
+        }
+
+        private async Task CreateRoles(IServiceProvider serviceProvider)
+        {
+            var RoleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+
+            List<string> roleNames = new List<string>();
+            //Adding Role
+            roleNames.AddRange(Configurations.GetRoles());
+            //Adding UserType
+            roleNames.AddRange(Configurations.GetUserTypes());
+            IdentityResult roleResult;
+            foreach (var roleName in roleNames)
+            {
+                var roleExist = await RoleManager.RoleExistsAsync(roleName);
+                if (!roleExist)
+                {
+                    roleResult = await RoleManager.CreateAsync(new IdentityRole(roleName));
+                }
+            }
         }
 
         // Entry point for the application.

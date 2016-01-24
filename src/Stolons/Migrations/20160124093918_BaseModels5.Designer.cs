@@ -8,8 +8,8 @@ using Stolons.Models;
 namespace Stolons.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20160117134153_BaseDb3")]
-    partial class BaseDb3
+    [Migration("20160124093918_BaseModels5")]
+    partial class BaseModels5
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -200,9 +200,11 @@ namespace Stolons.Migrations
 
                     b.Property<string>("ImageLink");
 
-                    b.Property<string>("Message");
+                    b.Property<string>("Message")
+                        .IsRequired();
 
-                    b.Property<string>("Title");
+                    b.Property<string>("Title")
+                        .IsRequired();
 
                     b.Property<int?>("UserId");
 
@@ -298,8 +300,6 @@ namespace Stolons.Migrations
 
                     b.Property<string>("Surname")
                         .IsRequired();
-
-                    b.Property<int>("UserRole");
 
                     b.HasKey("Id");
 

@@ -199,9 +199,11 @@ namespace Stolons.Migrations
 
                     b.Property<string>("ImageLink");
 
-                    b.Property<string>("Message");
+                    b.Property<string>("Message")
+                        .IsRequired();
 
-                    b.Property<string>("Title");
+                    b.Property<string>("Title")
+                        .IsRequired();
 
                     b.Property<int?>("UserId");
 
@@ -297,8 +299,6 @@ namespace Stolons.Migrations
 
                     b.Property<string>("Surname")
                         .IsRequired();
-
-                    b.Property<int>("UserRole");
 
                     b.HasKey("Id");
 

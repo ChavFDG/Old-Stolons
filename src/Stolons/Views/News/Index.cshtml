@@ -1,5 +1,6 @@
 @using System.Security.Claims
 @using Stolons.Services
+
 @model IEnumerable<Stolons.Models.News>
 
 
@@ -12,24 +13,36 @@
 
 @if (User.IsSignedIn())
 {
-    <p>
-        <a asp-action="Create">Ajouter une nouvelle</a>
-    </p>
+    if (    User.IsInRole(Configurations.Role.Administrator.ToString())
+||  User.IsInRole(Configurations.Role.Volunteer.ToString())
+||  User.IsInRole(Configurations.UserType.Producer.ToString()))
+    {
+        <p>
+            <a asp-action="Create">Ajouter une nouvelle</a>
+        </p>
+    }
 }
 <table class="table">
         @foreach (var item in Model.OrderByDescending(x => x.DateOfPublication))
             {
             <tr>
+                <td  class="tdImageNews">
+                    <div class="newsThumnail">
+                        <img src="@Html.DisplayFor(modelItem => item.ImageLink)" class="responsiveImage" />
+                    </div>
+                </td>
                 <td>
-                    <img src="@Html.DisplayFor(modelItem => item.ImageLink)" class="responsiveImage" style="float:left;width:375px;height:216px;margin-right:5px" />
                     <h3>@Html.DisplayFor(modelItem => item.Title)</h3>
                     <p>
                         Publi&eacute; par ??? le @Html.DisplayFor(modelItem => item.DateOfPublication)
-                        <a asp-action="Edit" asp-route-id="@item.Id">Editer</a> |
-                        <a asp-action="Delete" asp-route-id="@item.Id">Supprimer</a>
+                        @if (User.IsInRole(Configurations.Role.Administrator.ToString())
+                        || User.IsInRole(Configurations.Role.Volunteer.ToString()))
+                        //Ou c'est la news de l'utilisateur
+                        {
+                            <a asp-action="Edit" asp-route-id="@item.Id">Editer </a><a asp-action = "Delete" asp-route-id = "@item.Id">| Supprimer</a>
+                        }
                     </p>
                     @Html.DisplayFor(modelItem => item.Message)
-
                 </td>
             </tr>
         }
