@@ -8,8 +8,8 @@ using Stolons.Models;
 namespace Stolons.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20160124093918_BaseModels5")]
-    partial class BaseModels5
+    [Migration("20160126154313_ModelsBase6")]
+    partial class ModelsBase6
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -281,6 +281,8 @@ namespace Stolons.Migrations
                     b.Property<string>("City");
 
                     b.Property<bool>("Cotisation");
+
+                    b.Property<string>("DisableReason");
 
                     b.Property<string>("Discriminator")
                         .IsRequired();

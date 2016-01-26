@@ -138,11 +138,41 @@ namespace Stolons
 
         private async Task CreateAdminAcount(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
         {
+            await CreateAcount(context,
+                                userManager,
+                                "Admin",
+                                "Admin",
+                                "admin@admin.com",
+                                "admin@admin.com",
+                                Configurations.Role.Administrator,
+                                Configurations.UserType.SimpleUser);
+            await CreateAcount(context,
+                    userManager,
+                    "PARAVEL",
+                    "Damien",
+                    "damien.paravel@gmail.com",
+                    "damien.paravel@gmail.com",
+                    Configurations.Role.Administrator,
+                    Configurations.UserType.Consumer);
+            await CreateAcount(context,
+                    userManager,
+                    "MICHON",
+                    "Nicolas",
+                    "nicolas.michon@zoho.com",
+                    "nicolas.michon@zoho.com",
+                    Configurations.Role.Administrator,
+                    Configurations.UserType.Consumer);
+        }
+
+        private async Task CreateAcount(ApplicationDbContext context, UserManager<ApplicationUser> userManager, string name, string surname, string email, string password, Configurations.Role role, Configurations.UserType userType)
+        {
+            if (context.Consumers.Any(x => x.Email == email))
+                return;
             Consumer consumer = new Consumer();
-            consumer.Name = "Admin";
-            consumer.Surname = "Admin";
-            consumer.Email = "admin@admin.com";
-            consumer.Avatar = Path.Combine(Configurations.UserAvatarStockagePath, Configurations.DefaultFileName);            
+            consumer.Name = name;
+            consumer.Surname = surname;
+            consumer.Email = email;
+            consumer.Avatar = Path.Combine(Configurations.UserAvatarStockagePath, Configurations.DefaultFileName);
             consumer.RegistrationDate = DateTime.Now;
             consumer.Enable = true;
             context.Consumers.Add(consumer);
@@ -152,17 +182,18 @@ namespace Stolons
             var appUser = new ApplicationUser { UserName = consumer.Email, Email = consumer.Email };
             appUser.User = consumer;
 
-            var result = await userManager.CreateAsync(appUser, consumer.Email);
+            var result = await userManager.CreateAsync(appUser, password);
             if (result.Succeeded)
             {
                 //Add user role
-                result = await userManager.AddToRoleAsync(appUser, Configurations.Role.Administrator.ToString());
+                result = await userManager.AddToRoleAsync(appUser, role.ToString());
                 //Add user type
-                result = await userManager.AddToRoleAsync(appUser, Configurations.UserType.Consumer.ToString());
+                result = await userManager.AddToRoleAsync(appUser, userType.ToString());
             }
             #endregion Creating linked application data
 
             context.SaveChanges();
+
         }
 
         // Entry point for the application.

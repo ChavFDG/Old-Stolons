@@ -4,7 +4,7 @@ using Microsoft.Data.Entity.Migrations;
 
 namespace Stolons.Migrations
 {
-    public partial class BaseModels5 : Migration
+    public partial class ModelsBase6 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -42,6 +42,7 @@ namespace Stolons.Migrations
                     Avatar = table.Column<string>(nullable: true),
                     City = table.Column<string>(nullable: true),
                     Cotisation = table.Column<bool>(nullable: false),
+                    DisableReason = table.Column<string>(nullable: true),
                     Discriminator = table.Column<string>(nullable: false),
                     Email = table.Column<string>(nullable: true),
                     Enable = table.Column<bool>(nullable: false),

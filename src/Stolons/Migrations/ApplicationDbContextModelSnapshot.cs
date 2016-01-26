@@ -281,6 +281,8 @@ namespace Stolons.Migrations
 
                     b.Property<bool>("Cotisation");
 
+                    b.Property<string>("DisableReason");
+
                     b.Property<string>("Discriminator")
                         .IsRequired();
 

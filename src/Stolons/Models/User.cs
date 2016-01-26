@@ -39,6 +39,9 @@ namespace Stolons.Models
         [Display(Name = "Date d'enregistrement")]
         public DateTime RegistrationDate { get; set; }
 
+        [Display(Name = "Raison du blocage")]
+        public string DisableReason { get; set; }
+
         public List<News> News { get; set; }
 
     }

@@ -34,7 +34,7 @@
                 <td>
                     <h3>@Html.DisplayFor(modelItem => item.Title)</h3>
                     <p>
-                        Publi&eacute; par ??? le @Html.DisplayFor(modelItem => item.DateOfPublication)
+                        Publi&eacute; par @Html.DisplayFor(modelItem => item.User.Email) le @Html.DisplayFor(modelItem => item.DateOfPublication)
                         @if (User.IsInRole(Configurations.Role.Administrator.ToString())
                         || User.IsInRole(Configurations.Role.Volunteer.ToString()))
                         //Ou c'est la news de l'utilisateur

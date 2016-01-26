@@ -9,6 +9,8 @@ using Microsoft.Net.Http.Headers;
 using System.IO;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Hosting;
+using Microsoft.AspNet.Identity;
+using System.Security.Claims;
 
 namespace Stolons.Controllers
 {
@@ -16,9 +18,11 @@ namespace Stolons.Controllers
     {
         private ApplicationDbContext _context;
         private IHostingEnvironment _environment;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public NewsController(ApplicationDbContext context, IHostingEnvironment environment)
+        public NewsController(ApplicationDbContext context, UserManager<ApplicationUser> userManager, IHostingEnvironment environment)
         {
+            _userManager = userManager;
             _environment = environment;
             _context = context;    
         }
@@ -72,7 +76,14 @@ namespace Stolons.Controllers
                 news.DateOfPublication = DateTime.Now;
                 news.ImageLink = Path.Combine(Configurations.NewsImageStockagePath,fileName);
                 //TODO Get logged in User and add it to the news
-                //news.User = ???
+                var appUser = await GetCurrentUserAsync();
+                User user;
+                user = _context.Consumers.FirstOrDefault(x => x.Email == appUser.Email);
+                if(user == null)
+                {
+                    user = _context.Producers.FirstOrDefault(x => x.Email == appUser.Email);
+                }
+                news.User = user;
                 _context.News.Add(news);
                 _context.SaveChanges();
                 return RedirectToAction("Index");
@@ -155,6 +166,11 @@ namespace Stolons.Controllers
             _context.News.Remove(news);
             _context.SaveChanges();
             return RedirectToAction("Index");
+        }
+
+        private async Task<ApplicationUser> GetCurrentUserAsync()
+        {
+            return await _userManager.FindByIdAsync(HttpContext.User.GetUserId());
         }
     }
 }

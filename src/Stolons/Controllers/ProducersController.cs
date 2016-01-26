@@ -22,18 +22,15 @@ namespace Stolons.Controllers
         private IHostingEnvironment _environment;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
-        private readonly ILogger _logger;
 
         public ProducersController(ApplicationDbContext context, IHostingEnvironment environment,
             UserManager<ApplicationUser> userManager,
-            SignInManager<ApplicationUser> signInManager,
-            ILoggerFactory loggerFactory)
+            SignInManager<ApplicationUser> signInManager)
         {
             _environment = environment;
             _context = context;
             _userManager = userManager;
             _signInManager = signInManager;
-            _logger = loggerFactory.CreateLogger<AccountController>();
         }
 
         // GET: Producer
