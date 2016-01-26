@@ -8,6 +8,8 @@ namespace Stolons.ViewModels.Manage
 {
     public class IndexViewModel
     {
+        public string Avatar { get; set; }
+
         public bool HasPassword { get; set; }
 
         public IList<UserLoginInfo> Logins { get; set; }

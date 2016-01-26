@@ -5,24 +5,23 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Stolons.ViewModels.Users
+namespace Stolons.ViewModels.Producers
 {
-    public class UserStolonViewModel
+    public class ProducerViewModel
     {
-        public UserStolonViewModel()
+        public ProducerViewModel()
         {
 
         }
-        public UserStolonViewModel(Consumer consumer, Configurations.Role userRole)
+        public ProducerViewModel(Producer producer, Configurations.Role userRole)
         {
-            Consumer = consumer;
+            Producer = producer;
             UserRole = userRole;
-            OriginalEmail = consumer.Email;
+            OriginalEmail = producer.Email;
         }
 
         public string OriginalEmail { get; set; }
-
-        public Consumer Consumer { get; set; }
+        public Producer Producer { get; set; }
 
         [Display(Name = "Droit utilisateur ")]
         public Configurations.Role UserRole { get; set; }

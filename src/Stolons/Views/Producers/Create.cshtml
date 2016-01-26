@@ -1,4 +1,4 @@
-@model Stolons.Models.Producer
+@model Stolons.ViewModels.Producers.ProducerViewModel
 
 @{
     ViewData["Title"] = "Ajouter un nouveau producteur";
@@ -8,120 +8,126 @@
 
 <form asp-action="Create" enctype="multipart/form-data">
     <div class="form-horizontal">
-        <h4>@ViewData["Title"]</h4>
         <hr />
         <div asp-validation-summary="ValidationSummary.All" class="text-danger"></div>
         <div class="form-group">
-            <label asp-for="Name" class="col-md-2 control-label"></label>
+            <label asp-for="Producer.Name" class="col-md-2 control-label"></label>
             <div class="col-md-10">
-                <input asp-for="Name" class="form-control" />
-                <span asp-validation-for="Name" class="text-danger" />
+                <input asp-for="Producer.Name" class="form-control" />
+                <span asp-validation-for="Producer.Name" class="text-danger" />
             </div>
         </div>
         <div class="form-group">
-            <label asp-for="Surname" class="col-md-2 control-label"></label>
+            <label asp-for="Producer.Surname" class="col-md-2 control-label"></label>
             <div class="col-md-10">
-                <input asp-for="Surname" class="form-control" />
-                <span asp-validation-for="Surname" class="text-danger" />
+                <input asp-for="Producer.Surname" class="form-control" />
+                <span asp-validation-for="Producer.Surname" class="text-danger" />
             </div>
         </div>
         <div class="form-group">
-            <label asp-for="Email" class="col-md-2 control-label"></label>
+            <label asp-for="Producer.Email" class="col-md-2 control-label"></label>
             <div class="col-md-10">
-                <input asp-for="Email" class="form-control" />
-                <span asp-validation-for="Email" class="text-danger" />
+                <input asp-for="Producer.Email" class="form-control" />
+                <span asp-validation-for="Producer.Email" class="text-danger" />
             </div>
         </div>
         <div class="form-group">
-            <label asp-for="Avatar" class="col-md-2 control-label"></label>
+            <label asp-for="Producer.Avatar" class="col-md-2 control-label"></label>
             <div class="col-md-10">
                 <input type="file" accept="image/*" name="uploadFile" class="form-control" />
             </div>
         </div>
         <div class="form-group">
-            <label asp-for="PhoneNumber" class="col-md-2 control-label"></label>
+            <label asp-for="Producer.PhoneNumber" class="col-md-2 control-label"></label>
             <div class="col-md-10">
-                <input asp-for="PhoneNumber" class="form-control" />
-                <span asp-validation-for="PhoneNumber" class="text-danger" />
+                <input asp-for="Producer.PhoneNumber" class="form-control" />
+                <span asp-validation-for="Producer.PhoneNumber" class="text-danger" />
             </div>
         </div>
         <div class="form-group">
-            <label asp-for="Address" class="col-md-2 control-label"></label>
+            <label asp-for="Producer.Address" class="col-md-2 control-label"></label>
             <div class="col-md-10">
-                <input asp-for="Address" class="form-control" />
-                <span asp-validation-for="Address" class="text-danger" />
+                <input asp-for="Producer.Address" class="form-control" />
+                <span asp-validation-for="Producer.Address" class="text-danger" />
             </div>
         </div>
         <div class="form-group">
-            <label asp-for="PostCode" class="col-md-2 control-label"></label>
+            <label asp-for="Producer.PostCode" class="col-md-2 control-label"></label>
             <div class="col-md-10">
-                <input asp-for="PostCode" class="form-control" />
-                <span asp-validation-for="PostCode" class="text-danger" />
+                <input asp-for="Producer.PostCode" class="form-control" />
+                <span asp-validation-for="Producer.PostCode" class="text-danger" />
             </div>
         </div>
         <div class="form-group">
-            <label asp-for="City" class="col-md-2 control-label"></label>
+            <label asp-for="Producer.City" class="col-md-2 control-label"></label>
             <div class="col-md-10">
-                <input asp-for="City" class="form-control" />
-                <span asp-validation-for="City" class="text-danger" />
+                <input asp-for="Producer.City" class="form-control" />
+                <span asp-validation-for="Producer.City" class="text-danger" />
             </div>
         </div>
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
                 <div class="checkbox">
-                    <input asp-for="Cotisation" />
-                    <label asp-for="Cotisation"></label>
+                    <input asp-for="Producer.Cotisation" />
+                    <label asp-for="Producer.Cotisation"></label>
                 </div>
             </div>
         </div>
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
                 <div class="checkbox">
-                    <input asp-for="Enable" />
-                    <label asp-for="Enable"></label>
+                    <input asp-for="Producer.Enable" />
+                    <label asp-for="Producer.Enable"></label>
                 </div>
             </div>
         </div>
         <div class="form-group">
-            <label asp-for="CompanyName" class="col-md-2 control-label"></label>
+            <label asp-for="Producer.CompanyName" class="col-md-2 control-label"></label>
             <div class="col-md-10">
-                <input asp-for="CompanyName" class="form-control" />
-                <span asp-validation-for="CompanyName" class="text-danger" />
+                <input asp-for="Producer.CompanyName" class="form-control" />
+                <span asp-validation-for="Producer.CompanyName" class="text-danger" />
             </div>
         </div>
             <div class="form-group">
-                <label asp-for="Area" class="col-md-2 control-label"></label>
+                <label asp-for="Producer.Area" class="col-md-2 control-label"></label>
                 <div class="col-md-10">
-                    <input asp-for="Area" class="form-control" />
-                    <span asp-validation-for="Area" class="text-danger" />
+                    <input asp-for="Producer.Area" class="form-control" />
+                    <span asp-validation-for="Producer.Area" class="text-danger" />
                 </div>
             </div>
         <div class="form-group">
-            <label asp-for="Production" class="col-md-2 control-label"></label>
+            <label asp-for="Producer.Production" class="col-md-2 control-label"></label>
             <div class="col-md-10">
-                <input asp-for="Production" class="form-control" />
-                <span asp-validation-for="Production" class="text-danger" />
+                <input asp-for="Producer.Production" class="form-control" />
+                <span asp-validation-for="Producer.Production" class="text-danger" />
             </div>
         </div>
             <div class="form-group">
-                <label asp-for="OpenText" class="col-md-2 control-label"></label>
+                <label asp-for="Producer.OpenText" class="col-md-2 control-label"></label>
                 <div class="col-md-10">
-                    <input asp-for="OpenText" class="form-control" />
-                    <span asp-validation-for="OpenText" class="text-danger" />
+                    <input asp-for="Producer.OpenText" class="form-control" />
+                    <span asp-validation-for="Producer.OpenText" class="text-danger" />
                 </div>
             </div>
             <div class="form-group">
-                <label asp-for="StartDate" class="col-md-2 control-label"></label>
+                <label asp-for="Producer.StartDate" class="col-md-2 control-label"></label>
                 <div class="col-md-10">
-                    <input asp-for="StartDate" class="form-control" />
-                    <span asp-validation-for="StartDate" class="text-danger" />
+                    <input asp-for="Producer.StartDate" class="form-control" />
+                    <span asp-validation-for="Producer.StartDate" class="text-danger" />
                 </div>
             </div>
             <div class="form-group">
-                <label asp-for="WebSiteLink" class="col-md-2 control-label"></label>
+                <label asp-for="Producer.WebSiteLink" class="col-md-2 control-label"></label>
                 <div class="col-md-10">
-                    <input asp-for="WebSiteLink" class="form-control" />
-                    <span asp-validation-for="WebSiteLink" class="text-danger" />
+                    <input asp-for="Producer.WebSiteLink" class="form-control" />
+                    <span asp-validation-for="Producer.WebSiteLink" class="text-danger" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label asp-for="UserRole" class="col-md-2 control-label"></label>
+                <div class="col-md-10">
+                    <select asp-for="UserRole" asp-items="Html.GetEnumSelectList<Configurations.Role>()" class="form-control"></select>
+                    <span asp-validation-for="UserRole" class="text-danger"></span>
                 </div>
             </div>
             <div class="form-group">

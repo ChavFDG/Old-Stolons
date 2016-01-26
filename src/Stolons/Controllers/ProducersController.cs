@@ -9,6 +9,10 @@ using System.IO;
 using Microsoft.AspNet.Http;
 using Microsoft.Net.Http.Headers;
 using System.Threading.Tasks;
+using Microsoft.AspNet.Identity;
+using Microsoft.Extensions.Logging;
+using System.Collections.Generic;
+using Stolons.ViewModels.Producers;
 
 namespace Stolons.Controllers
 {
@@ -16,13 +20,20 @@ namespace Stolons.Controllers
     {
         private ApplicationDbContext _context;
         private IHostingEnvironment _environment;
-        private string _userStockagePath = Path.Combine("uploads", "images", "avatars");
-        private string _defaultFileName = "Default.png";
+        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly SignInManager<ApplicationUser> _signInManager;
+        private readonly ILogger _logger;
 
-        public ProducersController(ApplicationDbContext context, IHostingEnvironment environment)
+        public ProducersController(ApplicationDbContext context, IHostingEnvironment environment,
+            UserManager<ApplicationUser> userManager,
+            SignInManager<ApplicationUser> signInManager,
+            ILoggerFactory loggerFactory)
         {
             _environment = environment;
             _context = context;
+            _userManager = userManager;
+            _signInManager = signInManager;
+            _logger = loggerFactory.CreateLogger<AccountController>();
         }
 
         // GET: Producer
@@ -32,7 +43,7 @@ namespace Stolons.Controllers
         }
 
         // GET: Producer/Details/5
-        public IActionResult Details(int? id)
+        public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
             {
@@ -44,8 +55,10 @@ namespace Stolons.Controllers
             {
                 return HttpNotFound();
             }
-
-            return View(producer);
+            ApplicationUser appUser = _context.Users.First(x => x.Email == producer.Email);
+            IList<string> roles = await _userManager.GetRolesAsync(appUser);
+            string role = roles.FirstOrDefault(x => Configurations.GetRoles().Contains(x));
+            return View(new ProducerViewModel(producer, (Configurations.Role)Enum.Parse(typeof(Configurations.Role), role)));
         }
 
         // GET: Producer/Create
@@ -57,30 +70,48 @@ namespace Stolons.Controllers
         // POST: Producer/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(Producer producer, IFormFile uploadFile)
+        public async Task<IActionResult> Create(ProducerViewModel vmProducer, IFormFile uploadFile)
         {
+
             if (ModelState.IsValid)
             {
-                string fileName = _defaultFileName;
+                #region Creating Producer
+                string fileName = Configurations.DefaultFileName;
                 if (uploadFile != null)
                 {
                     //Image uploading
-                    string uploads = Path.Combine(_environment.WebRootPath, _userStockagePath);
+                    string uploads = Path.Combine(_environment.WebRootPath, Configurations.UserAvatarStockagePath);
                     fileName = Guid.NewGuid().ToString() + "_" + ContentDispositionHeaderValue.Parse(uploadFile.ContentDisposition).FileName.Trim('"');
                     await uploadFile.SaveAsAsync(Path.Combine(uploads, fileName));
                 }
                 //Setting value for creation
-                producer.Avatar = Path.Combine(_userStockagePath, fileName);
-                producer.RegistrationDate = DateTime.Now;
-                _context.Producers.Add(producer);
+                vmProducer.Producer.Avatar = Path.Combine(Configurations.UserAvatarStockagePath, fileName);
+                vmProducer.Producer.RegistrationDate = DateTime.Now;
+                _context.Producers.Add(vmProducer.Producer);
+                #endregion Creating Producer
+
+                #region Creating linked application data
+                var appUser = new ApplicationUser { UserName = vmProducer.Producer.Email, Email = vmProducer.Producer.Email };
+                appUser.User = vmProducer.Producer;
+
+                var result = await _userManager.CreateAsync(appUser, vmProducer.Producer.Email);
+                if (result.Succeeded)
+                {
+                    //Add user role
+                    result = await _userManager.AddToRoleAsync(appUser, vmProducer.UserRole.ToString());
+                    //Add user type
+                    result = await _userManager.AddToRoleAsync(appUser, Configurations.UserType.Producer.ToString());
+                }
+                #endregion Creating linked application data
+
                 _context.SaveChanges();
                 return RedirectToAction("Index");
             }
-            return View(producer);
+            return View(vmProducer);
         }
 
         // GET: Producer/Edit/5
-        public IActionResult Edit(int? id)
+        public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
             {
@@ -92,39 +123,54 @@ namespace Stolons.Controllers
             {
                 return HttpNotFound();
             }
-            return View(producer);
+            ApplicationUser appUser = _context.Users.First(x => x.Email == producer.Email);
+            IList<string> roles = await _userManager.GetRolesAsync(appUser);
+            string role = roles.FirstOrDefault(x => Configurations.GetRoles().Contains(x));
+            return View(new ProducerViewModel(producer, (Configurations.Role)Enum.Parse(typeof(Configurations.Role), role)));
         }
 
         // POST: Producer/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Producer producer, IFormFile uploadFile)
+        public async Task<IActionResult> Edit(ProducerViewModel vmProducer, IFormFile uploadFile, Configurations.Role UserRole)
         {
             if (ModelState.IsValid)
             {
                 if (uploadFile != null)
                 {
-                    string uploads = Path.Combine(_environment.WebRootPath, _userStockagePath);
+                    string uploads = Path.Combine(_environment.WebRootPath, Configurations.UserAvatarStockagePath);
                     //Deleting old image
-                    string oldImage = Path.Combine(uploads, producer.Avatar);
-                    if (System.IO.File.Exists(oldImage) && producer.Avatar != Path.Combine(_userStockagePath, _defaultFileName))
-                        System.IO.File.Delete(Path.Combine(uploads, producer.Avatar));
+                    string oldImage = Path.Combine(uploads, vmProducer.Producer.Avatar);
+                    if (System.IO.File.Exists(oldImage) && vmProducer.Producer.Avatar != Path.Combine(Configurations.UserAvatarStockagePath, Configurations.DefaultFileName))
+                        System.IO.File.Delete(Path.Combine(uploads, vmProducer.Producer.Avatar));
                     //Image uploading
                     string fileName = Guid.NewGuid().ToString() + "_" + ContentDispositionHeaderValue.Parse(uploadFile.ContentDisposition).FileName.Trim('"');
                     await uploadFile.SaveAsAsync(Path.Combine(uploads, fileName));
                     //Setting new value, saving
-                    producer.Avatar = Path.Combine(_userStockagePath, fileName);
+                    vmProducer.Producer.Avatar = Path.Combine(Configurations.UserAvatarStockagePath, fileName);
                 }
-                _context.Update(producer);
+                ApplicationUser appUser = _context.Users.First(x => x.Email == vmProducer.OriginalEmail);
+                appUser.Email = vmProducer.Producer.Email;
+                _context.Update(appUser);
+                //Getting actual roles
+                IList<string> roles = await _userManager.GetRolesAsync(appUser);
+                if (!roles.Contains(UserRole.ToString()))
+                {
+                    string roleToRemove = roles.FirstOrDefault(x => Configurations.GetRoles().Contains(x));
+                    await _userManager.RemoveFromRoleAsync(appUser, roleToRemove);
+                    //Add user role
+                    await _userManager.AddToRoleAsync(appUser, UserRole.ToString());
+                }
+                _context.Update(vmProducer.Producer);
                 _context.SaveChanges();
                 return RedirectToAction("Index");
             }
-            return View(producer);
+            return View(vmProducer);
         }
 
         // GET: Producer/Delete/5
         [ActionName("Delete")]
-        public IActionResult Delete(int? id)
+        public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
             {
@@ -136,8 +182,10 @@ namespace Stolons.Controllers
             {
                 return HttpNotFound();
             }
-
-            return View(producer);
+            ApplicationUser appUser = _context.Users.First(x => x.Email == producer.Email);
+            IList<string> roles = await _userManager.GetRolesAsync(appUser);
+            string role = roles.FirstOrDefault(x => Configurations.GetRoles().Contains(x));
+            return View(new ProducerViewModel(producer, (Configurations.Role)Enum.Parse(typeof(Configurations.Role), role)));
         }
 
         // POST: Producer/Delete/5
@@ -147,11 +195,16 @@ namespace Stolons.Controllers
         {
             Producer producer = _context.Producers.Single(m => m.Id == id);
             //Deleting image
-            string uploads = Path.Combine(_environment.WebRootPath, _userStockagePath);
+            string uploads = Path.Combine(_environment.WebRootPath, Configurations.UserAvatarStockagePath);
             string image = Path.Combine(uploads, producer.Avatar);
-            if (System.IO.File.Exists(image) && producer.Avatar != Path.Combine(_userStockagePath, _defaultFileName))
+            if (System.IO.File.Exists(image) && producer.Avatar != Path.Combine(Configurations.UserAvatarStockagePath, Configurations.DefaultFileName))
                 System.IO.File.Delete(Path.Combine(uploads, producer.Avatar));
+            //Delete App User
+            ApplicationUser appUser = _context.Users.First(x => x.Email == producer.Email);
+            _context.Users.Remove(appUser);
+            //Delete User
             _context.Producers.Remove(producer);
+            //Save
             _context.SaveChanges();
             return RedirectToAction("Index");
         }

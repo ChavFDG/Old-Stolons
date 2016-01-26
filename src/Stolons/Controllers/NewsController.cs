@@ -16,8 +16,6 @@ namespace Stolons.Controllers
     {
         private ApplicationDbContext _context;
         private IHostingEnvironment _environment;
-        private string _newsStockagePath = Path.Combine("uploads", "images", "news");
-        private string _defaultFileName = "Default.png";
 
         public NewsController(ApplicationDbContext context, IHostingEnvironment environment)
         {
@@ -61,18 +59,18 @@ namespace Stolons.Controllers
         {
             if (ModelState.IsValid)
             {
-                string fileName = _defaultFileName;
+                string fileName = Configurations.DefaultFileName;
                 if (uploadFile != null)
                 {
                     //Image uploading
-                    string uploads = Path.Combine(_environment.WebRootPath, _newsStockagePath);
+                    string uploads = Path.Combine(_environment.WebRootPath, Configurations.NewsImageStockagePath);
                     fileName = Guid.NewGuid().ToString() + "_" + ContentDispositionHeaderValue.Parse(uploadFile.ContentDisposition).FileName.Trim('"');
                     await uploadFile.SaveAsAsync(Path.Combine(uploads, fileName));
                 }
                 //Setting value for creation
                 news.Id = Guid.NewGuid();
                 news.DateOfPublication = DateTime.Now;
-                news.ImageLink = Path.Combine(_newsStockagePath,fileName);
+                news.ImageLink = Path.Combine(Configurations.NewsImageStockagePath,fileName);
                 //TODO Get logged in User and add it to the news
                 //news.User = ???
                 _context.News.Add(news);
@@ -107,16 +105,16 @@ namespace Stolons.Controllers
             {
                 if (uploadFile != null)
                 {
-                    string uploads = Path.Combine(_environment.WebRootPath, _newsStockagePath);
+                    string uploads = Path.Combine(_environment.WebRootPath, Configurations.NewsImageStockagePath);
                     //Deleting old image
                     string oldImage = Path.Combine(uploads, news.ImageLink);
-                    if (System.IO.File.Exists(oldImage) && news.ImageLink != Path.Combine(_newsStockagePath,_defaultFileName))
+                    if (System.IO.File.Exists(oldImage) && news.ImageLink != Path.Combine(Configurations.NewsImageStockagePath,Configurations.DefaultFileName))
                         System.IO.File.Delete(Path.Combine(uploads, news.ImageLink));
                     //Image uploading
                     string fileName = Guid.NewGuid().ToString() + "_" + ContentDispositionHeaderValue.Parse(uploadFile.ContentDisposition).FileName.Trim('"');
                     await uploadFile.SaveAsAsync(Path.Combine(uploads, fileName));
                     //Setting new value, saving
-                    news.ImageLink = Path.Combine(_newsStockagePath, fileName);
+                    news.ImageLink = Path.Combine(Configurations.NewsImageStockagePath, fileName);
                 }
                 _context.Update(news);
                 _context.SaveChanges();
@@ -150,9 +148,9 @@ namespace Stolons.Controllers
         {
             News news = _context.News.Single(m => m.Id == id);
             //Deleting image
-            string uploads = Path.Combine(_environment.WebRootPath, _newsStockagePath);
+            string uploads = Path.Combine(_environment.WebRootPath, Configurations.NewsImageStockagePath);
             string image = Path.Combine(uploads, news.ImageLink);
-            if (System.IO.File.Exists(image) && news.ImageLink != Path.Combine(_newsStockagePath, _defaultFileName))
+            if (System.IO.File.Exists(image) && news.ImageLink != Path.Combine(Configurations.NewsImageStockagePath, Configurations.DefaultFileName))
                 System.IO.File.Delete(Path.Combine(uploads, news.ImageLink));
             _context.News.Remove(news);
             _context.SaveChanges();

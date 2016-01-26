@@ -12,6 +12,7 @@ using Microsoft.Extensions.Logging;
 using Stolons.Models;
 using Stolons.Services;
 using Microsoft.AspNet.Identity;
+using System.IO;
 
 namespace Stolons
 {
@@ -68,7 +69,7 @@ namespace Stolons
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public async void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, IServiceProvider serviceProvider)
+        public async void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, IServiceProvider serviceProvider, ApplicationDbContext context, UserManager<ApplicationUser> userManager)
         {
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
@@ -112,6 +113,7 @@ namespace Stolons
             });
 
             await CreateRoles(serviceProvider);
+            await CreateAdminAcount(context, userManager);
         }
 
         private async Task CreateRoles(IServiceProvider serviceProvider)
@@ -132,6 +134,35 @@ namespace Stolons
                     roleResult = await RoleManager.CreateAsync(new IdentityRole(roleName));
                 }
             }
+        }
+
+        private async Task CreateAdminAcount(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
+        {
+            Consumer consumer = new Consumer();
+            consumer.Name = "Admin";
+            consumer.Surname = "Admin";
+            consumer.Email = "admin@admin.com";
+            consumer.Avatar = Path.Combine(Configurations.UserAvatarStockagePath, Configurations.DefaultFileName);            
+            consumer.RegistrationDate = DateTime.Now;
+            consumer.Enable = true;
+            context.Consumers.Add(consumer);
+
+
+            #region Creating linked application data
+            var appUser = new ApplicationUser { UserName = consumer.Email, Email = consumer.Email };
+            appUser.User = consumer;
+
+            var result = await userManager.CreateAsync(appUser, consumer.Email);
+            if (result.Succeeded)
+            {
+                //Add user role
+                result = await userManager.AddToRoleAsync(appUser, Configurations.Role.Administrator.ToString());
+                //Add user type
+                result = await userManager.AddToRoleAsync(appUser, Configurations.UserType.Consumer.ToString());
+            }
+            #endregion Creating linked application data
+
+            context.SaveChanges();
         }
 
         // Entry point for the application.

@@ -1,7 +1,7 @@
-@model Stolons.Models.Producer
+@model Stolons.ViewModels.Producers.ProducerViewModel
 
 @{
-    ViewData["Title"] = "Détails du producteur : " + Model.CompanyName;
+    ViewData["Title"] = "Détails du producteur : " + Model.Producer.CompanyName;
 }
 
 <h2>@ViewData["Title"]</h2>
@@ -10,40 +10,40 @@
     <hr />
     <dl class="dl-horizontal">
         <dt>
-            @Html.DisplayNameFor(model => model.Id)
+            @Html.DisplayNameFor(model => model.Producer.Id)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.Id)
+            @Html.DisplayFor(model => model.Producer.Id)
         </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.CompanyName)
+            @Html.DisplayNameFor(model => model.Producer.CompanyName)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.CompanyName)
+            @Html.DisplayFor(model => model.Producer.CompanyName)
         </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.Name)
+            @Html.DisplayNameFor(model => model.Producer.Name)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.Name)
+            @Html.DisplayFor(model => model.Producer.Name)
         </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.Surname)
+            @Html.DisplayNameFor(model => model.Producer.Surname)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.Surname)
+            @Html.DisplayFor(model => model.Producer.Surname)
         </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.Email)
+            @Html.DisplayNameFor(model => model.Producer.Email)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.Email)
+            @Html.DisplayFor(model => model.Producer.Email)
         </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.RegistrationDate)
+            @Html.DisplayNameFor(model => model.Producer.RegistrationDate)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.RegistrationDate)
+            @Html.DisplayFor(model => model.Producer.RegistrationDate)
         </dd>
         <dt>
             @Html.DisplayNameFor(model => model.UserRole)
@@ -52,80 +52,80 @@
             @Html.DisplayFor(model => model.UserRole)
         </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.PhoneNumber)
+            @Html.DisplayNameFor(model => model.Producer.PhoneNumber)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.PhoneNumber)
+            @Html.DisplayFor(model => model.Producer.PhoneNumber)
         </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.Address)
+            @Html.DisplayNameFor(model => model.Producer.Address)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.Address)
+            @Html.DisplayFor(model => model.Producer.Address)
         </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.PostCode)
+            @Html.DisplayNameFor(model => model.Producer.PostCode)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.PostCode)
+            @Html.DisplayFor(model => model.Producer.PostCode)
         </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.City)
+            @Html.DisplayNameFor(model => model.Producer.City)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.City)
+            @Html.DisplayFor(model => model.Producer.City)
         </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.Cotisation)
+            @Html.DisplayNameFor(model => model.Producer.Cotisation)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.Cotisation)
+            @Html.DisplayFor(model => model.Producer.Cotisation)
         </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.Enable)
+            @Html.DisplayNameFor(model => model.Producer.Enable)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.Enable)
+            @Html.DisplayFor(model => model.Producer.Enable)
         </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.Area)
+            @Html.DisplayNameFor(model => model.Producer.Area)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.Area)
+            @Html.DisplayFor(model => model.Producer.Area)
         </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.ExploitationPicuresSerialized)
+            @Html.DisplayNameFor(model => model.Producer.ExploitationPicuresSerialized)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.ExploitationPicuresSerialized)
+            @Html.DisplayFor(model => model.Producer.ExploitationPicuresSerialized)
         </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.OpenText)
+            @Html.DisplayNameFor(model => model.Producer.OpenText)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.OpenText)
+            @Html.DisplayFor(model => model.Producer.OpenText)
         </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.Production)
+            @Html.DisplayNameFor(model => model.Producer.Production)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.Production)
+            @Html.DisplayFor(model => model.Producer.Production)
         </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.StartDate)
+            @Html.DisplayNameFor(model => model.Producer.StartDate)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.StartDate)
+            @Html.DisplayFor(model => model.Producer.StartDate)
         </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.WebSiteLink)
+            @Html.DisplayNameFor(model => model.Producer.WebSiteLink)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.WebSiteLink)
+            @Html.DisplayFor(model => model.Producer.WebSiteLink)
         </dd>
     </dl>
 </div>
 <p>
-    <a asp-action="Edit" asp-route-id="@Model.Id">Editer @Model.CompanyName</a> |
+    <a asp-action="Edit" asp-route-id="@Model.Producer.Id">Editer @Model.Producer.CompanyName</a> |
     <a asp-action="Index">Retourner aux producteurs</a>
 </p>

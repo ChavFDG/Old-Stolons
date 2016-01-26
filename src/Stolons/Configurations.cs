@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -38,5 +39,9 @@ namespace Stolons
         {
             return Enum.GetNames(typeof(UserType));
         }
+        
+        public static string NewsImageStockagePath = Path.Combine("uploads", "images", "news");
+        public static string UserAvatarStockagePath = Path.Combine("uploads", "images", "avatars");
+        public static string DefaultFileName = "Default.png";
     }
 }
