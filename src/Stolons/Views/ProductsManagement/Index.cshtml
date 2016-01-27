@@ -1,0 +1,74 @@
+@model IEnumerable<Stolons.Models.Product>
+
+@{
+    ViewData["Title"] = "Gestion de mes produits et mes stocks";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<p>
+    <a asp-action="Create">Ajouter un produit</a>
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Name)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Familly)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Familly.Type)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Type)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Labels)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Price)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.WeekStock)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.State)
+        </th>
+        <th></th>
+    </tr>
+    
+@foreach (var item in Model) {
+    <tr>
+        <th>
+            @Html.DisplayFor(modelItem => item.Name)
+        </th>
+        <th>
+            @Html.DisplayFor(model => item.Familly)
+        </th>
+        <th>
+            @Html.DisplayFor(model => item.Familly.Type)
+        </th>
+        <th>
+            @Html.DisplayFor(model => item.Type)
+        </th>
+        <th>
+            @Html.DisplayFor(model => item.Labels)
+        </th>
+        <th>
+            @Html.DisplayFor(model => item.Price)
+        </th>
+        <th>
+            @Html.DisplayFor(model => item.WeekStock)
+        </th>
+        <th>
+            @Html.DisplayFor(model => item.State)
+        </th>
+        <td>
+            <a asp-action="Edit" asp-route-id="@item.Id">Editer</a> |
+            <a asp-action="Details" asp-route-id="@item.Id">Détails</a> |
+            <a asp-action="Delete" asp-route-id="@item.Id">Supprimer</a>
+        </td>
+    </tr>
+}
+</table>

@@ -1,0 +1,90 @@
+@model Stolons.Models.Product
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Product</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.AverageQuantity)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.AverageQuantity)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.DLC)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.DLC)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Description)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Description)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.PicturesSerialized)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.PicturesSerialized)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Price)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Price)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.ProductUnit)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ProductUnit)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.QuantityStep)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.QuantityStep)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.RemainingStock)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.RemainingStock)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.State)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.State)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Type)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Type)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.WeekStock)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.WeekStock)
+        </dd>
+    </dl>
+</div>
+<p>
+    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</p>

@@ -97,8 +97,20 @@
                         <li><a asp-controller="Home" asp-action="About">A propos</a></li>
                         <li><a asp-controller="Home" asp-action="HowItsWork">Comment ça marche</a></li>
                         <li><a asp-controller="Home" asp-action="Contact">Contact</a></li>
-                        <li><a asp-controller="Users" asp-action="Index">Adhérents</a></li>
-                        <li><a asp-controller="Producers" asp-action="Index">Producteurs</a></li>
+                        @if (User.IsInRole(Configurations.UserType.Consumer.ToString()))
+                        {
+                            //On affiche le panier de la semaine
+                        }
+                        @if (User.IsInRole(Configurations.UserType.Producer.ToString()))
+                        {
+                            <li><a asp-controller="ProductsManagement" asp-action="Index">Mes produits et mes stocks</a></li>
+                            //<li><a asp-controller="???" asp-action="Index">Mes factures</a></li>
+                        }
+                        @if (User.IsInRole(Configurations.Role.Volunteer.ToString()) || User.IsInRole(Configurations.Role.Administrator.ToString()))
+                        {
+                            <li><a asp-controller="Users" asp-action="Index">Adhérents</a></li>
+                            <li><a asp-controller="Producers" asp-action="Index">Producteurs</a></li>
+                        }
                     </ul>
                     @await Html.PartialAsync("_LoginPartial")
                 </div>
