@@ -24,20 +24,29 @@
 }
 <table class="table">
         @foreach (var item in Model.OrderByDescending(x => x.DateOfPublication))
-            {
+        {
             <tr>
                 <td  class="tdImageNews">
-                    <div class="newsThumnail">
-                        <img src="@Html.DisplayFor(modelItem => item.ImageLink)" class="responsiveImage" />
-                    </div>
+                    <img src="@Html.DisplayFor(modelItem => item.ImageLink)" class="newsThumnail responsiveImage" >
                 </td>
                 <td>
                     <h3>@Html.DisplayFor(modelItem => item.Title)</h3>
                     <p>
-                        Publi&eacute; par @Html.DisplayFor(modelItem => item.User.Email) le @Html.DisplayFor(modelItem => item.DateOfPublication)
+                        <div class="userNewsAvatar">
+                            <img src="@Html.DisplayFor(modelItem => item.User.Avatar)" class="responsiveImage circleAvatarDiv" />
+                        </div>
+                        @if (User.IsInRole(Configurations.UserType.Producer.ToString()))
+                        {
+                             <a asp-action="PartialDetail" asp-controller="Producers" asp-route-id="@item.User.Id">@Configurations.GetAlias(item.User)</a>
+                        }
+                        else
+                        {
+                            @Configurations.GetAlias(item.User)
+                        }
+                        le @Html.DisplayFor(modelItem => item.DateOfPublication)
                         @if (User.IsInRole(Configurations.Role.Administrator.ToString())
-                        || User.IsInRole(Configurations.Role.Volunteer.ToString()))
-                        //Ou c'est la news de l'utilisateur
+                        || User.IsInRole(Configurations.Role.Volunteer.ToString())
+                        || User.GetUserId() == item.User.Email)
                         {
                             <a asp-action="Edit" asp-route-id="@item.Id">Editer </a><a asp-action = "Delete" asp-route-id = "@item.Id">| Supprimer</a>
                         }

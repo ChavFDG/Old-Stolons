@@ -35,8 +35,9 @@
 
   "frameworks": {
     "dnx451": {
-      "frameworkAssemblies": {
-      }
+        "frameworkAssemblies": {
+            "System.Drawing": "4.0.0.0"
+        }
     },
     "dnxcore50": { }
   },

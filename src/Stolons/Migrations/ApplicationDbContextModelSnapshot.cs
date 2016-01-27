@@ -205,7 +205,7 @@ namespace Stolons.Migrations
                     b.Property<string>("Title")
                         .IsRequired();
 
-                    b.Property<int?>("UserId");
+                    b.Property<int>("UserForeignKey");
 
                     b.HasKey("Id");
                 });
@@ -420,7 +420,7 @@ namespace Stolons.Migrations
                 {
                     b.HasOne("Stolons.Models.User")
                         .WithMany()
-                        .HasForeignKey("UserId");
+                        .HasForeignKey("UserForeignKey");
                 });
 
             modelBuilder.Entity("Stolons.Models.Product", b =>

@@ -1,7 +1,7 @@
 @model Stolons.Models.News
 
 @{
-    ViewData["Title"] = "Edition de la nouvelle de ??? du " + Model.DateOfPublication;
+    ViewData["Title"] = "Edition de la nouvelle de " + Model.User.Email + " du " + Model.DateOfPublication;
 }
 
 <h2>@ViewData["Title"]</h2>

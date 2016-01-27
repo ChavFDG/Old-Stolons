@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -12,6 +13,9 @@ namespace Stolons.Models
         [Key]
         public Guid Id { get; set; }
 
+        public int UserForeignKey { get; set; }
+
+        [ForeignKey("UserForeignKey")]
         public User User { get; set; }
 
         [Required]

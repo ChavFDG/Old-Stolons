@@ -30,7 +30,7 @@ namespace Stolons.Controllers
         // GET: News
         public IActionResult Index()
         {
-            return View(_context.News.ToList());
+            return View(_context.News.Include(m => m.User).ToList());
         }
 
         // GET: News/Details/5
@@ -41,7 +41,7 @@ namespace Stolons.Controllers
                 return HttpNotFound();
             }
 
-            News news = _context.News.Single(m => m.Id == id);
+            News news = _context.News.Include(m => m.User).Single(m => m.Id == id);
             if (news == null)
             {
                 return HttpNotFound();
@@ -99,7 +99,7 @@ namespace Stolons.Controllers
                 return HttpNotFound();
             }
 
-            News news = _context.News.Single(m => m.Id == id);
+            News news = _context.News.Include(m => m.User).Single(m => m.Id == id);
             if (news == null)
             {
                 return HttpNotFound();
@@ -143,7 +143,7 @@ namespace Stolons.Controllers
                 return HttpNotFound();
             }
 
-            News news = _context.News.Single(m => m.Id == id);
+            News news = _context.News.Include(m => m.User).Single(m => m.Id == id);
             if (news == null)
             {
                 return HttpNotFound();

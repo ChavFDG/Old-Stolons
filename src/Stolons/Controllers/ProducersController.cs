@@ -58,6 +58,26 @@ namespace Stolons.Controllers
             return View(new ProducerViewModel(producer, (Configurations.Role)Enum.Parse(typeof(Configurations.Role), role)));
         }
 
+
+        // GET: Producer/PartialDetails/5
+        public async Task<IActionResult> PartialDetails(int? id)
+        {
+            if (id == null)
+            {
+                return HttpNotFound();
+            }
+
+            Producer producer = _context.Producers.Single(m => m.Id == id);
+            if (producer == null)
+            {
+                return HttpNotFound();
+            }
+            ApplicationUser appUser = _context.Users.First(x => x.Email == producer.Email);
+            IList<string> roles = await _userManager.GetRolesAsync(appUser);
+            string role = roles.FirstOrDefault(x => Configurations.GetRoles().Contains(x));
+            return PartialView(new ProducerViewModel(producer, (Configurations.Role)Enum.Parse(typeof(Configurations.Role), role)));
+        }
+
         // GET: Producer/Create
         public IActionResult Create()
         {

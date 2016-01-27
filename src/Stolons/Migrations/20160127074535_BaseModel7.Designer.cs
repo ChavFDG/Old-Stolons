@@ -8,8 +8,8 @@ using Stolons.Models;
 namespace Stolons.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20160126154313_ModelsBase6")]
-    partial class ModelsBase6
+    [Migration("20160127074535_BaseModel7")]
+    partial class BaseModel7
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -206,7 +206,7 @@ namespace Stolons.Migrations
                     b.Property<string>("Title")
                         .IsRequired();
 
-                    b.Property<int?>("UserId");
+                    b.Property<int>("UserForeignKey");
 
                     b.HasKey("Id");
                 });
@@ -421,7 +421,7 @@ namespace Stolons.Migrations
                 {
                     b.HasOne("Stolons.Models.User")
                         .WithMany()
-                        .HasForeignKey("UserId");
+                        .HasForeignKey("UserForeignKey");
                 });
 
             modelBuilder.Entity("Stolons.Models.Product", b =>

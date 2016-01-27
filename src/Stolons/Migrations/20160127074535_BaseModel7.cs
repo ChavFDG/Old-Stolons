@@ -4,7 +4,7 @@ using Microsoft.Data.Entity.Migrations;
 
 namespace Stolons.Migrations
 {
-    public partial class ModelsBase6 : Migration
+    public partial class BaseModel7 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -166,17 +166,17 @@ namespace Stolons.Migrations
                     ImageLink = table.Column<string>(nullable: true),
                     Message = table.Column<string>(nullable: false),
                     Title = table.Column<string>(nullable: false),
-                    UserId = table.Column<int>(nullable: true)
+                    UserForeignKey = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_News", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_News_User_UserId",
-                        column: x => x.UserId,
+                        name: "FK_News_User_UserForeignKey",
+                        column: x => x.UserForeignKey,
                         principalTable: "User",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
             migrationBuilder.CreateTable(
                 name: "WeekBasket",
