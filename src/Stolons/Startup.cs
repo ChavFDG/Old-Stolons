@@ -119,34 +119,48 @@ namespace Stolons
 
         private void CreateProductCategories(ApplicationDbContext context)
         {
-            ProductType fresh = new ProductType("Produits frais");
-            context.ProductTypes.Add(fresh);
-            context.ProductFamillys.Add(new ProductFamilly(fresh, "Fruits"));
-            context.ProductFamillys.Add(new ProductFamilly(fresh, "Légumes"));
-            context.ProductFamillys.Add(new ProductFamilly(fresh, "Produits laitiers"));
-            context.ProductFamillys.Add(new ProductFamilly(fresh, "Oeufs"));
-            //ProductFamilly fruits = new ProductFamilly(fresh, "Fruits");
-            //ProductFamilly vegetables = new ProductFamilly(fresh, "Légumes");
-            //ProductFamilly dairy = new ProductFamilly(fresh, "Produits laitiers");
-            //ProductFamilly eggs = new ProductFamilly(fresh, "Oeufs");
+            ProductType fresh = createProductType(context, "Produits frais");
+            createProductFamily(context, fresh, "Fruits");
+            createProductFamily(context, fresh, "Légumes");
+            createProductFamily(context, fresh, "Produits laitiers");
+            createProductFamily(context, fresh, "Oeufs");
 
-            ProductType bakery = new ProductType("Boulangerie");
-            context.ProductTypes.Add(bakery);
-            context.ProductFamillys.Add(new ProductFamilly(bakery, "Farines"));
+            ProductType bakery = createProductType(context, "Boulangerie");
+            createProductFamily(context, bakery, "Farines");
 
-            ProductType grocery = new ProductType("Epicerie");
-            context.ProductTypes.Add(grocery);
-            context.ProductFamillys.Add(new ProductFamilly(grocery, "Conserves"));
+            ProductType grocery = createProductType(context, "Epicerie");
+            createProductFamily(context, grocery, "Conserves");
 
-            ProductType bevarages = new ProductType("Boissons");
-            context.ProductTypes.Add(bevarages);
-            context.ProductFamillys.Add(new ProductFamilly(bevarages, "Alcools"));
-            context.ProductFamillys.Add(new ProductFamilly(bevarages, "Sans alcool"));
+            ProductType bevarages = createProductType(context, "Boissons");
+            createProductFamily(context, bevarages, "Alcools");
+            createProductFamily(context, bevarages, "Sans alcool");
 
-            ProductType other = new ProductType("Autres");
-            context.ProductTypes.Add(other);
-            context.ProductFamillys.Add(new ProductFamilly(other, "Savon"));
+            ProductType other = createProductType(context, "Autres");
+            createProductFamily(context, other, "Savons");
+
             context.SaveChanges();
+        }
+
+        private ProductType createProductType(ApplicationDbContext context, string name)
+        {
+            ProductType type = context.ProductTypes.FirstOrDefault(x=> x.Name == name);
+            if (type == null)
+            {
+                type = new ProductType(name);
+                context.ProductTypes.Add(type);
+            }
+            return type;
+        }
+
+        private ProductFamilly createProductFamily(ApplicationDbContext context, ProductType type, string name)
+        {
+            ProductFamilly family = context.ProductFamillys.FirstOrDefault(x=> x.Name == name);
+            if (family == null)
+            {
+                family = new ProductFamilly(type, name);
+                context.ProductFamillys.Add(family);
+            }
+            return family;
         }
 
         private async Task CreateRoles(IServiceProvider serviceProvider)
