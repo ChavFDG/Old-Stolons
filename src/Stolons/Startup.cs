@@ -114,6 +114,39 @@ namespace Stolons
 
             await CreateRoles(serviceProvider);
             await CreateAdminAcount(context, userManager);
+            await createProductCategories(context);
+        }
+
+        private async Task createProductCategories(ApplicationDbContext context)
+        {
+            ProductType fresh = new ProductType("Produits frais");
+            context.ProductTypes.Add(fresh);
+            context.ProductFamillys.Add(new ProductFamilly(fresh, "Fruits"));
+            context.ProductFamillys.Add(new ProductFamilly(fresh, "Légumes"));
+            context.ProductFamillys.Add(new ProductFamilly(fresh, "Produits laitiers"));
+            context.ProductFamillys.Add(new ProductFamilly(fresh, "Oeufs"));
+            //ProductFamilly fruits = new ProductFamilly(fresh, "Fruits");
+            //ProductFamilly vegetables = new ProductFamilly(fresh, "Légumes");
+            //ProductFamilly dairy = new ProductFamilly(fresh, "Produits laitiers");
+            //ProductFamilly eggs = new ProductFamilly(fresh, "Oeufs");
+
+            ProductType bakery = new ProductType("Boulangerie");
+            context.ProductTypes.Add(bakery);
+            context.ProductFamillys.Add(new ProductFamilly(bakery, "Farines"));
+
+            ProductType grocery = new ProductType("Epicerie");
+            context.ProductTypes.Add(grocery);
+            context.ProductFamillys.Add(new ProductFamilly(grocery, "Conserves"));
+
+            ProductType bevarages = new ProductType("Boissons");
+            context.ProductTypes.Add(bevarages);
+            context.ProductFamillys.Add(new ProductFamilly(bevarages, "Alcools"));
+            context.ProductFamillys.Add(new ProductFamilly(bevarages, "Sans alcool"));
+
+            ProductType other = new ProductType("Autres");
+            context.ProductTypes.Add(other);
+            context.ProductFamillys.Add(new ProductFamilly(other, "Savon"));
+            context.SaveChanges();
         }
 
         private async Task CreateRoles(IServiceProvider serviceProvider)
@@ -163,7 +196,6 @@ namespace Stolons
                     Configurations.Role.Administrator,
                     Configurations.UserType.Consumer);
         }
-
         private async Task CreateAcount(ApplicationDbContext context, UserManager<ApplicationUser> userManager, string name, string surname, string email, string password, Configurations.Role role, Configurations.UserType userType)
         {
             if (context.Consumers.Any(x => x.Email == email))
