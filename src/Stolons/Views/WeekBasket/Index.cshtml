@@ -1,0 +1,59 @@
+
+@using Stolons.ViewModels.WeekBasket;
+@model WeekBasketViewModel
+
+@{
+    ViewData["Title"] = "Mon panier";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<div class="weekbasket">
+    <div class="container">
+        <div class="container col-xs-4 col-sm-4 col-md-4 col-lg-4">
+            <div  bordered-table">
+                <span>List des produits en cours pour l'utilisateur.</span>
+                <br/>
+                <span>(Mes articles):</span>
+                <table>
+                </table>
+            </div>
+        </div>
+        <div class="container col-xs-8 col-sm-8 col-md-8 col-lg-8">
+            <div class="row">
+                <label class="control-label" for="productCategory">Categories: </label>
+                <select name="productCategory">
+                    @foreach (var productType in Model.productTypes)
+                    {
+                        <optgroup label="@productType.Name">
+                            @foreach (var productFamily in Model.productFamilies)
+                            {
+                                @if (productType.Name == productFamily.Type.Name)
+                                {
+                                    <option>@productFamily.Name</option>
+                                }
+                            }
+                        </optgroup>
+                    }
+                </select>
+
+                <label class="control-label" for="labels">Label: </label>
+                    <select name="labels">
+                        <option>Bio man!</option>
+                        <option>Local</option>
+                        <option>raisonné</option>
+                    </select>
+                
+                <input type="text" placeholder="Rechercher un produit" />
+
+            </div>
+            Liste de tous les produits disponibles
+
+            <br />
+             
+        </div>
+        <div class="row">
+            
+        </div>
+    </div>
+</div>

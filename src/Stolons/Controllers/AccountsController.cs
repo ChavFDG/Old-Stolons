@@ -102,7 +102,6 @@ namespace Stolons.Controllers
             // If we got this far, something failed, redisplay form
             return View(model);
         }
-        
 
         //
         // POST: /Account/LogOff
@@ -140,11 +139,6 @@ namespace Stolons.Controllers
             {
                 ModelState.AddModelError(string.Empty, error.Description);
             }
-        }
-
-        private async Task<ApplicationUser> GetCurrentUserAsync()
-        {
-            return await _userManager.FindByIdAsync(HttpContext.User.GetUserId());
         }
 
         private IActionResult RedirectToLocal(string returnUrl)

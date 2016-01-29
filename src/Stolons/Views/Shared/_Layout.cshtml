@@ -1,4 +1,8 @@
 ﻿<!DOCTYPE html>
+@using Microsoft.AspNet.Identity;
+@using System.Security.Claims;
+@using Stolons.ViewModels;
+
 <html>
     <head>
         <meta charset="utf-8" />
@@ -35,7 +39,6 @@
             </script>
             <script src="~/js/site.min.js" asp-append-version="true"></script>
         </environment>
-
     </head>
     <body>
         <!--Popup-->
@@ -57,7 +60,7 @@
             // Initalize modal dialog
             // attach modal-container bootstrap attributes to links with .modal-link class.
             // when a link is clicked with these attributes, bootstrap will display the href content in a modal dialog.
-            $('body').on('click', '.modal-link', function (e) {
+                $('body').on('click', '.modal-link', function (e) {
                 e.preventDefault();
                 $(this).attr('data-target', '#modal-container');
                 $(this).attr('data-toggle', 'modal');
@@ -79,43 +82,8 @@
         });
         </script>
 
+        @await Component.InvokeAsync("Banner")
 
-        <div class="navbar navbar-inverse navbar-fixed-top">
-            <div class="container">
-                <div class="navbar-header">
-                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                        <span class="sr-only">Toggle navigation</span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                    </button>
-                    <a asp-controller="News" asp-action="Index" class="navbar-brand">Stolons</a>
-                </div>
-                <div class="navbar-collapse collapse">
-                    <ul class="nav navbar-nav">
-                        <li><a asp-controller="News" asp-action="Index">Les nouvelles</a></li>
-                        <li><a asp-controller="Home" asp-action="About">A propos</a></li>
-                        <li><a asp-controller="Home" asp-action="HowItsWork">Comment ça marche</a></li>
-                        <li><a asp-controller="Home" asp-action="Contact">Contact</a></li>
-                        @if (User.IsInRole(Configurations.UserType.Consumer.ToString()))
-                        {
-                            //On affiche le panier de la semaine
-                        }
-                        @if (User.IsInRole(Configurations.UserType.Producer.ToString()))
-                        {
-                            <li><a asp-controller="ProductsManagement" asp-action="Index">Mes produits et mes stocks</a></li>
-                            //<li><a asp-controller="???" asp-action="Index">Mes factures</a></li>
-                        }
-                        @if (User.IsInRole(Configurations.Role.Volunteer.ToString()) || User.IsInRole(Configurations.Role.Administrator.ToString()))
-                        {
-                            <li><a asp-controller="Users" asp-action="Index">Adhérents</a></li>
-                            <li><a asp-controller="Producers" asp-action="Index">Producteurs</a></li>
-                        }
-                    </ul>
-                    @await Html.PartialAsync("_LoginPartial")
-                </div>
-            </div>
-        </div>
         <div class="container body-content">
             @RenderBody()
             <hr />
