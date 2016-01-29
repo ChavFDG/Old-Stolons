@@ -251,6 +251,8 @@ namespace Stolons.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<string>("Image");
+
                     b.Property<string>("Name");
 
                     b.Property<Guid?>("TypeId");
@@ -262,6 +264,8 @@ namespace Stolons.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Image");
 
                     b.Property<string>("Name");
 

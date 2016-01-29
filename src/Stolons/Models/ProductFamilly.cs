@@ -14,5 +14,7 @@ namespace Stolons.Models
         public ProductType Type { get; set; }
         [Display(Name = "Nom")]
         public string Name { get; set; }
+        [Display(Name = "Image")] //Lien vers l'image du label
+        public string Image { get; set; }
     }
 }

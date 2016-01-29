@@ -8,8 +8,8 @@ using Stolons.Models;
 namespace Stolons.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20160127074535_BaseModel7")]
-    partial class BaseModel7
+    [Migration("20160129134124_BseModel8")]
+    partial class BseModel8
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -252,6 +252,8 @@ namespace Stolons.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<string>("Image");
+
                     b.Property<string>("Name");
 
                     b.Property<Guid?>("TypeId");
@@ -263,6 +265,8 @@ namespace Stolons.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Image");
 
                     b.Property<string>("Name");
 

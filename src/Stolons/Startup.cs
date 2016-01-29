@@ -153,7 +153,7 @@ namespace Stolons
                     "damien.paravel@gmail.com",
                     "damien.paravel@gmail.com",
                     Configurations.Role.Administrator,
-                    Configurations.UserType.Consumer);
+                    Configurations.UserType.Producer);
             await CreateAcount(context,
                     userManager,
                     "MICHON",

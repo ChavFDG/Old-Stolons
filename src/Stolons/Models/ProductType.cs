@@ -12,5 +12,7 @@ namespace Stolons.Models
         public Guid Id { get; set; }
         [Display(Name = "Nom")]
         public string Name { get; set; }
+        [Display(Name = "Image")] //Lien vers l'image du label
+        public string Image { get; set; }
     }
 }
