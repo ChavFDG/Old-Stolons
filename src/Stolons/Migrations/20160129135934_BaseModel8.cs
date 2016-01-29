@@ -4,7 +4,7 @@ using Microsoft.Data.Entity.Migrations;
 
 namespace Stolons.Migrations
 {
-    public partial class BseModel8 : Migration
+    public partial class BaseModel8 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

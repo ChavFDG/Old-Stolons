@@ -39,6 +39,7 @@ namespace Stolons.Models
                 _Pictures = value;
             }
         }
+
         public string PicturesSerialized
         {
             get

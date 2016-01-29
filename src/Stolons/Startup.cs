@@ -114,10 +114,10 @@ namespace Stolons
 
             await CreateRoles(serviceProvider);
             await CreateAdminAcount(context, userManager);
-            await createProductCategories(context);
+            CreateProductCategories(context);
         }
 
-        private async Task createProductCategories(ApplicationDbContext context)
+        private void CreateProductCategories(ApplicationDbContext context)
         {
             ProductType fresh = new ProductType("Produits frais");
             context.ProductTypes.Add(fresh);

@@ -8,6 +8,10 @@ using System.Threading.Tasks;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Hosting;
 using System.Security.Claims;
+using Microsoft.AspNet.Http;
+using System.Collections.Generic;
+using System.IO;
+using Microsoft.Net.Http.Headers;
 
 namespace Stolons.Controllers
 {
@@ -28,7 +32,8 @@ namespace Stolons.Controllers
         public async Task<IActionResult> Index()
         {
             var appUser = await GetCurrentUserAsync();
-            return View(_context.Producs.Include(m => m.Labels).Include(m => m.Familly).Where(x => x.Producer.Email == appUser.Email).ToList());
+            var products = _context.Producs.Include(m => m.Labels).Include(m => m.Familly).Where(x => x.Producer.Email == appUser.Email).ToList();
+            return View(products);
         }
 
         // GET: ProductsManagement/Details/5
@@ -57,10 +62,24 @@ namespace Stolons.Controllers
         // POST: ProductsManagement/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(Product product)
+        public async Task<IActionResult> Create(Product product, IFormFile uploadFile1, IFormFile uploadFile2, IFormFile uploadFile3)
         {
             if (ModelState.IsValid)
             {
+                //On s'occupe des images du produit
+                string fileName = Configurations.DefaultFileName;
+                foreach (IFormFile uploadFile in new List<IFormFile>() { uploadFile1, uploadFile2, uploadFile3 })
+                {
+                    if (uploadFile != null)
+                    {
+                        //Image uploading
+                        string uploads = Path.Combine(_environment.WebRootPath, Configurations.UserProductsStockagePath);
+                        fileName = Guid.NewGuid().ToString() + "_" + ContentDispositionHeaderValue.Parse(uploadFile.ContentDisposition).FileName.Trim('"');
+                        await uploadFile.SaveAsAsync(Path.Combine(uploads, fileName)); 
+                        product.Pictures.Add(Path.Combine(Configurations.UserProductsStockagePath, fileName));
+                    }
+                }
+
                 product.Id = Guid.NewGuid();
                 _context.Producs.Add(product);
                 _context.SaveChanges();
