@@ -6,7 +6,7 @@ using Microsoft.AspNet.Mvc;
 using Microsoft.AspNet.Identity;
 using System.Security.Claims;
 using Microsoft.Extensions.Logging;
-using Stolons.ViewModels.Base;
+using Stolons.ViewModels.Banner;
 using Stolons.Models;
 
 namespace Stolons.Controllers
@@ -31,7 +31,7 @@ namespace Stolons.Controllers
             {
                 ApplicationUser appUser = await _userManager.FindByIdAsync(HttpContext.User.GetUserId()); 
                 User user = _dbContext.StolonsUsers.FirstOrDefault(x => x.Email.Equals(appUser.Email, StringComparison.CurrentCultureIgnoreCase));
-                return View(new BaseViewModel(user));
+                return View(new BannerViewModel(user));
             } else
             {
                 return View();
