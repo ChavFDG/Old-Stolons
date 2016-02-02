@@ -1,0 +1,49 @@
+﻿<!DOCTYPE html>
+@using Microsoft.AspNet.Identity;
+@using System.Security.Claims;
+@using Stolons.ViewModels;
+
+<div class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a asp-controller="News" asp-action="Index" class="navbar-brand">Stolons</a>
+        </div>
+        <div>
+            <ul class="nav navbar-nav">
+                @if (!User.Identity.IsAuthenticated)
+                {
+                    <li><a asp-controller="Home" asp-action="HowItsWork">Comment ça marche</a></li>
+                    <li><a asp-controller="News" asp-action="Index">Les nouvelles</a></li>
+                    <li><a asp-controller="ProductsManagement" asp-action="PublicProducts">Nos producteurs</a></li>
+                    <li><a asp-controller="Producers" asp-action="PublicProducers">Nos produits</a></li>
+                    <li><a asp-controller="Home" asp-action="Contact">Qui sommes-nous ?</a></li>        
+                } else
+                {
+                    <li><a asp-controller="News" asp-action="Index">Les nouvelles</a></li>
+                    @if (User.IsInRole(Configurations.UserType.Consumer.ToString()))
+                    {
+                        <li><a asp-controller="WeekBasket" asp-action="Index" asp-route-id="@Model.User.Id">Mon panier</a></li>
+                    }
+                    @if (User.IsInRole(Configurations.UserType.Producer.ToString()))
+                    {
+                        <li><a asp-controller="ProductsManagement" asp-action="Index">Mes produits et mes stocks</a></li>
+                        //<li><a asp-controller="???" asp-action="Index">Mes factures</a></li>
+                    }
+                    @if (User.IsInRole(Configurations.Role.Volunteer.ToString()) || User.IsInRole(Configurations.Role.Administrator.ToString()))
+                    {
+                        <li><a asp-controller="Weekbasket" asp-action="Baskets">Gérer les paniers</a></li>
+                        <li><a asp-controller="Users" asp-action="Index">Adhérents</a></li>
+                        <li><a asp-controller="Producers" asp-action="Index">Producteurs</a></li>
+                    }
+                }
+            </ul>
+            @await Html.PartialAsync("_LoginPartial")
+        </div>
+    </div>
+</div>
