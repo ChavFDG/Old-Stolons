@@ -4,7 +4,7 @@ using Microsoft.Data.Entity.Migrations;
 
 namespace Stolons.Migrations
 {
-    public partial class BaseModel8 : Migration
+    public partial class BaseModel10 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -25,13 +25,12 @@ namespace Stolons.Migrations
                 name: "ProductType",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(nullable: false),
-                    Image = table.Column<string>(nullable: true),
-                    Name = table.Column<string>(nullable: true)
+                    Name = table.Column<string>(nullable: false),
+                    Image = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ProductType", x => x.Id);
+                    table.PrimaryKey("PK_ProductType", x => x.Name);
                 });
             migrationBuilder.CreateTable(
                 name: "User",
@@ -88,19 +87,18 @@ namespace Stolons.Migrations
                 name: "ProductFamilly",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(nullable: false),
+                    Name = table.Column<string>(nullable: false),
                     Image = table.Column<string>(nullable: true),
-                    Name = table.Column<string>(nullable: true),
-                    TypeId = table.Column<Guid>(nullable: true)
+                    TypeName = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ProductFamilly", x => x.Id);
+                    table.PrimaryKey("PK_ProductFamilly", x => x.Name);
                     table.ForeignKey(
-                        name: "FK_ProductFamilly_ProductType_TypeId",
-                        column: x => x.TypeId,
+                        name: "FK_ProductFamilly_ProductType_TypeName",
+                        column: x => x.TypeName,
                         principalTable: "ProductType",
-                        principalColumn: "Id",
+                        principalColumn: "Name",
                         onDelete: ReferentialAction.Restrict);
                 });
             migrationBuilder.CreateTable(
@@ -205,7 +203,6 @@ namespace Stolons.Migrations
                     AverageQuantity = table.Column<int>(nullable: false),
                     DLC = table.Column<DateTime>(nullable: false),
                     Description = table.Column<string>(nullable: true),
-                    FamillyId = table.Column<Guid>(nullable: true),
                     Name = table.Column<string>(nullable: true),
                     PicturesSerialized = table.Column<string>(nullable: true),
                     Price = table.Column<float>(nullable: false),
@@ -221,10 +218,10 @@ namespace Stolons.Migrations
                 {
                     table.PrimaryKey("PK_Product", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Product_ProductFamilly_FamillyId",
-                        column: x => x.FamillyId,
+                        name: "FK_Product_ProductFamilly_Name",
+                        column: x => x.Name,
                         principalTable: "ProductFamilly",
-                        principalColumn: "Id",
+                        principalColumn: "Name",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Product_Producer_ProducerId",

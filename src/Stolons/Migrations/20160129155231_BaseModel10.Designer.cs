@@ -8,8 +8,8 @@ using Stolons.Models;
 namespace Stolons.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20160129135934_BaseModel8")]
-    partial class BaseModel8
+    [Migration("20160129155231_BaseModel10")]
+    partial class BaseModel10
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -222,8 +222,6 @@ namespace Stolons.Migrations
 
                     b.Property<string>("Description");
 
-                    b.Property<Guid?>("FamillyId");
-
                     b.Property<string>("Name");
 
                     b.Property<string>("PicturesSerialized");
@@ -249,28 +247,22 @@ namespace Stolons.Migrations
 
             modelBuilder.Entity("Stolons.Models.ProductFamilly", b =>
                 {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd();
+                    b.Property<string>("Name");
 
                     b.Property<string>("Image");
 
-                    b.Property<string>("Name");
+                    b.Property<string>("TypeName");
 
-                    b.Property<Guid?>("TypeId");
-
-                    b.HasKey("Id");
+                    b.HasKey("Name");
                 });
 
             modelBuilder.Entity("Stolons.Models.ProductType", b =>
                 {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd();
+                    b.Property<string>("Name");
 
                     b.Property<string>("Image");
 
-                    b.Property<string>("Name");
-
-                    b.HasKey("Id");
+                    b.HasKey("Name");
                 });
 
             modelBuilder.Entity("Stolons.Models.User", b =>
@@ -432,7 +424,7 @@ namespace Stolons.Migrations
                 {
                     b.HasOne("Stolons.Models.ProductFamilly")
                         .WithMany()
-                        .HasForeignKey("FamillyId");
+                        .HasForeignKey("Name");
 
                     b.HasOne("Stolons.Models.Producer")
                         .WithMany()
@@ -443,7 +435,7 @@ namespace Stolons.Migrations
                 {
                     b.HasOne("Stolons.Models.ProductType")
                         .WithMany()
-                        .HasForeignKey("TypeId");
+                        .HasForeignKey("TypeName");
                 });
 
             modelBuilder.Entity("Stolons.Models.WeekBasket", b =>
