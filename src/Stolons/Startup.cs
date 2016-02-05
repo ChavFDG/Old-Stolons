@@ -119,29 +119,29 @@ namespace Stolons
 
         private void CreateProductCategories(ApplicationDbContext context)
         {
-            ProductType fresh = createProductType(context, "Produits frais");
-            createProductFamily(context, fresh, "Fruits");
-            createProductFamily(context, fresh, "Légumes");
-            createProductFamily(context, fresh, "Produits laitiers");
-            createProductFamily(context, fresh, "Oeufs");
+            ProductType fresh = CreateProductType(context, "Produits frais");
+            CreateProductFamily(context, fresh, "Fruits");
+            CreateProductFamily(context, fresh, "Légumes");
+            CreateProductFamily(context, fresh, "Produits laitiers");
+            CreateProductFamily(context, fresh, "Oeufs");
 
-            ProductType bakery = createProductType(context, "Boulangerie");
-            createProductFamily(context, bakery, "Farines");
+            ProductType bakery = CreateProductType(context, "Boulangerie");
+            CreateProductFamily(context, bakery, "Farines");
 
-            ProductType grocery = createProductType(context, "Epicerie");
-            createProductFamily(context, grocery, "Conserves");
+            ProductType grocery = CreateProductType(context, "Epicerie");
+            CreateProductFamily(context, grocery, "Conserves");
 
-            ProductType bevarages = createProductType(context, "Boissons");
-            createProductFamily(context, bevarages, "Alcools");
-            createProductFamily(context, bevarages, "Sans alcool");
+            ProductType bevarages = CreateProductType(context, "Boissons");
+            CreateProductFamily(context, bevarages, "Alcools");
+            CreateProductFamily(context, bevarages, "Sans alcool");
 
-            ProductType other = createProductType(context, "Autres");
-            createProductFamily(context, other, "Savons");
+            ProductType other = CreateProductType(context, "Autres");
+            CreateProductFamily(context, other, "Savons");
 
             context.SaveChanges();
         }
 
-        private ProductType createProductType(ApplicationDbContext context, string name)
+        private ProductType CreateProductType(ApplicationDbContext context, string name)
         {
             ProductType type = context.ProductTypes.FirstOrDefault(x=> x.Name == name);
             if (type == null)
@@ -152,7 +152,7 @@ namespace Stolons
             return type;
         }
 
-        private ProductFamilly createProductFamily(ApplicationDbContext context, ProductType type, string name)
+        private ProductFamilly CreateProductFamily(ApplicationDbContext context, ProductType type, string name)
         {
             ProductFamilly family = context.ProductFamillys.FirstOrDefault(x=> x.Name == name);
             if (family == null)

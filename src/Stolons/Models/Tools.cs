@@ -21,6 +21,8 @@ namespace Stolons.Models
 
         public static string SerializeListToString(IList<string> listToSerialize)
         {
+            if (listToSerialize == null)
+                return null;
             return String.Join(";", listToSerialize);
         }
     }

@@ -12,6 +12,7 @@ using Microsoft.AspNet.Http;
 using System.Collections.Generic;
 using System.IO;
 using Microsoft.Net.Http.Headers;
+using Stolons.ViewModels.ProductsManagement;
 
 namespace Stolons.Controllers
 {
@@ -56,13 +57,13 @@ namespace Stolons.Controllers
         // GET: ProductsManagement/Create
         public IActionResult Create()
         {
-            return View();
+            return View(new ProductEditionViewModel(new Product(),_context.ProductTypes.Include(x=>x.ProductFamilly).ToList()));
         }
 
         // POST: ProductsManagement/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(Product product, IFormFile uploadFile1, IFormFile uploadFile2, IFormFile uploadFile3)
+        public async Task<IActionResult> Create(ProductEditionViewModel vmProduct, IFormFile uploadFile1, IFormFile uploadFile2, IFormFile uploadFile3)
         {
             if (ModelState.IsValid)
             {
@@ -76,16 +77,16 @@ namespace Stolons.Controllers
                         string uploads = Path.Combine(_environment.WebRootPath, Configurations.UserProductsStockagePath);
                         fileName = Guid.NewGuid().ToString() + "_" + ContentDispositionHeaderValue.Parse(uploadFile.ContentDisposition).FileName.Trim('"');
                         await uploadFile.SaveAsAsync(Path.Combine(uploads, fileName)); 
-                        product.Pictures.Add(Path.Combine(Configurations.UserProductsStockagePath, fileName));
+                        vmProduct.Product.Pictures.Add(Path.Combine(Configurations.UserProductsStockagePath, fileName));
                     }
                 }
 
-                product.Id = Guid.NewGuid();
-                _context.Producs.Add(product);
+                vmProduct.Product.Id = Guid.NewGuid();
+                _context.Producs.Add(vmProduct.Product);
                 _context.SaveChanges();
                 return RedirectToAction("Index");
             }
-            return View(product);
+            return View(vmProduct);
         }
 
         // GET: ProductsManagement/Edit/5

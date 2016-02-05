@@ -23,10 +23,10 @@
             <div class="row">
                 <label class="control-label" for="productCategory">Categories: </label>
                 <select name="productCategory">
-                    @foreach (var productType in Model.productTypes)
+                    @foreach (var productType in Model.ProductTypes)
                     {
                         <optgroup label="@productType.Name">
-                            @foreach (var productFamily in Model.productFamilies)
+                            @foreach (var productFamily in Model.ProductFamilies)
                             {
                                 @if (productType.Name == productFamily.Type.Name)
                                 {

@@ -10,9 +10,10 @@ namespace Stolons.ViewModels.WeekBasket
     public class WeekBasketViewModel
     {
         public Consumer Consumer { get; set; }
-        public List<ProductFamilly> productFamilies { get; set;}
 
-        public List<ProductType> productTypes { get; set;}
+        public List<ProductFamilly> ProductFamilies { get; set;}
+
+        public List<ProductType> ProductTypes { get; set;}
 
         public WeekBasketViewModel() 
         {
@@ -21,8 +22,8 @@ namespace Stolons.ViewModels.WeekBasket
         public WeekBasketViewModel(Consumer consumer, List<ProductFamilly> families, List<ProductType> types)
         {
             Consumer = consumer;
-            productFamilies = families;
-            productTypes = types;
+            ProductFamilies = families;
+            ProductTypes = types;
         }
     }
 }
