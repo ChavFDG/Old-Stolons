@@ -6,10 +6,10 @@
 
 <h2>@ViewData["Title"]</h2>
 
-<form asp-action="Create">
+<form asp-action="Create" enctype="multipart/form-data">
     <div class="form-horizontal">
         <hr />
-        <div asp-validation-summary="ValidationSummary.ModelOnly" class="text-danger"></div>
+        <div asp-validation-summary="ValidationSummary.All" class="text-danger"></div>
         <div class="form-group">
             <label asp-for="Product.Name" class="col-md-2 control-label"></label>
             <div class="col-md-10">
@@ -25,13 +25,6 @@
             </div>
         </div>
         <div class="form-group">
-            <label asp-for="Product.Familly" class="col-md-2 control-label"></label>
-            <div class="col-md-10">
-                <input asp-for="Product.Familly" class="form-control" />
-                <span asp-validation-for="Product.Familly" class="text-danger" />
-            </div>
-        </div>
-        <div class="form-group">
             <label asp-for="Product.Labels" class="col-md-2 control-label"></label>
             <div class="col-md-10">
                 <input asp-for="Product.Labels" class="form-control" />
@@ -41,19 +34,19 @@
         <div class="form-group">
             <label class="col-md-2 control-label">Photo principale</label>
             <div class="col-md-10">
-                <input type="file" accept="image/*" name="uploadFile1" class="form-control" />
+                <input type="file" accept="image/*" name="Product.UploadFile1" class="form-control" />
             </div>
         </div>
         <div class="form-group">
             <label class="col-md-2 control-label">2ieme photo</label>
             <div class="col-md-10">
-                <input type="file" accept="image/*" name="uploadFile2" class="form-control" />
+                <input type="file" accept="image/*" name="Product.UploadFile2" class="form-control" />
             </div>
         </div>
         <div class="form-group">
             <label class="col-md-2 control-label">3ieme photo</label>
             <div class="col-md-10">
-                <input type="file" accept="image/*" name="uploadFile3" class="form-control" />
+                <input type="file" accept="image/*" name="Product.UploadFile3" class="form-control" />
             </div>
         </div>
         <div class="form-group">
@@ -66,31 +59,30 @@
         <div class="form-group">
             <label asp-for="Product.Familly" class="col-md-2 control-label"></label>
             <div class="col-md-10">
-                <select name="productCategory" class="form-control">
+                <select asp-for="FamillyName" class="form-control">
                     @foreach (var productType in Model.ProductTypes)
                     {
                         <optgroup label="@productType.Name">
                             @foreach (var productFamily in productType.ProductFamilly)
                             {
-                                <option>@productFamily.Name</option>
+                                <option value="@productFamily.Name">@productFamily.Name</option>
                             }
                         </optgroup>
                     }
                 </select>
             </div>
         </div>
-
         <div class="form-group">
             <label asp-for="Product.Type" class="col-md-2 control-label"></label>
             <div class="col-md-10">
-                <select asp-for="Product.Type" class="form-control"></select>
+                <select asp-for="Product.Type" asp-items="Html.GetEnumSelectList<Product.SellType>()" class="form-control"></select>
                 <span asp-validation-for="Product.Type" class="text-danger" />
             </div>
         </div>
         <div class="form-group">
             <label asp-for="Product.ProductUnit" class="col-md-2 control-label"></label>
             <div class="col-md-10">
-                <select asp-for="Product.ProductUnit" class="form-control"></select>
+                <select asp-for="Product.ProductUnit" asp-items="Html.GetEnumSelectList<Product.Unit>()" class="form-control"></select>
                 <span asp-validation-for="Product.ProductUnit" class="text-danger" />
             </div>
         </div>
@@ -148,14 +140,14 @@
         </div>
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Create" class="btn btn-default" />
+                <input type="submit" value="Ajouter" class="btn btn-default" />
             </div>
         </div>
     </div>
 </form>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Index">Revenir aux produits</a>
 </div>
 
 @section Scripts {

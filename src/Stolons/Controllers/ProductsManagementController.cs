@@ -63,13 +63,18 @@ namespace Stolons.Controllers
         // POST: ProductsManagement/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(ProductEditionViewModel vmProduct, IFormFile uploadFile1, IFormFile uploadFile2, IFormFile uploadFile3)
+        public async Task<IActionResult> Create(ProductEditionViewModel vmProduct)
         {
             if (ModelState.IsValid)
             {
+                //Set Product familly (si ça retourne null c'est que la famille selectionnée n'existe pas, alors on est dans la merde)
+                vmProduct.Product.Familly = _context.ProductFamillys.FirstOrDefault(x => x.Name == vmProduct.FamillyName);
+                //Set Producer (si ça retourne null, c'est que c'est pas un producteur qui est logger, alors on est dans la merde)
+                var appUser = await GetCurrentUserAsync();
+                vmProduct.Product.Producer = _context.Producers.FirstOrDefault(x => x.Email == appUser.Email);
                 //On s'occupe des images du produit
                 string fileName = Configurations.DefaultFileName;
-                foreach (IFormFile uploadFile in new List<IFormFile>() { uploadFile1, uploadFile2, uploadFile3 })
+                foreach (IFormFile uploadFile in new List<IFormFile>() { vmProduct.UploadFile1, vmProduct.UploadFile2, vmProduct.UploadFile3 })
                 {
                     if (uploadFile != null)
                     {

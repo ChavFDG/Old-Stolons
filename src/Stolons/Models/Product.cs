@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -16,6 +17,7 @@ namespace Stolons.Models
         [Display(Name = "Famille de produit")]
         public ProductFamilly Familly { get; set; }
         [Display(Name = "Nom")]
+        [Required]
         public string Name { get; set; }
         [Display(Name = "Description")]
         public string Description { get; set; }
@@ -56,8 +58,10 @@ namespace Stolons.Models
         public DateTime DLC { get; set; }
 
         [Display(Name = "Type de vente")]
+        [Required]
         public SellType Type { get; set; }
         [Display(Name = "Prix")]
+        [Required]
         public float Price { get; set; }
         [Display(Name = "Stock de la semaine")]
         public int WeekStock { get; set; }
@@ -75,9 +79,12 @@ namespace Stolons.Models
 
         public enum SellType
         {
+            [Display(Name ="Au poids")]
             Weigh = 0,
-            Piece = 2,
-            Wrapped = 3
+            [Display(Name = "A la pièce")]
+            Piece = 1,
+            [Display(Name = "Emballé")]
+            Wrapped = 2
         }
 
         public enum Unit
@@ -88,9 +95,20 @@ namespace Stolons.Models
 
         public enum ProductState
         {
+            [Display(Name = "Indisponible")]
             Disabled = 0,
+            [Display(Name = "Disponible")]
             Enabled = 1,
+            [Display(Name = "Attente Stock")]
             Stock = 2
+        }
+
+        public enum Label
+        {
+            [Display(Name = "AB")]
+            Ab = 0,
+            [Display(Name = "DEMETER")]
+            Demeter = 1
         }
     }
 }

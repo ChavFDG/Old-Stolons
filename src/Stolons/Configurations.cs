@@ -56,5 +56,13 @@ namespace Stolons
                 return "Les Stolons de Privas";
             }
         }
+
+
+
+        private static string _labelImagePath = Path.Combine("images", "labels");
+        public static string GetImage(this Product.Label label)
+        {
+            return Path.Combine(_labelImagePath, label.ToString() + ".jpg");
+        }
     }
 }
