@@ -4,7 +4,7 @@ using Microsoft.Data.Entity.Migrations;
 
 namespace Stolons.Migrations
 {
-    public partial class DatabaseModels11 : Migration
+    public partial class DatabaseModels12 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -203,7 +203,8 @@ namespace Stolons.Migrations
                     AverageQuantity = table.Column<int>(nullable: false),
                     DLC = table.Column<DateTime>(nullable: false),
                     Description = table.Column<string>(nullable: true),
-                    Name = table.Column<string>(nullable: true),
+                    LabelsSerialized = table.Column<string>(nullable: true),
+                    Name = table.Column<string>(nullable: false),
                     PicturesSerialized = table.Column<string>(nullable: true),
                     Price = table.Column<float>(nullable: false),
                     ProducerId = table.Column<int>(nullable: true),
@@ -222,7 +223,7 @@ namespace Stolons.Migrations
                         column: x => x.Name,
                         principalTable: "ProductFamilly",
                         principalColumn: "Name",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Product_Producer_ProducerId",
                         column: x => x.ProducerId,
@@ -318,25 +319,6 @@ namespace Stolons.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
-            migrationBuilder.CreateTable(
-                name: "Label",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(nullable: false),
-                    Image = table.Column<string>(nullable: true),
-                    Name = table.Column<string>(nullable: true),
-                    ProductId = table.Column<Guid>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Label", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Label_Product_ProductId",
-                        column: x => x.ProductId,
-                        principalTable: "Product",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
             migrationBuilder.CreateIndex(
                 name: "RoleNameIndex",
                 table: "AspNetRoles",
@@ -359,12 +341,11 @@ namespace Stolons.Migrations
             migrationBuilder.DropTable("AspNetUserRoles");
             migrationBuilder.DropTable("Bill");
             migrationBuilder.DropTable("BillEntry");
-            migrationBuilder.DropTable("Label");
             migrationBuilder.DropTable("News");
             migrationBuilder.DropTable("AspNetRoles");
             migrationBuilder.DropTable("AspNetUsers");
-            migrationBuilder.DropTable("WeekBasket");
             migrationBuilder.DropTable("Product");
+            migrationBuilder.DropTable("WeekBasket");
             migrationBuilder.DropTable("ProductFamilly");
             migrationBuilder.DropTable("User");
             migrationBuilder.DropTable("ProductType");

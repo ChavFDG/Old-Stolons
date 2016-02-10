@@ -33,7 +33,7 @@ namespace Stolons.Controllers
         public async Task<IActionResult> Index()
         {
             var appUser = await GetCurrentUserAsync();
-            var products = _context.Producs.Include(m => m.Labels).Include(m => m.Familly).Where(x => x.Producer.Email == appUser.Email).ToList();
+            var products = _context.Producs.Include(m => m.Familly).Where(x => x.Producer.Email == appUser.Email).ToList();
             return View(products);
         }
 
@@ -67,6 +67,8 @@ namespace Stolons.Controllers
         {
             if (ModelState.IsValid)
             {
+                //Set Labels
+                vmProduct.Product.SetLabels(vmProduct.SelectedLabels);
                 //Set Product familly (si ça retourne null c'est que la famille selectionnée n'existe pas, alors on est dans la merde)
                 vmProduct.Product.Familly = _context.ProductFamillys.FirstOrDefault(x => x.Name == vmProduct.FamillyName);
                 //Set Producer (si ça retourne null, c'est que c'est pas un producteur qui est logger, alors on est dans la merde)

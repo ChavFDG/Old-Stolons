@@ -9,6 +9,10 @@ namespace Stolons.ViewModels.ProductsManagement
 {
     public class ProductEditionViewModel
     {
+
+
+        public string[] SelectedLabels { get; set; }
+
         public string FamillyName { get; set; }
 
         public Product Product { get; set; }
@@ -27,6 +31,8 @@ namespace Stolons.ViewModels.ProductsManagement
         {
             Product = product;
             ProductTypes = types;
+            SelectedLabels = product.Labels.OfType<string>().ToArray();
+
         }
     }
 }

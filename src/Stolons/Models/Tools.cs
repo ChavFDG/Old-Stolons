@@ -11,7 +11,7 @@ namespace Stolons.Models
         {
             if (String.IsNullOrWhiteSpace(stringToSerialize))
             {
-                return null;
+                return new List<string>();
             }
             else
             {
@@ -24,6 +24,14 @@ namespace Stolons.Models
             if (listToSerialize == null)
                 return null;
             return String.Join(";", listToSerialize);
+        }
+
+        public static void SetLabels(this Product product, string[] labels)
+        {
+            foreach (string label in labels)
+            {
+                product.Labels.Add((Product.Label)Enum.Parse(typeof(Product.Label), label));
+            }
         }
     }
 }

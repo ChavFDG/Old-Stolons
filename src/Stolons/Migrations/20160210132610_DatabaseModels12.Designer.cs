@@ -8,8 +8,8 @@ using Stolons.Models;
 namespace Stolons.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20160205115023_DatabaseModels11")]
-    partial class DatabaseModels11
+    [Migration("20160210132610_DatabaseModels12")]
+    partial class DatabaseModels12
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -177,20 +177,6 @@ namespace Stolons.Migrations
                     b.HasKey("Id");
                 });
 
-            modelBuilder.Entity("Stolons.Models.Label", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<string>("Image");
-
-                    b.Property<string>("Name");
-
-                    b.Property<Guid?>("ProductId");
-
-                    b.HasKey("Id");
-                });
-
             modelBuilder.Entity("Stolons.Models.News", b =>
                 {
                     b.Property<Guid>("Id")
@@ -222,7 +208,10 @@ namespace Stolons.Migrations
 
                     b.Property<string>("Description");
 
-                    b.Property<string>("Name");
+                    b.Property<string>("LabelsSerialized");
+
+                    b.Property<string>("Name")
+                        .IsRequired();
 
                     b.Property<string>("PicturesSerialized");
 
@@ -404,13 +393,6 @@ namespace Stolons.Migrations
                     b.HasOne("Stolons.Models.WeekBasket")
                         .WithMany()
                         .HasForeignKey("WeekBasketId");
-                });
-
-            modelBuilder.Entity("Stolons.Models.Label", b =>
-                {
-                    b.HasOne("Stolons.Models.Product")
-                        .WithMany()
-                        .HasForeignKey("ProductId");
                 });
 
             modelBuilder.Entity("Stolons.Models.News", b =>

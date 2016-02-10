@@ -21,9 +21,47 @@ namespace Stolons.Models
         public string Name { get; set; }
         [Display(Name = "Description")]
         public string Description { get; set; }
-        [Display(Name = "Label")]
-        public List<Label> Labels { get; set; }
 
+
+
+        private IList<Label> _Labels = new List<Label>();
+        [Display(Name = "Labels")]
+        [NotMapped]
+        public virtual IList<Label> Labels
+        {
+            get
+            {
+                return _Labels;
+
+            }
+            set
+            {
+                _Labels = value;
+            }
+        }
+
+        public string LabelsSerialized
+        {
+            get
+            {
+                if (_Labels == null)
+                    return null;
+                return String.Join(";", _Labels);
+            }
+            set
+            {
+                if (String.IsNullOrWhiteSpace(value))
+                {
+                    _Labels = new List<Label>();
+                }
+                else
+                {
+                    var strings = value.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries).ToList();
+                    _Labels = new List<Label>();
+                    strings.ForEach(x => _Labels.Add((Label)Enum.Parse(typeof(Label), x)));
+                }
+            }
+        }
 
         private IList<string> _Pictures;
         [Display(Name = "Photos")]
@@ -110,5 +148,6 @@ namespace Stolons.Models
             [Display(Name = "DEMETER")]
             Demeter = 1
         }
+
     }
 }

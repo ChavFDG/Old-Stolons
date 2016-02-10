@@ -27,8 +27,20 @@
         <div class="form-group">
             <label asp-for="Product.Labels" class="col-md-2 control-label"></label>
             <div class="col-md-10">
-                <input asp-for="Product.Labels" class="form-control" />
-                <span asp-validation-for="Product.Labels" class="text-danger" />
+                @foreach (var label in Enum.GetNames(typeof(Product.Label)))
+                {
+                    <span>
+                        @label                        
+                        @if (Model.SelectedLabels.Contains(label))
+                        {
+                            <input type="checkbox" class="checkbox" name="SelectedLabels" value="@label" id="@label" checked>
+                        }
+                        else
+                        {
+                            <input type="checkbox" class="checkbox" name="SelectedLabels" value="@label" id="@label">
+                        }
+                    </span>
+                }
             </div>
         </div>
         <div class="form-group">
