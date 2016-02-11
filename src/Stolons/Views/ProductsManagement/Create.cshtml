@@ -1,4 +1,5 @@
 @model Stolons.ViewModels.ProductsManagement.ProductEditionViewModel
+@using Stolons.Helpers
 
 @{
     ViewData["Title"] = "Ajouter un produit";
@@ -27,17 +28,17 @@
         <div class="form-group">
             <label asp-for="Product.Labels" class="col-md-2 control-label"></label>
             <div class="col-md-10">
-                @foreach (var label in Enum.GetNames(typeof(Product.Label)))
+                @foreach (Product.Label label in Enum.GetValues(typeof(Product.Label)))
                 {
                     <span>
-                        @label                        
-                        @if (Model.SelectedLabels.Contains(label))
+                        @(EnumHelper<Product.Label>.GetDisplayValue(label))
+                        @if (Model.SelectedLabels.Contains(label.ToString()))
                         {
-                            <input type="checkbox" class="checkbox" name="SelectedLabels" value="@label" id="@label" checked>
+                            <input type="checkbox" class="checkbox" name="SelectedLabels" value="@label.ToString()" id="@label.ToString()" checked>
                         }
                         else
                         {
-                            <input type="checkbox" class="checkbox" name="SelectedLabels" value="@label" id="@label">
+                            <input type="checkbox" class="checkbox" name="SelectedLabels" value="@label.ToString()" id="@label.ToString()">
                         }
                     </span>
                 }

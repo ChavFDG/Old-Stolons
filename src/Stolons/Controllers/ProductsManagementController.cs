@@ -33,7 +33,7 @@ namespace Stolons.Controllers
         public async Task<IActionResult> Index()
         {
             var appUser = await GetCurrentUserAsync();
-            var products = _context.Producs.Include(m => m.Familly).Where(x => x.Producer.Email == appUser.Email).ToList();
+            var products = _context.Producs.Include(m => m.Familly).Include(m=>m.Familly.Type).Where(x => x.Producer.Email == appUser.Email).ToList();
             return View(products);
         }
 

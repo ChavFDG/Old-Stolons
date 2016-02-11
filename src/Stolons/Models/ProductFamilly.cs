@@ -11,7 +11,7 @@ namespace Stolons.Models
         [Key]
         [Display(Name = "Nom")]
         public string FamillyName { get; set; }
-        [Display(Name = "Famille de produit")]
+        [Display(Name = "Type de produit")]
         public ProductType Type { get; set; }
         
         [Display(Name = "Image")] //Lien vers l'image du label
