@@ -154,7 +154,7 @@ namespace Stolons
 
         private ProductFamilly CreateProductFamily(ApplicationDbContext context, ProductType type, string name)
         {
-            ProductFamilly family = context.ProductFamillys.FirstOrDefault(x=> x.Name == name);
+            ProductFamilly family = context.ProductFamillys.FirstOrDefault(x=> x.FamillyName == name);
             if (family == null)
             {
                 family = new ProductFamilly(type, name);
@@ -200,7 +200,7 @@ namespace Stolons
                     "damien.paravel@gmail.com",
                     "damien.paravel@gmail.com",
                     Configurations.Role.Administrator,
-                    Configurations.UserType.Producer);
+                    Configurations.UserType.Consumer);
             await CreateAcount(context,
                     userManager,
                     "MICHON",
@@ -209,24 +209,57 @@ namespace Stolons
                     "nicolas.michon@zoho.com",
                     Configurations.Role.Administrator,
                     Configurations.UserType.Consumer);
+            await CreateAcount(context,
+                    userManager,
+                    "Maurice",
+                    "Robert",
+                    "producer@gmail.com",
+                    "producer@gmail.com",
+                    Configurations.Role.User,
+                    Configurations.UserType.Producer);
         }
         private async Task CreateAcount(ApplicationDbContext context, UserManager<ApplicationUser> userManager, string name, string surname, string email, string password, Configurations.Role role, Configurations.UserType userType)
         {
-            if (context.Consumers.Any(x => x.Email == email))
+
+            if (context.Consumers.Any(x => x.Email == email) || context.Producers.Any(x => x.Email == email))
                 return;
-            Consumer consumer = new Consumer();
-            consumer.Name = name;
-            consumer.Surname = surname;
-            consumer.Email = email;
-            consumer.Avatar = Path.Combine(Configurations.UserAvatarStockagePath, Configurations.DefaultFileName);
-            consumer.RegistrationDate = DateTime.Now;
-            consumer.Enable = true;
-            context.Consumers.Add(consumer);
+            User user;
+            switch(userType)
+            {
+                case Configurations.UserType.Producer:
+                    user = new Producer();
+                    break;
+                case Configurations.UserType.Consumer:
+                    user = new Consumer();
+                    break;
+                default:
+                    user = new Consumer();
+                    break;
+            }                
+            user.Name = name;
+            user.Surname = surname;
+            user.Email = email;
+            user.Avatar = Path.Combine(Configurations.UserAvatarStockagePath, Configurations.DefaultFileName);
+            user.RegistrationDate = DateTime.Now;
+            user.Enable = true;
+
+            switch (userType)
+            {
+                case Configurations.UserType.Producer:
+                    context.Producers.Add(user as Producer);
+                    break;
+                case Configurations.UserType.Consumer:
+                    context.Consumers.Add(user as Consumer);
+                    break;
+                default:
+                    context.Consumers.Add(user as Consumer);
+                    break;
+            }
 
 
             #region Creating linked application data
-            var appUser = new ApplicationUser { UserName = consumer.Email, Email = consumer.Email };
-            appUser.User = consumer;
+            var appUser = new ApplicationUser { UserName = user.Email, Email = user.Email };
+            appUser.User = user;
 
             var result = await userManager.CreateAsync(appUser, password);
             if (result.Succeeded)

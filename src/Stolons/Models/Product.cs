@@ -145,8 +145,16 @@ namespace Stolons.Models
         {
             [Display(Name = "AB")]
             Ab = 0,
-            [Display(Name = "DEMETER")]
-            Demeter = 1
+            [Display(Name = "Demeter")]
+            Demeter = 1,
+            [Display(Name = "Nature et Progrès")]
+            NatureEtProgres = 2,
+            [Display(Name = "Fairtrade")]
+            Fairtrade = 3,
+            [Display(Name = "Max Havelaar ")]
+            MaxHavelaar = 4,
+            [Display(Name = "Engagé dans le bio")]
+            BioEngaged = 5
         }
 
     }

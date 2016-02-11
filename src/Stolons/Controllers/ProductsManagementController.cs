@@ -70,7 +70,7 @@ namespace Stolons.Controllers
                 //Set Labels
                 vmProduct.Product.SetLabels(vmProduct.SelectedLabels);
                 //Set Product familly (si ça retourne null c'est que la famille selectionnée n'existe pas, alors on est dans la merde)
-                vmProduct.Product.Familly = _context.ProductFamillys.FirstOrDefault(x => x.Name == vmProduct.FamillyName);
+                vmProduct.Product.Familly = _context.ProductFamillys.FirstOrDefault(x => x.FamillyName == vmProduct.FamillyName);
                 //Set Producer (si ça retourne null, c'est que c'est pas un producteur qui est logger, alors on est dans la merde)
                 var appUser = await GetCurrentUserAsync();
                 vmProduct.Product.Producer = _context.Producers.FirstOrDefault(x => x.Email == appUser.Email);

@@ -10,7 +10,7 @@ namespace Stolons.Models
     {
         [Key]
         [Display(Name = "Nom")]
-        public string Name { get; set; }
+        public string FamillyName { get; set; }
         [Display(Name = "Famille de produit")]
         public ProductType Type { get; set; }
         
@@ -21,10 +21,10 @@ namespace Stolons.Models
         {
         }
 
-        public ProductFamilly(ProductType type, string name)
+        public ProductFamilly(ProductType type, string famillyName)
         {
             Type = type;
-            Name = name;
+            FamillyName = famillyName;
         }
     }
 }

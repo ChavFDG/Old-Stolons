@@ -4,7 +4,7 @@ using Microsoft.Data.Entity.Migrations;
 
 namespace Stolons.Migrations
 {
-    public partial class DatabaseModels12 : Migration
+    public partial class BataBaseModel13 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -87,13 +87,13 @@ namespace Stolons.Migrations
                 name: "ProductFamilly",
                 columns: table => new
                 {
-                    Name = table.Column<string>(nullable: false),
+                    FamillyName = table.Column<string>(nullable: false),
                     Image = table.Column<string>(nullable: true),
                     TypeName = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ProductFamilly", x => x.Name);
+                    table.PrimaryKey("PK_ProductFamilly", x => x.FamillyName);
                     table.ForeignKey(
                         name: "FK_ProductFamilly_ProductType_TypeName",
                         column: x => x.TypeName,
@@ -203,6 +203,7 @@ namespace Stolons.Migrations
                     AverageQuantity = table.Column<int>(nullable: false),
                     DLC = table.Column<DateTime>(nullable: false),
                     Description = table.Column<string>(nullable: true),
+                    FamillyFamillyName = table.Column<string>(nullable: true),
                     LabelsSerialized = table.Column<string>(nullable: true),
                     Name = table.Column<string>(nullable: false),
                     PicturesSerialized = table.Column<string>(nullable: true),
@@ -219,11 +220,11 @@ namespace Stolons.Migrations
                 {
                     table.PrimaryKey("PK_Product", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Product_ProductFamilly_Name",
-                        column: x => x.Name,
+                        name: "FK_Product_ProductFamilly_FamillyFamillyName",
+                        column: x => x.FamillyFamillyName,
                         principalTable: "ProductFamilly",
-                        principalColumn: "Name",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "FamillyName",
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Product_Producer_ProducerId",
                         column: x => x.ProducerId,

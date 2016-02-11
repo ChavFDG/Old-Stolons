@@ -207,6 +207,8 @@ namespace Stolons.Migrations
 
                     b.Property<string>("Description");
 
+                    b.Property<string>("FamillyFamillyName");
+
                     b.Property<string>("LabelsSerialized");
 
                     b.Property<string>("Name")
@@ -235,13 +237,13 @@ namespace Stolons.Migrations
 
             modelBuilder.Entity("Stolons.Models.ProductFamilly", b =>
                 {
-                    b.Property<string>("Name");
+                    b.Property<string>("FamillyName");
 
                     b.Property<string>("Image");
 
                     b.Property<string>("TypeName");
 
-                    b.HasKey("Name");
+                    b.HasKey("FamillyName");
                 });
 
             modelBuilder.Entity("Stolons.Models.ProductType", b =>
@@ -405,7 +407,7 @@ namespace Stolons.Migrations
                 {
                     b.HasOne("Stolons.Models.ProductFamilly")
                         .WithMany()
-                        .HasForeignKey("Name");
+                        .HasForeignKey("FamillyFamillyName");
 
                     b.HasOne("Stolons.Models.Producer")
                         .WithMany()
