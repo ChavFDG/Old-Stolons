@@ -9,6 +9,7 @@ namespace Stolons.ViewModels.ProductsManagement
 {
     public class ProductEditionViewModel
     {
+        public bool IsNew { get; set; }
 
 
         public string[] SelectedLabels { get; set; }
@@ -27,12 +28,12 @@ namespace Stolons.ViewModels.ProductsManagement
         {
         }
 
-        public ProductEditionViewModel(Product product, List<ProductType> types)
+        public ProductEditionViewModel(Product product, List<ProductType> types, bool isNew)
         {
             Product = product;
             ProductTypes = types;
             SelectedLabels = product.Labels.OfType<string>().ToArray();
-
+            IsNew = isNew;
         }
     }
 }

@@ -9,7 +9,7 @@
 <h2>@ViewData["Title"]</h2>
 
 <p>
-    <a asp-action="Create">Ajouter un produit</a>
+    <a asp-action="Manage">Ajouter un produit</a>
 </p>
 <table class="table">
     <tr>
@@ -87,11 +87,9 @@
                     @(EnumHelper<Product.ProductState>.GetDisplayValue(@item.State))
                 </th>
                 break;
-
         }
         <td>
-            <a asp-action="Edit" asp-route-id="@item.Id">Editer</a> |
-            <a asp-action="Details" asp-route-id="@item.Id">Détails</a> |
+            <a asp-action="Manage" asp-route-id="@item.Id">Editer</a> |
             <a asp-action="Delete" asp-route-id="@item.Id">Supprimer</a>
         </td>
     </tr>

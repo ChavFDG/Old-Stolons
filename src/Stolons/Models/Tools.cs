@@ -28,6 +28,8 @@ namespace Stolons.Models
 
         public static void SetLabels(this Product product, string[] labels)
         {
+            if (labels == null)
+                return;
             foreach (string label in labels)
             {
                 product.Labels.Add((Product.Label)Enum.Parse(typeof(Product.Label), label));

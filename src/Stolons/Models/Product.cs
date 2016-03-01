@@ -127,8 +127,10 @@ namespace Stolons.Models
 
         public enum Unit
         {
-            Gr = 0,
-            Ml = 1
+            Kg = 0,
+            Gr = 1,
+            Ml = 2,
+            L = 3
         }
 
         public enum ProductState

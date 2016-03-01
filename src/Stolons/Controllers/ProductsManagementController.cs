@@ -55,15 +55,17 @@ namespace Stolons.Controllers
         }
 
         // GET: ProductsManagement/Create
-        public IActionResult Create()
+        public IActionResult Manage(Guid? id)
         {
-            return View(new ProductEditionViewModel(new Product(),_context.ProductTypes.Include(x=>x.ProductFamilly).ToList()));
+            Product product = id == null ? new Product() : _context.Producs.First(x => x.Id == id);
+            return View(new ProductEditionViewModel(product, _context.ProductTypes.Include(x => x.ProductFamilly).ToList(),id == null));
+
         }
 
         // POST: ProductsManagement/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(ProductEditionViewModel vmProduct)
+        public async Task<IActionResult> Manage(ProductEditionViewModel vmProduct)
         {
             if (ModelState.IsValid)
             {
@@ -87,45 +89,21 @@ namespace Stolons.Controllers
                         vmProduct.Product.Pictures.Add(Path.Combine(Configurations.UserProductsStockagePath, fileName));
                     }
                 }
-
-                vmProduct.Product.Id = Guid.NewGuid();
-                _context.Producs.Add(vmProduct.Product);
+                if(vmProduct.IsNew)
+                {
+                    vmProduct.Product.Id = Guid.NewGuid();
+                    _context.Producs.Add(vmProduct.Product);
+                }
+                else
+                {
+                    _context.Producs.Update(vmProduct.Product);
+                }
                 _context.SaveChanges();
                 return RedirectToAction("Index");
             }
             return View(vmProduct);
         }
-
-        // GET: ProductsManagement/Edit/5
-        public IActionResult Edit(Guid? id)
-        {
-            if (id == null)
-            {
-                return HttpNotFound();
-            }
-
-            Product product = _context.Producs.Single(m => m.Id == id);
-            if (product == null)
-            {
-                return HttpNotFound();
-            }
-            return View(product);
-        }
-
-        // POST: ProductsManagement/Edit/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public IActionResult Edit(Product product)
-        {
-            if (ModelState.IsValid)
-            {
-                _context.Update(product);
-                _context.SaveChanges();
-                return RedirectToAction("Index");
-            }
-            return View(product);
-        }
-
+        
         // GET: ProductsManagement/Delete/5
         [ActionName("Delete")]
         public IActionResult Delete(Guid? id)
