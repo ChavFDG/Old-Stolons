@@ -133,6 +133,31 @@ namespace Stolons.Controllers
             return RedirectToAction("Index");
         }
 
+
+        public IActionResult Enable(Guid? id)
+        {
+            _context.Producs.First(x => x.Id == id).State = Product.ProductState.Enabled;
+            _context.SaveChanges();
+            return RedirectToAction("Index");
+
+        }
+        public IActionResult Disable(Guid? id)
+        {
+            _context.Producs.First(x => x.Id == id).State = Product.ProductState.Disabled;
+            _context.SaveChanges();
+            return RedirectToAction("Index");
+
+        }
+
+
+        [HttpPost, ActionName("ChangeStock")]
+        public IActionResult ChangeStock(Guid id, int newStock)
+        {
+            _context.Producs.First(x => x.Id == id).WeekStock = newStock;
+            _context.SaveChanges();
+            return RedirectToAction("Index");
+        }
+
         private async Task<ApplicationUser> GetCurrentUserAsync()
         {
             return await _userManager.FindByIdAsync(HttpContext.User.GetUserId());

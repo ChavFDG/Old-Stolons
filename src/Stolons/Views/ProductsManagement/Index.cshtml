@@ -3,7 +3,7 @@
 @using Stolons.Models
 
 @{
-    ViewData["Title"] = "Gestion de mes produits et mes stocks";
+    ViewData["Title"] = "Gestion de mes produits et de mes stocks";
 }
 
 <h2>@ViewData["Title"]</h2>
@@ -23,13 +23,16 @@
             @Html.DisplayNameFor(model => model.Familly)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Type)
-        </th>
-        <th>
             @Html.DisplayNameFor(model => model.Labels)
         </th>
         <th>
             @Html.DisplayNameFor(model => model.Price)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ProductUnit)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Type)
         </th>
         <th>
             @Html.DisplayNameFor(model => model.WeekStock)
@@ -52,9 +55,6 @@
             @Html.DisplayFor(model => item.Familly.Type.ProductFamilly)
         </th>
         <th>
-            @(EnumHelper<Product.SellType>.GetDisplayValue(@item.Type))
-        </th>
-        <th>
             @for (int cpt = 0; cpt < item.Labels.Count; cpt++)
             {
                 @(EnumHelper<Product.Label>.GetDisplayValue(item.Labels[cpt]) )
@@ -65,30 +65,59 @@
             }
         </th>
         <th>
-            @Html.DisplayFor(model => item.Price)
+            @Html.DisplayFor(model => item.Price) @("€")
+        </th>
+        <th>
+            @Html.DisplayFor(model => item.ProductUnit)
+        </th>
+        <th>
+            @(EnumHelper<Product.SellType>.GetDisplayValue(@item.Type))
         </th>
         <th>
             @Html.DisplayFor(model => item.WeekStock)
+            <input id="@("WeekStockEdition" + item.Id)" asp-for="@item.WeekStock" class="form-control" min="0"/>
+            <script>
+                $('#@("WeekStockEdition" + item.Id)').change(function ()
+                {
+                    $.ajax({
+                        url: '@Url.Action("ChangeStock", "ProductsManagement")',
+                        type: 'POST',
+                        data: {
+                            id: '@item.Id',
+                            newStock: $('#@("WeekStockEdition" + item.Id)').val()
+                        }
+                    });
+                });
+            </script>
         </th>
         @switch (@item.State)
         {
             case Product.ProductState.Disabled:
-                <th>
+                <th bgcolor="#ff0000">
                     @(EnumHelper<Product.ProductState>.GetDisplayValue(@item.State))
                 </th>
                 break;
             case Product.ProductState.Enabled:
-                <th  bgcolor="#00ff00">
+                <th bgcolor="#00ff00">
                     @(EnumHelper<Product.ProductState>.GetDisplayValue(@item.State))
                 </th>
                 break;
             case Product.ProductState.Stock:
-                <th  bgcolor="#FF0000">
+                <th bgcolor="#ff8000">
                     @(EnumHelper<Product.ProductState>.GetDisplayValue(@item.State))
                 </th>
                 break;
         }
         <td>
+            @if (@item.State == Product.ProductState.Enabled)
+            {
+                <a asp-action="Disable" asp-route-id="@item.Id">Désactiver</a>
+            }
+            else
+            {
+                <a asp-action="Enable" asp-route-id="@item.Id">Activer</a>
+            }
+            |
             <a asp-action="Manage" asp-route-id="@item.Id">Editer</a> |
             <a asp-action="Delete" asp-route-id="@item.Id">Supprimer</a>
         </td>
