@@ -1,0 +1,28 @@
+@model IEnumerable<Stolons.Models.Bill>
+
+@{
+    ViewData["Title"] = "Mes Factures";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.BillNumber)
+        </th>
+        <th></th>
+    </tr>
+    
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.BillNumber)
+        </td>
+        <td>
+            <a asp-action="Download" asp-route-id="@item.BillNumber">Télécharger</a>
+        </td>
+    </tr>
+}
+</table>

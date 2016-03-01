@@ -29,11 +29,12 @@
                     @if (User.IsInRole(Configurations.UserType.Consumer.ToString()))
                     {
                         <li><a asp-controller="WeekBasket" asp-action="Index" asp-route-id="@Model.User.Id">Mon panier</a></li>
+                        <li><a asp-controller="Bills" asp-action="Index">Mes factures</a></li>
                     }
                     @if (User.IsInRole(Configurations.UserType.Producer.ToString()))
                     {
                         <li><a asp-controller="ProductsManagement" asp-action="Index">Mes produits et mes stocks</a></li>
-                        //<li><a asp-controller="???" asp-action="Index">Mes factures</a></li>
+                        <li><a asp-controller="Bills" asp-action="Index">Mes factures</a></li>
                     }
                     @if (User.IsInRole(Configurations.Role.Volunteer.ToString()) || User.IsInRole(Configurations.Role.Administrator.ToString()))
                     {
