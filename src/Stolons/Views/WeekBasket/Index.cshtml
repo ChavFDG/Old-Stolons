@@ -1,4 +1,4 @@
-
+@using Stolons.Helpers
 @using Stolons.ViewModels.WeekBasket;
 @model WeekBasketViewModel
 
@@ -12,7 +12,7 @@
     <div class="container">
         <div class="container col-xs-4 col-sm-4 col-md-4 col-lg-4">
             <div  bordered-table">
-                <span>List des produits en cours pour l'utilisateur.</span>
+                <span>Liste des produits en cours pour l'utilisateur.</span>
                 <br/>
                 <span>(Mes articles):</span>
                 <table>
@@ -21,17 +21,17 @@
         </div>
         <div class="container col-xs-8 col-sm-8 col-md-8 col-lg-8">
             <div class="row">
-                <label class="control-label" for="productCategory">Categories: </label>
-                <select name="productCategory">
+                <label class="control-label" for="productFamilly">Famille : </label>
+                <select name="productFamilly">
+                    <optgroup label="Tous">
+                        <option value="Tous">Tous</option>
+                    </optgroup>
                     @foreach (var productType in Model.ProductTypes)
                     {
                         <optgroup label="@productType.Name">
-                            @foreach (var productFamily in Model.ProductFamilies)
+                            @foreach (var productFamily in productType.ProductFamilly)
                             {
-                                @if (productType.Name == productFamily.Type.Name)
-                                {
-                                    <option>@productFamily.FamillyName</option>
-                                }
+                                <option value="@productFamily.FamillyName">@productFamily.FamillyName</option>
                             }
                         </optgroup>
                     }
@@ -39,14 +39,51 @@
 
                 <label class="control-label" for="labels">Label: </label>
                     <select name="labels">
-                        <option>Bio man!</option>
-                        <option>Local</option>
-                        <option>raisonné</option>
+                        @foreach (Product.Label label in Enum.GetValues(typeof(Product.Label)))
+                        {
+                            <option>
+                                @(EnumHelper<Product.Label>.GetDisplayValue(label))
+                            </option>
+                        }
                     </select>
-                
+
+                <label class="control-label" for="labels">Label: </label> 
+
+                <div id="list1" class="dropdown-check-list" tabindex="100">
+                    <span class="anchor">Select Fruits</span>
+                    <ul id="items" class="items">
+                        @foreach (Product.Label label in Enum.GetValues(typeof(Product.Label)))
+                        {
+                            <li><input type="checkbox" id="@label" />@(EnumHelper<Product.Label>.GetDisplayValue(label)) </li>
+                        }
+                    </ul>
+                </div>
+
+                <script>
+                    var checkList = document.getElementById('list1');
+                    var items = document.getElementById('items');
+                    checkList.getElementsByClassName('anchor')[0].onclick = function (evt) {
+                        if (items.classList.contains('visible')) {
+                            items.classList.remove('visible');
+                            items.style.display = "none";
+                        }
+
+                        else {
+                            items.classList.add('visible');
+                            items.style.display = "block";
+                        }
+
+
+                    }
+
+                    items.onblur = function (evt) {
+                        items.classList.remove('visible');
+                    }
+                </script>
+
                 <input type="text" placeholder="Rechercher un produit" />
 
-            </div>
+</div>
             Liste de tous les produits disponibles
 
             <br />

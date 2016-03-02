@@ -29,10 +29,7 @@ namespace Stolons.Controllers
             {
                 return HttpNotFound();
             }
-            var productFamilies = _context.ProductFamillys.ToList();
-            var productTypes = _context.ProductTypes.ToList();
-            return View(new WeekBasketViewModel(consumer, productFamilies, productTypes));
-            //return View(new WeekBasketViewModel());
+            return View(new WeekBasketViewModel(consumer, _context));
         }
     }
 }
