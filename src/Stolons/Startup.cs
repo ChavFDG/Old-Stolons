@@ -112,15 +112,16 @@ namespace Stolons
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
 
+            SetConfigurations(context);
             await CreateRoles(serviceProvider);
             await CreateAdminAcount(context, userManager);
             CreateProductCategories(context);
-            SetConfigurations(context);
         }
 
         private void SetConfigurations(ApplicationDbContext context)
         {
-            if(context.ApplicationConfig.Any())
+
+            if (context.ApplicationConfig.Any())
             {
                 Configurations.ApplicationConfig = context.ApplicationConfig.First();
             }
@@ -136,11 +137,11 @@ namespace Stolons
                 Configurations.ApplicationConfig.StockUpdateHourStartDate = 12;
                 Configurations.ApplicationConfig.StockUpdateMinuteStartDate= 0;
                 //Commandes
-                Configurations.ApplicationConfig.CommandDayStartDate = DayOfWeek.Sunday;
-                Configurations.ApplicationConfig.CommandHourStartDate = 0;
-                Configurations.ApplicationConfig.CommandMinuteStartDate = 0;
+                Configurations.ApplicationConfig.OrderDayStartDate = DayOfWeek.Sunday;
+                Configurations.ApplicationConfig.OrderHourStartDate = 0;
+                Configurations.ApplicationConfig.OrderMinuteStartDate = 0;
                 //Simulation
-                Configurations.ApplicationConfig.Simulation = true;
+                Configurations.ApplicationConfig.IsModeSimulated = true;
                 Configurations.ApplicationConfig.SimulationMode = ApplicationConfig.Modes.StockUpdate;
                 //
                 context.Add(Configurations.ApplicationConfig);

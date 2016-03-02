@@ -102,19 +102,19 @@ namespace Stolons.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<int>("CommandDayStartDate");
+                    b.Property<bool>("IsModeSimulated");
 
-                    b.Property<int>("CommandHourStartDate");
+                    b.Property<int>("OrderDayStartDate");
 
-                    b.Property<int>("CommandMinuteStartDate");
+                    b.Property<int>("OrderHourStartDate");
+
+                    b.Property<int>("OrderMinuteStartDate");
 
                     b.Property<int>("PreparationDayStartDate");
 
                     b.Property<int>("PreparationHourStartDate");
 
                     b.Property<int>("PreparationMinuteStartDate");
-
-                    b.Property<bool>("Simulation");
 
                     b.Property<int>("SimulationMode");
 

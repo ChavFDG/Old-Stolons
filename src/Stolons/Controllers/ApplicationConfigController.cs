@@ -37,6 +37,7 @@ namespace Stolons.Controllers
                 Configurations.ApplicationConfig = applicationConfig;
                 _context.Update(applicationConfig);
                 _context.SaveChanges();
+
                 return RedirectToAction("Index");
             }
             return View(applicationConfig);

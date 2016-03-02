@@ -1,4 +1,4 @@
-@model IEnumerable<Stolons.Models.Bill>
+ï»¿@model IEnumerable<Stolons.Models.Bill>
 
 @{
     ViewData["Title"] = "Mes Factures";
@@ -21,7 +21,7 @@
             @Html.DisplayFor(modelItem => item.BillNumber)
         </td>
         <td>
-            <a asp-action="Download" asp-route-id="@item.BillNumber">Télécharger</a>
+            <a asp-action="Download" asp-route-id="@item.BillNumber">TÃ©lÃ©charger</a>
         </td>
     </tr>
 }

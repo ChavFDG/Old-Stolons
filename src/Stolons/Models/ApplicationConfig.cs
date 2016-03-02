@@ -27,14 +27,14 @@ namespace Stolons.Models
         public int StockUpdateMinuteStartDate { get; set; }
         
         [Display(Name = "Jour")]
-        public DayOfWeek CommandDayStartDate { get; set; }
+        public DayOfWeek OrderDayStartDate { get; set; }
         [Display(Name = "Heure")]
-        public int CommandHourStartDate { get; set; }
+        public int OrderHourStartDate { get; set; }
         [Display(Name = "Minute")]
-        public int CommandMinuteStartDate { get; set; }
+        public int OrderMinuteStartDate { get; set; }
         
         [Display(Name = "Mode simulation")]
-        public bool Simulation { get; set; }
+        public bool IsModeSimulated { get; set; }
 
         [Display(Name = "Choix du mode à simuler")]
         public Modes SimulationMode { get; set; }

@@ -58,7 +58,7 @@ namespace Stolons.Controllers
         public IActionResult Manage(Guid? id)
         {
             Product product = id == null ? new Product() : _context.Producs.First(x => x.Id == id);
-            return View(new ProductEditionViewModel(product, _context.ProductTypes.Include(x => x.ProductFamilly).ToList(),id == null));
+            return View(new ProductEditionViewModel(product, _context,id == null));
 
         }
 
@@ -101,6 +101,7 @@ namespace Stolons.Controllers
                 _context.SaveChanges();
                 return RedirectToAction("Index");
             }
+            vmProduct.RefreshTypes(_context);
             return View(vmProduct);
         }
         

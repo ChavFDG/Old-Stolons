@@ -1,4 +1,4 @@
-@model IEnumerable<Stolons.Models.Producer>
+﻿@model IEnumerable<Stolons.Models.Producer>
 
 @{
     ViewData["Title"] = "Liste des producteurs";
@@ -70,7 +70,7 @@
             <a asp-action="ShowBills" asp-route-id="@item.Id">Factures</a> |
             <a asp-action="ShowBasketWeek" asp-route-id="@item.Id">Fiche panier</a> |
             <a asp-action="Edit" asp-route-id="@item.Id">Editer</a> |
-            <a asp-action="Details" asp-route-id="@item.Id">D�tails</a> |
+            <a asp-action="Details" asp-route-id="@item.Id">Détails</a> |
             <a asp-action="Delete" asp-route-id="@item.Id">Supprimer</a>
         </td>
     </tr>

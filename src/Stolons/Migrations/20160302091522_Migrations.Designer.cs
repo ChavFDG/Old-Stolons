@@ -8,7 +8,7 @@ using Stolons.Models;
 namespace Stolons.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20160302082511_Migrations")]
+    [Migration("20160302091522_Migrations")]
     partial class Migrations
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -103,19 +103,19 @@ namespace Stolons.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<int>("CommandDayStartDate");
+                    b.Property<bool>("IsModeSimulated");
 
-                    b.Property<int>("CommandHourStartDate");
+                    b.Property<int>("OrderDayStartDate");
 
-                    b.Property<int>("CommandMinuteStartDate");
+                    b.Property<int>("OrderHourStartDate");
+
+                    b.Property<int>("OrderMinuteStartDate");
 
                     b.Property<int>("PreparationDayStartDate");
 
                     b.Property<int>("PreparationHourStartDate");
 
                     b.Property<int>("PreparationMinuteStartDate");
-
-                    b.Property<bool>("Simulation");
 
                     b.Property<int>("SimulationMode");
 

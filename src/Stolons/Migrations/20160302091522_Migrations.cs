@@ -26,13 +26,13 @@ namespace Stolons.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
-                    CommandDayStartDate = table.Column<int>(nullable: false),
-                    CommandHourStartDate = table.Column<int>(nullable: false),
-                    CommandMinuteStartDate = table.Column<int>(nullable: false),
+                    IsModeSimulated = table.Column<bool>(nullable: false),
+                    OrderDayStartDate = table.Column<int>(nullable: false),
+                    OrderHourStartDate = table.Column<int>(nullable: false),
+                    OrderMinuteStartDate = table.Column<int>(nullable: false),
                     PreparationDayStartDate = table.Column<int>(nullable: false),
                     PreparationHourStartDate = table.Column<int>(nullable: false),
                     PreparationMinuteStartDate = table.Column<int>(nullable: false),
-                    Simulation = table.Column<bool>(nullable: false),
                     SimulationMode = table.Column<int>(nullable: false),
                     StockUpdateDayStartDate = table.Column<int>(nullable: false),
                     StockUpdateHourStartDate = table.Column<int>(nullable: false),

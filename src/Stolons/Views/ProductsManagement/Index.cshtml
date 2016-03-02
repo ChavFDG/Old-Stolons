@@ -1,4 +1,4 @@
-@model IEnumerable<Stolons.Models.Product>
+ï»¿@model IEnumerable<Stolons.Models.Product>
 @using Stolons.Helpers
 @using Stolons.Models
 
@@ -65,7 +65,7 @@
             }
         </th>
         <th>
-            @Html.DisplayFor(model => item.Price) @("€")
+            @Html.DisplayFor(model => item.Price) @("â‚¬")
         </th>
         <th>
             @Html.DisplayFor(model => item.ProductUnit)
@@ -74,9 +74,10 @@
             @(EnumHelper<Product.SellType>.GetDisplayValue(@item.Type))
         </th>
         <th>
-            @Html.DisplayFor(model => item.WeekStock)
-            <input id="@("WeekStockEdition" + item.Id)" asp-for="@item.WeekStock" class="form-control" min="0"/>
-            <script>
+            @if (Configurations.Mode == ApplicationConfig.Modes.StockUpdate)
+            {
+                <input id="@("WeekStockEdition" + item.Id)" asp-for="@item.WeekStock" class="form-control" min="0" />
+                <script>
                 $('#@("WeekStockEdition" + item.Id)').change(function ()
                 {
                     $.ajax({
@@ -88,7 +89,12 @@
                         }
                     });
                 });
-            </script>
+                </script>
+            }
+            else
+            {
+                @Html.DisplayFor(model => item.WeekStock)
+            }            
         </th>
         @switch (@item.State)
         {
@@ -109,15 +115,17 @@
                 break;
         }
         <td>
-            @if (@item.State == Product.ProductState.Enabled)
+            @if (Configurations.Mode == ApplicationConfig.Modes.StockUpdate)
             {
-                <a asp-action="Disable" asp-route-id="@item.Id">Désactiver</a>
+                if (@item.State == Product.ProductState.Enabled)
+                {
+                    <a asp-action="Disable" asp-route-id="@item.Id">DÃ©sactiver |</a>
+                }
+                else
+                {
+                    <a asp-action="Enable" asp-route-id="@item.Id">Activer |</a>
+                }
             }
-            else
-            {
-                <a asp-action="Enable" asp-route-id="@item.Id">Activer</a>
-            }
-            |
             <a asp-action="Manage" asp-route-id="@item.Id">Editer</a> |
             <a asp-action="Delete" asp-route-id="@item.Id">Supprimer</a>
         </td>

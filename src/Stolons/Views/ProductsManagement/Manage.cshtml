@@ -1,4 +1,4 @@
-@model Stolons.ViewModels.ProductsManagement.ProductEditionViewModel
+﻿@model Stolons.ViewModels.ProductsManagement.ProductEditionViewModel
 @using Stolons.Helpers
 
 @{
@@ -93,13 +93,6 @@
                 </select>
             </div>
         </div>
-        <div class="form-group">
-            <label asp-for="Product.Type" class="col-md-2 control-label"></label>
-            <div class="col-md-10">
-                <select id="SellType" asp-for="Product.Type" asp-items="Html.GetEnumSelectList<Product.SellType>()" class="form-control"></select>
-                <span asp-validation-for="Product.Type" class="text-danger" />
-            </div>
-        </div>
         <script>
             $('#SellType').change(function () {
                 if ($("#SellType").val() == 1)
@@ -108,8 +101,13 @@
                     $("#AverageQuantityDiv").hide();
             });
         </script>
-
-
+        <div class="form-group">
+            <label asp-for="Product.Type" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <select id="SellType" asp-for="Product.Type" asp-items="Html.GetEnumSelectList<Product.SellType>()" class="form-control"></select>
+                <span asp-validation-for="Product.Type" class="text-danger" />
+            </div>
+        </div>
         <div class="form-group">
             <label asp-for="Product.ProductUnit" class="col-md-2 control-label"></label>
             <div class="col-md-10">

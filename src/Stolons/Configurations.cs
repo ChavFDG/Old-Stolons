@@ -8,10 +8,59 @@ using System.Threading.Tasks;
 
 namespace Stolons
 {
+    
+
     public static class Configurations
     {
         #region Configuration
-        public static ApplicationConfig ApplicationConfig = new ApplicationConfig();
+        public static ApplicationConfig ApplicationConfig;
+
+        public static int GetDaysDiff(DayOfWeek from, DayOfWeek to)
+        {
+            int fromNumber = from == DayOfWeek.Sunday ? 7 : Convert.ToInt32(from);
+            int toNumber = to == DayOfWeek.Sunday ? 7 : Convert.ToInt32(to);
+            int toReturn = toNumber - fromNumber;
+            return toReturn;
+        }
+
+        public static ApplicationConfig.Modes Mode
+        {
+            get
+            {
+                if(ApplicationConfig.IsModeSimulated)
+                {
+                    return ApplicationConfig.SimulationMode;
+                }
+
+                DateTime currentTime = DateTime.Now;
+                
+                DateTime preparationTime = DateTime.Today;
+                preparationTime = preparationTime.AddDays(GetDaysDiff(currentTime.DayOfWeek, ApplicationConfig.PreparationDayStartDate));
+                preparationTime = preparationTime.AddHours(ApplicationConfig.PreparationHourStartDate).AddMinutes(ApplicationConfig.PreparationMinuteStartDate);
+                
+                DateTime stockUpdateTime = DateTime.Today;
+                stockUpdateTime = stockUpdateTime.AddDays(GetDaysDiff(currentTime.DayOfWeek, ApplicationConfig.StockUpdateDayStartDate));
+                stockUpdateTime = stockUpdateTime.AddHours(ApplicationConfig.StockUpdateHourStartDate).AddMinutes(ApplicationConfig.StockUpdateMinuteStartDate);
+                
+                DateTime orderTime = DateTime.Today;
+                orderTime = orderTime.AddDays(GetDaysDiff(currentTime.DayOfWeek, ApplicationConfig.OrderDayStartDate));
+                orderTime = orderTime.AddHours(ApplicationConfig.OrderHourStartDate).AddMinutes(ApplicationConfig.OrderMinuteStartDate);
+
+               
+                if(preparationTime <= currentTime && currentTime <= stockUpdateTime)
+                {
+                    return ApplicationConfig.Modes.Preparation;
+                }
+                if (stockUpdateTime <= currentTime && currentTime <= orderTime)
+                {
+                    return ApplicationConfig.Modes.StockUpdate;
+                }
+                return ApplicationConfig.Modes.Order;
+            }
+        }
+            
+
+
         #endregion Configuration
 
 

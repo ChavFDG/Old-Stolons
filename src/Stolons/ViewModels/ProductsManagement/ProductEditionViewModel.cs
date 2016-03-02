@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNet.Http;
+using Microsoft.Data.Entity;
 using Stolons.Models;
 using System;
 using System.Collections.Generic;
@@ -28,12 +29,17 @@ namespace Stolons.ViewModels.ProductsManagement
         {
         }
 
-        public ProductEditionViewModel(Product product, List<ProductType> types, bool isNew)
+        public ProductEditionViewModel(Product product, ApplicationDbContext context, bool isNew)
         {
             Product = product;
-            ProductTypes = types;
-            SelectedLabels = product.Labels.OfType<string>().ToArray();
             IsNew = isNew;
+            RefreshTypes(context);
+        }
+
+        public void RefreshTypes(ApplicationDbContext context)
+        {
+            ProductTypes = context.ProductTypes.Include(x => x.ProductFamilly).ToList();
+            SelectedLabels = Product.Labels.OfType<string>().ToArray();
         }
     }
 }

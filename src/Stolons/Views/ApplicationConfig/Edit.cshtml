@@ -1,4 +1,4 @@
-@model Stolons.Models.ApplicationConfig
+ï»¿@model Stolons.Models.ApplicationConfig
 
 @{
     ViewData["Title"] = "Modifier la configuration";
@@ -9,7 +9,7 @@
 <form asp-action="Edit">
     <div class="form-horizontal">
 
-        <h4>Début préparation des commandes :</h4>
+        <h4>DÃ©but prÃ©paration des commandes :</h4>
         <div class="form-group">
             <label asp-for="PreparationDayStartDate" class="col-md-2 control-label"></label>
             <div class="col-md-10">
@@ -32,7 +32,7 @@
             </div>
         </div>
 
-        <h4>Début mise à jour des stocks :</h4>
+        <h4>DÃ©but mise Ã  jour des stocks :</h4>
         <div class="form-group">
             <label asp-for="StockUpdateDayStartDate" class="col-md-2 control-label"></label>
             <div class="col-md-10">
@@ -55,28 +55,28 @@
             </div>
         </div>
 
-        <h4>Début passage des commandes :</h4>
+        <h4>DÃ©but passage des commandes :</h4>
         <div asp-validation-summary="ValidationSummary.ModelOnly" class="text-danger"></div>
         <input type="hidden" asp-for="Id" />
         <div class="form-group">
-            <label asp-for="CommandDayStartDate" class="col-md-2 control-label"></label>
+            <label asp-for="OrderDayStartDate" class="col-md-2 control-label"></label>
             <div class="col-md-10">
-                <select asp-for="CommandDayStartDate" asp-items="Html.GetEnumSelectList<DayOfWeek>()" class="form-control"></select>
-                <span asp-validation-for="CommandDayStartDate" class="text-danger" />
+                <select asp-for="OrderDayStartDate" asp-items="Html.GetEnumSelectList<DayOfWeek>()" class="form-control"></select>
+                <span asp-validation-for="OrderDayStartDate" class="text-danger" />
             </div>
         </div>
         <div class="form-group">
-            <label asp-for="CommandHourStartDate" class="col-md-2 control-label"></label>
+            <label asp-for="OrderHourStartDate" class="col-md-2 control-label"></label>
             <div class="col-md-10">
-                <input asp-for="CommandHourStartDate" class="form-control" />
-                <span asp-validation-for="CommandHourStartDate" class="text-danger" />
+                <input asp-for="OrderHourStartDate" class="form-control" />
+                <span asp-validation-for="OrderHourStartDate" class="text-danger" />
             </div>
         </div>
         <div class="form-group">
-            <label asp-for="CommandMinuteStartDate" class="col-md-2 control-label"></label>
+            <label asp-for="OrderMinuteStartDate" class="col-md-2 control-label"></label>
             <div class="col-md-10">
-                <input asp-for="CommandMinuteStartDate" class="form-control" />
-                <span asp-validation-for="CommandMinuteStartDate" class="text-danger" />
+                <input asp-for="OrderMinuteStartDate" class="form-control" />
+                <span asp-validation-for="OrderMinuteStartDate" class="text-danger" />
             </div>
         </div>
 
@@ -84,8 +84,8 @@
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
                 <div class="checkbox">
-                    <input  asp-for="Simulation" />
-                    <label asp-for="Simulation"></label>
+                    <input  asp-for="IsModeSimulated" />
+                    <label asp-for="IsModeSimulated"></label>
                 </div>
             </div>
         </div>

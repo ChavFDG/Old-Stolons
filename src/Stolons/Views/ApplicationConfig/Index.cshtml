@@ -1,13 +1,13 @@
-@model ApplicationConfig
+ï»¿@model ApplicationConfig
 
 @{
     ViewData["Title"] = "Configuration du site web";
 }
 
 <h2>@ViewData["Title"]</h2>
-
+<p>Mode actuel : @Configurations.Mode</p>
 <div>
-    <h4>Début préparation des commandes :</h4>
+    <h4>DÃ©but prÃ©paration des commandes :</h4>
     <dl class="dl-horizontal">
         <dt>
             @Html.DisplayNameFor(model => model.PreparationDayStartDate)
@@ -28,7 +28,7 @@
             @Html.DisplayFor(model => model.PreparationMinuteStartDate)
         </dd>
     </dl>
-    <h4>Début mise à jour des stocks :</h4>
+    <h4>DÃ©but mise Ã  jour des stocks :</h4>
     <dl class="dl-horizontal">
         <dt>
             @Html.DisplayNameFor(model => model.StockUpdateDayStartDate)
@@ -49,34 +49,34 @@
             @Html.DisplayFor(model => model.StockUpdateMinuteStartDate)
         </dd>
     </dl>
-    <h4>Début passage des commandes :</h4>
+    <h4>DÃ©but passage des commandes :</h4>
     <dl class="dl-horizontal">
         <dt>
-            @Html.DisplayNameFor(model => model.CommandDayStartDate)
+            @Html.DisplayNameFor(model => model.OrderDayStartDate)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.CommandDayStartDate)
+            @Html.DisplayFor(model => model.OrderDayStartDate)
         </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.CommandHourStartDate)
+            @Html.DisplayNameFor(model => model.OrderHourStartDate)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.CommandHourStartDate)
+            @Html.DisplayFor(model => model.OrderHourStartDate)
         </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.CommandMinuteStartDate)
+            @Html.DisplayNameFor(model => model.OrderMinuteStartDate)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.CommandMinuteStartDate)
+            @Html.DisplayFor(model => model.OrderMinuteStartDate)
         </dd>
     </dl>
     <h4>Simulation :</h4>
     <dl class="dl-horizontal">
         <dt>
-            @Html.DisplayNameFor(model => model.Simulation)
+            @Html.DisplayNameFor(model => model.IsModeSimulated)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.Simulation)
+            @Html.DisplayFor(model => model.IsModeSimulated)
         </dd>
         <dt>
             @Html.DisplayNameFor(model => model.SimulationMode)
