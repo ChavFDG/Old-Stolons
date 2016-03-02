@@ -8,8 +8,8 @@ using Stolons.Models;
 namespace Stolons.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20160211132438_BataBaseModel13")]
-    partial class BataBaseModel13
+    [Migration("20160302082511_Migrations")]
+    partial class Migrations
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -96,6 +96,36 @@ namespace Stolons.Migrations
                     b.HasKey("UserId", "RoleId");
 
                     b.HasAnnotation("Relational:TableName", "AspNetUserRoles");
+                });
+
+            modelBuilder.Entity("Stolons.Models.ApplicationConfig", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int>("CommandDayStartDate");
+
+                    b.Property<int>("CommandHourStartDate");
+
+                    b.Property<int>("CommandMinuteStartDate");
+
+                    b.Property<int>("PreparationDayStartDate");
+
+                    b.Property<int>("PreparationHourStartDate");
+
+                    b.Property<int>("PreparationMinuteStartDate");
+
+                    b.Property<bool>("Simulation");
+
+                    b.Property<int>("SimulationMode");
+
+                    b.Property<int>("StockUpdateDayStartDate");
+
+                    b.Property<int>("StockUpdateHourStartDate");
+
+                    b.Property<int>("StockUpdateMinuteStartDate");
+
+                    b.HasKey("Id");
                 });
 
             modelBuilder.Entity("Stolons.Models.ApplicationUser", b =>

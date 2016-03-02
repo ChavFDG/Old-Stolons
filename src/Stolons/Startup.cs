@@ -115,6 +115,38 @@ namespace Stolons
             await CreateRoles(serviceProvider);
             await CreateAdminAcount(context, userManager);
             CreateProductCategories(context);
+            SetConfigurations(context);
+        }
+
+        private void SetConfigurations(ApplicationDbContext context)
+        {
+            if(context.ApplicationConfig.Any())
+            {
+                Configurations.ApplicationConfig = context.ApplicationConfig.First();
+            }
+            else
+            {
+                Configurations.ApplicationConfig = new ApplicationConfig();
+                //Préparation commande
+                Configurations.ApplicationConfig.PreparationDayStartDate = DayOfWeek.Wednesday;
+                Configurations.ApplicationConfig.PreparationHourStartDate = 12;
+                Configurations.ApplicationConfig.PreparationMinuteStartDate = 0;
+                //Mise à jour stock
+                Configurations.ApplicationConfig.StockUpdateDayStartDate = DayOfWeek.Thursday;
+                Configurations.ApplicationConfig.StockUpdateHourStartDate = 12;
+                Configurations.ApplicationConfig.StockUpdateMinuteStartDate= 0;
+                //Commandes
+                Configurations.ApplicationConfig.CommandDayStartDate = DayOfWeek.Sunday;
+                Configurations.ApplicationConfig.CommandHourStartDate = 0;
+                Configurations.ApplicationConfig.CommandMinuteStartDate = 0;
+                //Simulation
+                Configurations.ApplicationConfig.Simulation = true;
+                Configurations.ApplicationConfig.SimulationMode = ApplicationConfig.Modes.StockUpdate;
+                //
+                context.Add(Configurations.ApplicationConfig);
+                context.SaveChanges();
+            }
+
         }
 
         private void CreateProductCategories(ApplicationDbContext context)

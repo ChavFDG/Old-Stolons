@@ -1,0 +1,116 @@
+@model Stolons.Models.ApplicationConfig
+
+@{
+    ViewData["Title"] = "Modifier la configuration";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<form asp-action="Edit">
+    <div class="form-horizontal">
+
+        <h4>Début préparation des commandes :</h4>
+        <div class="form-group">
+            <label asp-for="PreparationDayStartDate" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <select asp-for="PreparationDayStartDate" asp-items="Html.GetEnumSelectList<DayOfWeek>()" class="form-control"></select>
+                <span asp-validation-for="PreparationDayStartDate" class="text-danger" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="PreparationHourStartDate" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="PreparationHourStartDate" class="form-control" />
+                <span asp-validation-for="PreparationHourStartDate" class="text-danger" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="PreparationMinuteStartDate" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="PreparationMinuteStartDate" class="form-control" />
+                <span asp-validation-for="PreparationMinuteStartDate" class="text-danger" />
+            </div>
+        </div>
+
+        <h4>Début mise à jour des stocks :</h4>
+        <div class="form-group">
+            <label asp-for="StockUpdateDayStartDate" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <select asp-for="StockUpdateDayStartDate" asp-items="Html.GetEnumSelectList<DayOfWeek>()" class="form-control"></select>
+                <span asp-validation-for="StockUpdateDayStartDate" class="text-danger" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="StockUpdateHourStartDate" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="StockUpdateHourStartDate" class="form-control" />
+                <span asp-validation-for="StockUpdateHourStartDate" class="text-danger" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="StockUpdateMinuteStartDate" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="StockUpdateMinuteStartDate" class="form-control" />
+                <span asp-validation-for="StockUpdateMinuteStartDate" class="text-danger" />
+            </div>
+        </div>
+
+        <h4>Début passage des commandes :</h4>
+        <div asp-validation-summary="ValidationSummary.ModelOnly" class="text-danger"></div>
+        <input type="hidden" asp-for="Id" />
+        <div class="form-group">
+            <label asp-for="CommandDayStartDate" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <select asp-for="CommandDayStartDate" asp-items="Html.GetEnumSelectList<DayOfWeek>()" class="form-control"></select>
+                <span asp-validation-for="CommandDayStartDate" class="text-danger" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="CommandHourStartDate" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="CommandHourStartDate" class="form-control" />
+                <span asp-validation-for="CommandHourStartDate" class="text-danger" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="CommandMinuteStartDate" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="CommandMinuteStartDate" class="form-control" />
+                <span asp-validation-for="CommandMinuteStartDate" class="text-danger" />
+            </div>
+        </div>
+
+        <h4>Simulation :</h4>
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <div class="checkbox">
+                    <input  asp-for="Simulation" />
+                    <label asp-for="Simulation"></label>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="SimulationMode" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <select asp-for="SimulationMode" asp-items="Html.GetEnumSelectList<ApplicationConfig.Modes>()" class="form-control"></select>
+                <span asp-validation-for="SimulationMode" class="text-danger" />
+            </div>
+        </div>
+        
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Sauvegarder" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+</form>
+
+<div>
+    <a asp-action="Index">Revenir</a>
+</div>
+
+@section Scripts {
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+}

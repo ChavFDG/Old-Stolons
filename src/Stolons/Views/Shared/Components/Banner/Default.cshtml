@@ -42,6 +42,10 @@
                         <li><a asp-controller="Users" asp-action="Index">Adhérents</a></li>
                         <li><a asp-controller="Producers" asp-action="Index">Producteurs</a></li>
                     }
+                    @if (User.IsInRole(Configurations.Role.Administrator.ToString()))
+                    {
+                        <li><a asp-controller="ApplicationConfig" asp-action="Index">Administrer le site</a></li>
+                    }
                 }
             </ul>
             @await Html.PartialAsync("_LoginPartial")

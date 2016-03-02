@@ -10,6 +10,14 @@ namespace Stolons
 {
     public static class Configurations
     {
+        #region Configuration
+        public static ApplicationConfig ApplicationConfig = new ApplicationConfig();
+        #endregion Configuration
+
+
+
+
+        #region UserManagement
         public enum Role
         {
             [Display(Name = "Adhérent")]
@@ -39,12 +47,6 @@ namespace Stolons
         {
             return Enum.GetNames(typeof(UserType));
         }
-        
-        public static string NewsImageStockagePath = Path.Combine("uploads", "images", "news");
-        public static string UserAvatarStockagePath = Path.Combine("uploads", "images", "avatars");
-        public static string UserProductsStockagePath = Path.Combine("uploads", "products");
-        public static string DefaultFileName = "Default.png";
-
         public static string GetAlias(this User user)
         {
             if (user is Producer)
@@ -56,13 +58,26 @@ namespace Stolons
                 return "Les Stolons de Privas";
             }
         }
+        #endregion UserManagement
 
+        #region FileManagement
 
-
+        public static string NewsImageStockagePath = Path.Combine("uploads", "images", "news");
+        public static string UserAvatarStockagePath = Path.Combine("uploads", "images", "avatars");
+        public static string UserProductsStockagePath = Path.Combine("uploads", "products");
+        public static string DefaultFileName = "Default.png";
         private static string _labelImagePath = Path.Combine("images", "labels");
         public static string GetImage(this Product.Label label)
         {
             return Path.Combine(_labelImagePath, label.ToString() + ".jpg");
         }
+
+        #endregion FIleManagement
+
+
+
+
+
+       
     }
 }

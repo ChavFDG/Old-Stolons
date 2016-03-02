@@ -4,7 +4,7 @@ using Microsoft.Data.Entity.Migrations;
 
 namespace Stolons.Migrations
 {
-    public partial class BataBaseModel13 : Migration
+    public partial class Migrations : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -20,6 +20,27 @@ namespace Stolons.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_IdentityRole", x => x.Id);
+                });
+            migrationBuilder.CreateTable(
+                name: "ApplicationConfig",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(nullable: false),
+                    CommandDayStartDate = table.Column<int>(nullable: false),
+                    CommandHourStartDate = table.Column<int>(nullable: false),
+                    CommandMinuteStartDate = table.Column<int>(nullable: false),
+                    PreparationDayStartDate = table.Column<int>(nullable: false),
+                    PreparationHourStartDate = table.Column<int>(nullable: false),
+                    PreparationMinuteStartDate = table.Column<int>(nullable: false),
+                    Simulation = table.Column<bool>(nullable: false),
+                    SimulationMode = table.Column<int>(nullable: false),
+                    StockUpdateDayStartDate = table.Column<int>(nullable: false),
+                    StockUpdateHourStartDate = table.Column<int>(nullable: false),
+                    StockUpdateMinuteStartDate = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ApplicationConfig", x => x.Id);
                 });
             migrationBuilder.CreateTable(
                 name: "ProductType",
@@ -340,6 +361,7 @@ namespace Stolons.Migrations
             migrationBuilder.DropTable("AspNetUserClaims");
             migrationBuilder.DropTable("AspNetUserLogins");
             migrationBuilder.DropTable("AspNetUserRoles");
+            migrationBuilder.DropTable("ApplicationConfig");
             migrationBuilder.DropTable("Bill");
             migrationBuilder.DropTable("BillEntry");
             migrationBuilder.DropTable("News");

@@ -19,6 +19,9 @@ namespace Stolons.Models
         public DbSet<ProductType> ProductTypes { get; set; }
         public DbSet<User> StolonsUsers { get; set; }
         public DbSet<WeekBasket> WeekBaskets { get; set; }
+        public DbSet<ApplicationConfig> ApplicationConfig { get; set; }
+
+        
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

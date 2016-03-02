@@ -1,0 +1,91 @@
+@model ApplicationConfig
+
+@{
+    ViewData["Title"] = "Configuration du site web";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<div>
+    <h4>Début préparation des commandes :</h4>
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.PreparationDayStartDate)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.PreparationDayStartDate)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.PreparationHourStartDate)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.PreparationHourStartDate)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.PreparationMinuteStartDate)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.PreparationMinuteStartDate)
+        </dd>
+    </dl>
+    <h4>Début mise à jour des stocks :</h4>
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.StockUpdateDayStartDate)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.StockUpdateDayStartDate)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.StockUpdateHourStartDate)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.StockUpdateHourStartDate)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.StockUpdateMinuteStartDate)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.StockUpdateMinuteStartDate)
+        </dd>
+    </dl>
+    <h4>Début passage des commandes :</h4>
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.CommandDayStartDate)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.CommandDayStartDate)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.CommandHourStartDate)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.CommandHourStartDate)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.CommandMinuteStartDate)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.CommandMinuteStartDate)
+        </dd>
+    </dl>
+    <h4>Simulation :</h4>
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Simulation)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Simulation)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.SimulationMode)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.SimulationMode)
+        </dd>
+    </dl>
+</div>
+<p>
+    <a asp-action="Edit">Modifier</a>
+</p>

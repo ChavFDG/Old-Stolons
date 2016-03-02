@@ -97,6 +97,36 @@ namespace Stolons.Migrations
                     b.HasAnnotation("Relational:TableName", "AspNetUserRoles");
                 });
 
+            modelBuilder.Entity("Stolons.Models.ApplicationConfig", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int>("CommandDayStartDate");
+
+                    b.Property<int>("CommandHourStartDate");
+
+                    b.Property<int>("CommandMinuteStartDate");
+
+                    b.Property<int>("PreparationDayStartDate");
+
+                    b.Property<int>("PreparationHourStartDate");
+
+                    b.Property<int>("PreparationMinuteStartDate");
+
+                    b.Property<bool>("Simulation");
+
+                    b.Property<int>("SimulationMode");
+
+                    b.Property<int>("StockUpdateDayStartDate");
+
+                    b.Property<int>("StockUpdateHourStartDate");
+
+                    b.Property<int>("StockUpdateMinuteStartDate");
+
+                    b.HasKey("Id");
+                });
+
             modelBuilder.Entity("Stolons.Models.ApplicationUser", b =>
                 {
                     b.Property<string>("Id");
