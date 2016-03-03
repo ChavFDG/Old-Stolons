@@ -114,6 +114,17 @@ namespace Stolons.Models
         [Display(Name = "Etat")]
         public ProductState State { get; set; }
 
+        public string GetFirstImage()
+        {
+            if(_Pictures.Any())
+            {
+                return _Pictures[0];
+            }
+            else
+            {
+                return Configurations.DefaultProductImage;
+            }
+        }
 
         public enum SellType
         {

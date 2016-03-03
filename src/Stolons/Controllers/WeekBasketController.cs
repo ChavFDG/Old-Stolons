@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Hosting;
 using Stolons.ViewModels.WeekBasket;
+using Microsoft.Data.Entity;
 
 namespace Stolons.Controllers
 {

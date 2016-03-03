@@ -39,7 +39,7 @@ namespace Stolons.ViewModels.ProductsManagement
         public void RefreshTypes(ApplicationDbContext context)
         {
             ProductTypes = context.ProductTypes.Include(x => x.ProductFamilly).ToList();
-            SelectedLabels = Product.Labels.OfType<string>().ToArray();
+            SelectedLabels = Product.Labels.Select(s => s.ToString()).ToArray();
         }
     }
 }

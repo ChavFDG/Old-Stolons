@@ -1,4 +1,5 @@
-﻿using Stolons.Models;
+﻿using Microsoft.AspNet.Http;
+using Stolons.Models;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -111,14 +112,23 @@ namespace Stolons
 
         #region FileManagement
 
+        public static string ServerUrl = "http://localhost:5000";//TOdo
+        
+
         public static string NewsImageStockagePath = Path.Combine("uploads", "images", "news");
         public static string UserAvatarStockagePath = Path.Combine("uploads", "images", "avatars");
-        public static string UserProductsStockagePath = Path.Combine("uploads", "products");
+        public static string UserProductsStockagePath = Path.Combine("uploads", "images", "products");
+        public static string DefaultProductImage = Path.Combine("uploads", "images", "products", "Default.png");
         public static string DefaultFileName = "Default.png";
         private static string _labelImagePath = Path.Combine("images", "labels");
         public static string GetImage(this Product.Label label)
         {
             return Path.Combine(_labelImagePath, label.ToString() + ".jpg");
+        }
+
+        public static string GetUrl(string localPath)
+        {
+            return Path.Combine(ServerUrl,localPath).Replace("\\", "/");
         }
 
         #endregion FIleManagement

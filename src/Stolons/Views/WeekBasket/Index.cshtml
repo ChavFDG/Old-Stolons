@@ -1,4 +1,4 @@
-@using Stolons.Helpers
+﻿@using Stolons.Helpers
 @using Stolons.ViewModels.WeekBasket;
 @model WeekBasketViewModel
 
@@ -9,16 +9,77 @@
 <h2>@ViewData["Title"]</h2>
 
 <div class="weekbasket">
-    <div class="container">
-        <div class="container col-xs-4 col-sm-4 col-md-4 col-lg-4">
-            <div  bordered-table">
-                <span>Liste des produits en cours pour l'utilisateur.</span>
-                <br/>
-                <span>(Mes articles):</span>
-                <table>
-                </table>
-            </div>
+    <div class="row">
+        <!-- Mon panier-->
+        <div class="myBasket col-lg-3">
+
         </div>
+
+        <!-- Les produits-->
+        <div class="products col-lg-9">
+            @foreach (Product product in Model.Products)
+            {
+                <div class="product">
+                    <div class="product-top">
+                        <div class="pr_img">
+                            <img src="@Configurations.GetUrl(product.GetFirstImage())" />
+                        </div>
+                        <div class="pr_avatar">
+                            <img src="@Configurations.GetUrl(product.Producer.Avatar)" />
+                        </div>
+                        <div class="pr_labels">
+                            @foreach (Product.Label label in product.Labels)
+                            {
+                                <div class="pr_label">
+                                    <img src="@Configurations.GetUrl(label.GetImage())" />
+                                </div>
+                            }
+                        </div>
+                    </div>
+                    <div class="product-bottom">
+                        <div class="pr_text">
+                            <div class="pr_name">
+                                @product.Name
+                            </div>
+                            <div class="pr_priceQuantity">
+                                @(product.Price +"€")
+                                @switch(product.Type)
+                                {
+                                    case Product.SellType.Piece:
+                                        EnumHelper<Product.SellType>.GetDisplayValue(Product.SellType.Piece);
+                                        break;
+                                    case Product.SellType.Weigh:
+                                        product.ProductUnit.ToString();
+                                        break;
+                                    case Product.SellType.Wrapped:
+                                        product.ProductUnit.ToString();
+                                        break;
+                                }
+                            </div>
+                        </div>
+                        <div class="pr_actions">
+                            <div class="pr_actionDetail">
+                                <button type="button" class="btn btn-default">Fiche produit</button>
+                            </div>
+                            <div class="pr_actionAdd">
+                                <button type="button" class="btn btn-default">Ajouter au panier</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+            
+        </div>
+
+
+        <!-- Les filtres-->
+        <div class="filters">
+
+        </div>
+    </div>
+
+    <div class="container" style="display:none;">
+
         <div class="container col-xs-8 col-sm-8 col-md-8 col-lg-8">
             <div class="row">
                 <label class="control-label" for="productFamilly">Famille : </label>
@@ -80,6 +141,7 @@
                         items.classList.remove('visible');
                     }
                 </script>
+
 
                 <input type="text" placeholder="Rechercher un produit" />
 

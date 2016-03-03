@@ -11,7 +11,9 @@ namespace Stolons.ViewModels.WeekBasket
     public class WeekBasketViewModel
     {
         public Consumer Consumer { get; set; }
-        
+
+        public List<Product> Products { get; set; }
+
         public List<ProductType> ProductTypes { get; set;}
 
         public WeekBasketViewModel() 
@@ -21,6 +23,7 @@ namespace Stolons.ViewModels.WeekBasket
         public WeekBasketViewModel(Consumer consumer, ApplicationDbContext context)
         {
             Consumer = consumer;
+            Products = context.Products.Include(x=>x.Producer).Where(x => x.State == Product.ProductState.Enabled).ToList();
             ProductTypes = context.ProductTypes.Include(x => x.ProductFamilly).ToList();
         }
     }

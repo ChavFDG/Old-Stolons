@@ -107,3 +107,72 @@ textarea {
         .dropdown-check-list ul.items li {
             list-style: none;
         }
+
+/*-- WEEK BASKET --*/
+
+.myBasket{
+
+}
+.products{
+
+}
+.product {
+    display: inline-block;
+    width: 360px;
+    height: 285px;
+    border: 1px solid #222;
+    padding: 5px;
+}
+.filters{
+
+}
+.product-top {
+    height: 200px;
+}
+.pr_img img {
+    width: 350px;
+    height: 200px;
+}
+.pr_avatar {
+    position: absolute;
+    margin: -200px 0 0 300px;
+    border-radius: 25px;
+    background-color: #ddd;
+}
+.pr_avatar img {
+    width: 50px;
+    height: 50px;
+}
+.pr_labels {
+    position: absolute;
+    margin-top: -20px;
+}
+.pr_label {
+    float: left;
+    margin: 0 1px;
+}
+.pr_label img {
+    width: 20px;
+    height: 20px;
+}
+.product-bottom {
+    
+}
+.pr_text {
+
+}
+.pr_name {
+    text-align: left;
+}
+.pr_priceQuantity {
+    text-align: right;
+}
+.pr_actions {
+    text-align: center;
+}
+.pr_actionDetail {
+    display: inline;
+}
+.pr_actionAdd {
+    display: inline;
+}

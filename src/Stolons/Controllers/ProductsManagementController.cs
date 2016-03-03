@@ -33,7 +33,7 @@ namespace Stolons.Controllers
         public async Task<IActionResult> Index()
         {
             var appUser = await GetCurrentUserAsync();
-            var products = _context.Producs.Include(m => m.Familly).Include(m=>m.Familly.Type).Where(x => x.Producer.Email == appUser.Email).ToList();
+            var products = _context.Products.Include(m => m.Familly).Include(m=>m.Familly.Type).Where(x => x.Producer.Email == appUser.Email).ToList();
             return View(products);
         }
 
@@ -45,7 +45,7 @@ namespace Stolons.Controllers
                 return HttpNotFound();
             }
 
-            Product product = _context.Producs.Single(m => m.Id == id);
+            Product product = _context.Products.Single(m => m.Id == id);
             if (product == null)
             {
                 return HttpNotFound();
@@ -57,7 +57,7 @@ namespace Stolons.Controllers
         // GET: ProductsManagement/Create
         public IActionResult Manage(Guid? id)
         {
-            Product product = id == null ? new Product() : _context.Producs.First(x => x.Id == id);
+            Product product = id == null ? new Product() : _context.Products.Include(x=>x.Familly).First(x => x.Id == id);
             return View(new ProductEditionViewModel(product, _context,id == null));
 
         }
@@ -92,11 +92,11 @@ namespace Stolons.Controllers
                 if(vmProduct.IsNew)
                 {
                     vmProduct.Product.Id = Guid.NewGuid();
-                    _context.Producs.Add(vmProduct.Product);
+                    _context.Products.Add(vmProduct.Product);
                 }
                 else
                 {
-                    _context.Producs.Update(vmProduct.Product);
+                    _context.Products.Update(vmProduct.Product);
                 }
                 _context.SaveChanges();
                 return RedirectToAction("Index");
@@ -114,7 +114,7 @@ namespace Stolons.Controllers
                 return HttpNotFound();
             }
 
-            Product product = _context.Producs.Single(m => m.Id == id);
+            Product product = _context.Products.Single(m => m.Id == id);
             if (product == null)
             {
                 return HttpNotFound();
@@ -128,8 +128,8 @@ namespace Stolons.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult DeleteConfirmed(Guid id)
         {
-            Product product = _context.Producs.Single(m => m.Id == id);
-            _context.Producs.Remove(product);
+            Product product = _context.Products.Single(m => m.Id == id);
+            _context.Products.Remove(product);
             _context.SaveChanges();
             return RedirectToAction("Index");
         }
@@ -137,14 +137,14 @@ namespace Stolons.Controllers
 
         public IActionResult Enable(Guid? id)
         {
-            _context.Producs.First(x => x.Id == id).State = Product.ProductState.Enabled;
+            _context.Products.First(x => x.Id == id).State = Product.ProductState.Enabled;
             _context.SaveChanges();
             return RedirectToAction("Index");
 
         }
         public IActionResult Disable(Guid? id)
         {
-            _context.Producs.First(x => x.Id == id).State = Product.ProductState.Disabled;
+            _context.Products.First(x => x.Id == id).State = Product.ProductState.Disabled;
             _context.SaveChanges();
             return RedirectToAction("Index");
 
@@ -154,7 +154,7 @@ namespace Stolons.Controllers
         [HttpPost, ActionName("ChangeStock")]
         public IActionResult ChangeStock(Guid id, int newStock)
         {
-            _context.Producs.First(x => x.Id == id).WeekStock = newStock;
+            _context.Products.First(x => x.Id == id).WeekStock = newStock;
             _context.SaveChanges();
             return RedirectToAction("Index");
         }

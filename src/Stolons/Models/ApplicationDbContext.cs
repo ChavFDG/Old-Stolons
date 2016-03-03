@@ -14,7 +14,7 @@ namespace Stolons.Models
         public DbSet<BillEntry> BillEntrys { get; set; }
         public DbSet<Consumer> Consumers { get; set; }
         public DbSet<Producer> Producers { get; set; }
-        public DbSet<Product> Producs { get; set; }
+        public DbSet<Product> Products { get; set; }
         public DbSet<ProductFamilly> ProductFamillys { get; set; }
         public DbSet<ProductType> ProductTypes { get; set; }
         public DbSet<User> StolonsUsers { get; set; }
