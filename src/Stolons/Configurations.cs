@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNet.Http;
+﻿using Microsoft.AspNet.Hosting;
+using Microsoft.AspNet.Http;
+using Microsoft.Net.Http.Headers;
 using Stolons.Models;
 using System;
 using System.Collections.Generic;
@@ -131,12 +133,20 @@ namespace Stolons
             return Path.Combine(ServerUrl,localPath).Replace("\\", "/");
         }
 
+        public static async Task<string> UploadFile(IHostingEnvironment environment, IFormFile uploadFile, string path)
+        {
+            string uploads = Path.Combine(environment.WebRootPath, path);
+            string fileName = Guid.NewGuid().ToString() + "_" + ContentDispositionHeaderValue.Parse(uploadFile.ContentDisposition).FileName.Trim('"');
+            await uploadFile.SaveAsAsync(Path.Combine(uploads, fileName));
+            return Path.Combine(path,fileName);
+        }
+
         #endregion FIleManagement
 
 
 
 
 
-       
+
     }
 }

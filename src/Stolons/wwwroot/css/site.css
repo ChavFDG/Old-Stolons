@@ -60,6 +60,20 @@ textarea {
     height: 25px;
 }
 
+.avatar {
+    float: left;
+    margin-top: 1em;
+    margin-right: 1em;
+    position: relative;
+
+    -webkit-border-radius: 50%;
+    -moz-border-radius: 50%;
+    border-radius: 50%;
+
+    -webkit-box-shadow: 0 0 0 3px #fff, 0 0 0 4px #999, 0 2px 5px 4px rgba(0,0,0,.2);
+    -moz-box-shadow: 0 0 0 3px #fff, 0 0 0 4px #999, 0 2px 5px 4px rgba(0,0,0,.2);
+    box-shadow: 0 0 0 3px #fff, 0 0 0 4px #999, 0 2px 5px 4px rgba(0,0,0,.2);
+}
 
 
 /* DropDOwn list */
@@ -118,8 +132,8 @@ textarea {
 }
 .product {
     display: inline-block;
-    width: 360px;
-    height: 285px;
+    width: 250px;
+    height: 200px;
     border: 1px solid #222;
     padding: 5px;
 }
@@ -127,25 +141,33 @@ textarea {
 
 }
 .product-top {
-    height: 200px;
+    height: 100px;
+    position: relative;
+}
+.pr_img { 
 }
 .pr_img img {
-    width: 350px;
-    height: 200px;
+    max-height: 100%; 
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
 }
 .pr_avatar {
     position: absolute;
-    margin: -200px 0 0 300px;
+    margin: 0 0 0 0;
     border-radius: 25px;
     background-color: #ddd;
+    top: 0;
+    right: 0;
+    padding: 5px;
 }
 .pr_avatar img {
-    width: 50px;
-    height: 50px;
+    width: 25px;
+    height: 25px;
 }
 .pr_labels {
     position: absolute;
-    margin-top: -20px;
+    bottom:0;
 }
 .pr_label {
     float: left;
@@ -156,16 +178,18 @@ textarea {
     height: 20px;
 }
 .product-bottom {
-    
+    height: 100px;    
 }
 .pr_text {
 
 }
 .pr_name {
-    text-align: left;
+    text-align: center;
+    font-size:large
 }
 .pr_priceQuantity {
     text-align: right;
+    font-size:medium;
 }
 .pr_actions {
     text-align: center;

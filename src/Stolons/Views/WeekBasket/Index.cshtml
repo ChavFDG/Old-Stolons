@@ -21,7 +21,7 @@
             {
                 <div class="product">
                     <div class="product-top">
-                        <div class="pr_img">
+                        <div class="pr_img product-top">
                             <img src="@Configurations.GetUrl(product.GetFirstImage())" />
                         </div>
                         <div class="pr_avatar">
@@ -43,24 +43,17 @@
                             </div>
                             <div class="pr_priceQuantity">
                                 @(product.Price +"€")
-                                @switch(product.Type)
+                                @if (product.Type == Product.SellType.Piece)
                                 {
-                                    case Product.SellType.Piece:
-                                        EnumHelper<Product.SellType>.GetDisplayValue(Product.SellType.Piece);
-                                        break;
-                                    case Product.SellType.Weigh:
-                                        product.ProductUnit.ToString();
-                                        break;
-                                    case Product.SellType.Wrapped:
-                                        product.ProductUnit.ToString();
-                                        break;
+                                    @(" la pièce")
+                                }
+                                else
+                                {
+                                    @(" / " + product.ProductUnit.ToString())
                                 }
                             </div>
                         </div>
                         <div class="pr_actions">
-                            <div class="pr_actionDetail">
-                                <button type="button" class="btn btn-default">Fiche produit</button>
-                            </div>
                             <div class="pr_actionAdd">
                                 <button type="button" class="btn btn-default">Ajouter au panier</button>
                             </div>

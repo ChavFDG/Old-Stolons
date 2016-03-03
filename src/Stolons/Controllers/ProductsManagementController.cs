@@ -77,17 +77,25 @@ namespace Stolons.Controllers
                 var appUser = await GetCurrentUserAsync();
                 vmProduct.Product.Producer = _context.Producers.FirstOrDefault(x => x.Email == appUser.Email);
                 //On s'occupe des images du produit
-                string fileName = Configurations.DefaultFileName;
+                int cpt = 0;
                 foreach (IFormFile uploadFile in new List<IFormFile>() { vmProduct.UploadFile1, vmProduct.UploadFile2, vmProduct.UploadFile3 })
                 {
                     if (uploadFile != null)
                     {
                         //Image uploading
-                        string uploads = Path.Combine(_environment.WebRootPath, Configurations.UserProductsStockagePath);
-                        fileName = Guid.NewGuid().ToString() + "_" + ContentDispositionHeaderValue.Parse(uploadFile.ContentDisposition).FileName.Trim('"');
-                        await uploadFile.SaveAsAsync(Path.Combine(uploads, fileName)); 
-                        vmProduct.Product.Pictures.Add(Path.Combine(Configurations.UserProductsStockagePath, fileName));
+                        string fileName = await Configurations.UploadFile(_environment, uploadFile, Configurations.UserProductsStockagePath);
+                        if(!vmProduct.IsNew && vmProduct.Product.Pictures.Count > cpt)
+                        {
+                            //Replace
+                            vmProduct.Product.Pictures[cpt] = fileName;
+                        }
+                        else
+                        {
+                            //Add
+                            vmProduct.Product.Pictures.Add(fileName);
+                        }
                     }
+                    cpt++;
                 }
                 if(vmProduct.IsNew)
                 {
