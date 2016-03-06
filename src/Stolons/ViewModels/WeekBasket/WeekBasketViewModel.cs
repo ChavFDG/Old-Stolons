@@ -16,12 +16,15 @@ namespace Stolons.ViewModels.WeekBasket
 
         public List<ProductType> ProductTypes { get; set;}
 
+        public Models.WeekBasket WeekBasket { get; set; }
+
         public WeekBasketViewModel() 
         {
         }
 
-        public WeekBasketViewModel(Consumer consumer, ApplicationDbContext context)
+        public WeekBasketViewModel(Consumer consumer, Models.WeekBasket weekBasket, ApplicationDbContext context)
         {
+            WeekBasket = weekBasket;
             Consumer = consumer;
             Products = context.Products.Include(x=>x.Producer).Where(x => x.State == Product.ProductState.Enabled).ToList();
             ProductTypes = context.ProductTypes.Include(x => x.ProductFamilly).ToList();

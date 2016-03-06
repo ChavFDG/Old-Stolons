@@ -8,24 +8,179 @@
 
 <h2>@ViewData["Title"]</h2>
 
+<script>
+    $(document).ready(function () {
+        console.log("start");
+        //Hide / Show quantity input
+        var trs = $('tr').each(function(){
+        
+        });
+
+        //
+        $('button.addProductBtn').click(function () {
+            var basketId = '@(Model.WeekBasket.Id.ToString())';
+            $.ajax({
+                url: '@Url.Action("AddToBasket", "WeekBasket")',
+                data: {
+                    productId: $(this).attr('data-productId'),
+                    weekBasketId: '@(Model.WeekBasket.Id.ToString())'
+                },
+                type: 'post',
+                success: function (response) {
+                    $('span#data-productId' + $(this).attr('data-productId')).innerHtml = response.Quantity
+                    //Add line to week basket
+                    var table = document.getElementById("weekBasket");
+
+                    // Create an empty <tr> element and add it to the 1st position of the table:
+                    var row = table.insertRow(-1);
+                    row.node().to$().attr("data-productId", response.Product.Id);
+                    // Insert new cells (<td> elements) at the 1st and 2nd position of the "new" <tr> element:
+                    var cellProductName = row.insertCell(0);
+                    var cellQuantity = row.insertCell(1);
+                    var cellPrice = row.insertCell(2);
+                    var cellDetail = row.insertCell(3);
+                    var cellDelete = row.insertCell(4);
+
+                    // Add some text to the new cells:
+                    cellProductName.innerHTML = response.Product.Name;
+                    cellQuantity.innerHTML = "<span data-productId='" + response.Product.Id + "'>" + response.Quantity + "</span>";
+                    cellPrice.innerHTML = response.Product.Price * response.Quantity;
+                    cellDetail.innerHTML = 'D';
+                    cellDelete.innerHTML = "Del";
+                }
+            });
+            $(this).hide();
+            $('div#data-productId' + $(this).attr('data-productId')).show();
+        });
+
+        $('a.plus').click(function () {
+            $.ajax({
+                url: '@Url.Action("PlusProduct", "WeekBasket")',
+                data: {
+                    productId: $(this).attr('data-productId'),
+                    weekBasketId: '@(Model.WeekBasket.Id.ToString())'
+                },
+                type: 'post',
+                success: function (response) {
+                    var productId = response.Product.Id;
+                    var spans = $('span[data-productId=' + productId + ']');
+                    for (i = 0; i < spans.length; i++) {
+                        spans[i].textContent = response.Quantity;
+                    }
+                }
+            });
+            return false;
+        });
+
+    });
+</script>
+
 <div class="weekbasket">
     <div class="row">
         <!-- Mon panier-->
-        <div class="myBasket col-lg-3">
+        <div class="myBasket col-lg-3" id="basketContent">
+            <table class="table" id="weekBasket">
+                <tr>
+                    <th>
+                        Produit
+                    </th>
+                    <th>
+                        <!-- Quantité-->
+                    </th>
+                    <th>
+                        <!-- Prix-->
+                        €
+                    </th>
+                    <th>
+                        <!-- Detail-->
+                    </th>
+                    <th>
+                        <!-- Suppression-->
+                    </th>
+                </tr>
 
+                @foreach (BillEntry entry in Model.WeekBasket.Products)
+                {
+                    <tr data-productId="@entry.Product.Id">
+                        <th>
+                            @entry.Product.Name
+                        </th>
+                        <th>
+                            <span class="quantity" data-productId="@entry.Product.Id">@entry.Quantity</span>
+                        </th>
+                        <th>
+                            @(entry.Quantity * entry.Product.Price)
+                        </th>
+                        <th>
+                            D
+                        </th>
+                        <th>
+                            Del
+                        </th>
+                    </tr>
+                }
+            </table>
         </div>
 
         <!-- Les produits-->
         <div class="products col-lg-9">
+            <!-- Les filtres-->
+            <div class="filters">
+                <label class="control-label" for="productFamilly">Famille : </label>
+                <select id="Familly" name="productFamilly">
+                    <optgroup label="Tous">
+                        <option value="Tous">Tous</option>
+                    </optgroup>
+                    @foreach (var productType in Model.ProductTypes)
+                    {
+                        <optgroup label="@productType.Name">
+                            @foreach (var productFamily in productType.ProductFamilly)
+                            {
+                                <option value="@productFamily.FamillyName">@productFamily.FamillyName</option>
+                            }
+                        </optgroup>
+                    }
+                </select>
+                <label>Recherche :</label>
+                <input id="Search" type="text">
+                <script>
+                </script>
+                <script>
+                $('#Familly').change(function ()
+                {
+                    filterproducts();
+                });
+                $("#Search").keyup(function () {
+                    filterproducts();
+                });
+
+                function filterproducts() {
+                    var $searchVal = $.trim($("#Search").val())
+                    var elements = document.getElementsByClassName('product')
+                    for (var i = 0; i < elements.length; i++)  {
+                        if ((elements[i].dataset.familly == $('#Familly').val().toString() //Si la famille selectionné
+                            || $('#Familly').val().toString() == "Tous") // ou si on affiche tous
+                            && (elements[i].dataset.productname.toLowerCase().contains($searchVal.toLowerCase()) // Si c'est le contenue de la boite de recherche
+                            || $searchVal === "")) { // Ou si la boite de recherche est vide
+                            elements[i].style.display = "inline-block"
+                        }
+                        else {
+                            elements[i].style.display = "none"
+                        }
+                    }
+                }
+
+                </script>
+            </div>
             @foreach (Product product in Model.Products)
             {
-                <div class="product">
+                <div class="product" data-familly="@product.Familly.FamillyName" data-productname="@product.Name">
                     <div class="product-top">
                         <div class="pr_img product-top">
                             <img src="@Configurations.GetUrl(product.GetFirstImage())" />
                         </div>
                         <div class="pr_avatar">
-                            <img src="@Configurations.GetUrl(product.Producer.Avatar)" />
+                            <img class="avatar" src="@Configurations.GetUrl(product.Producer.Avatar)" />
                         </div>
                         <div class="pr_labels">
                             @foreach (Product.Label label in product.Labels)
@@ -54,98 +209,21 @@
                             </div>
                         </div>
                         <div class="pr_actions">
-                            <div class="pr_actionAdd">
-                                <button type="button" class="btn btn-default">Ajouter au panier</button>
+                            <button type="button" class="btn btn-default addProductBtn" data-productId="@product.Id" >Ajouter au panier</button>
+                            <div class="productQuantityChanger" data-productId="@product.Id">
+                                <a href="" class="minus" data-productId="@product.Id"  >
+                                    <img src="@Configurations.GetUrl("/images/basket-remove.png")" />
+                                </a>
+                                <span class="quantity" data-productId="@product.Id">rien</span>
+                                <a href="" class="plus" data-productId="@product.Id" >
+                                    <img src="@Configurations.GetUrl("/images/basket-add.png")" />
+                                </a>
                             </div>
                         </div>
                     </div>
                 </div>
             }
-            
         </div>
 
-
-        <!-- Les filtres-->
-        <div class="filters">
-
-        </div>
-    </div>
-
-    <div class="container" style="display:none;">
-
-        <div class="container col-xs-8 col-sm-8 col-md-8 col-lg-8">
-            <div class="row">
-                <label class="control-label" for="productFamilly">Famille : </label>
-                <select name="productFamilly">
-                    <optgroup label="Tous">
-                        <option value="Tous">Tous</option>
-                    </optgroup>
-                    @foreach (var productType in Model.ProductTypes)
-                    {
-                        <optgroup label="@productType.Name">
-                            @foreach (var productFamily in productType.ProductFamilly)
-                            {
-                                <option value="@productFamily.FamillyName">@productFamily.FamillyName</option>
-                            }
-                        </optgroup>
-                    }
-                </select>
-
-                <label class="control-label" for="labels">Label: </label>
-                    <select name="labels">
-                        @foreach (Product.Label label in Enum.GetValues(typeof(Product.Label)))
-                        {
-                            <option>
-                                @(EnumHelper<Product.Label>.GetDisplayValue(label))
-                            </option>
-                        }
-                    </select>
-
-                <label class="control-label" for="labels">Label: </label> 
-
-                <div id="list1" class="dropdown-check-list" tabindex="100">
-                    <span class="anchor">Select Fruits</span>
-                    <ul id="items" class="items">
-                        @foreach (Product.Label label in Enum.GetValues(typeof(Product.Label)))
-                        {
-                            <li><input type="checkbox" id="@label" />@(EnumHelper<Product.Label>.GetDisplayValue(label)) </li>
-                        }
-                    </ul>
-                </div>
-
-                <script>
-                    var checkList = document.getElementById('list1');
-                    var items = document.getElementById('items');
-                    checkList.getElementsByClassName('anchor')[0].onclick = function (evt) {
-                        if (items.classList.contains('visible')) {
-                            items.classList.remove('visible');
-                            items.style.display = "none";
-                        }
-
-                        else {
-                            items.classList.add('visible');
-                            items.style.display = "block";
-                        }
-
-
-                    }
-
-                    items.onblur = function (evt) {
-                        items.classList.remove('visible');
-                    }
-                </script>
-
-
-                <input type="text" placeholder="Rechercher un produit" />
-
-</div>
-            Liste de tous les produits disponibles
-
-            <br />
-             
-        </div>
-        <div class="row">
-            
-        </div>
     </div>
 </div>

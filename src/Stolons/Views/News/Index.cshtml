@@ -27,13 +27,13 @@
         {
             <tr>
                 <td  class="tdImageNews">
-                    <img src="@Html.DisplayFor(modelItem => Configurations.GetUrl(item.ImageLink))" class="newsThumnail responsiveImage" >
+                    <img src="@Configurations.GetUrl(item.ImageLink)" class="newsThumnail responsiveImage" >
                 </td>
                 <td>
                     <h3>@Html.DisplayFor(modelItem => item.Title)</h3>
                     <p>
                         <div class="userNewsAvatar">
-                            <img src="@Html.DisplayFor(modelItem => Configurations.GetUrl(item.User.Avatar))" class="responsiveImage circleAvatarDiv" />
+                            <img src="@Configurations.GetUrl(item.User.Avatar)" class="responsiveImage avatar" />
                         </div>
                         @if (User.IsInRole(Configurations.UserType.Producer.ToString()))
                         {

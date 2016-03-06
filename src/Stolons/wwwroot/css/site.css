@@ -61,10 +61,6 @@ textarea {
 }
 
 .avatar {
-    float: left;
-    margin-top: 1em;
-    margin-right: 1em;
-    position: relative;
 
     -webkit-border-radius: 50%;
     -moz-border-radius: 50%;
@@ -154,9 +150,6 @@ textarea {
 }
 .pr_avatar {
     position: absolute;
-    margin: 0 0 0 0;
-    border-radius: 25px;
-    background-color: #ddd;
     top: 0;
     right: 0;
     padding: 5px;
@@ -195,8 +188,5 @@ textarea {
     text-align: center;
 }
 .pr_actionDetail {
-    display: inline;
-}
-.pr_actionAdd {
     display: inline;
 }
