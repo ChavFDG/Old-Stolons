@@ -16,6 +16,18 @@ textarea {
     max-width: 280px;
 }
 
+/* Banner */
+.bannerAccount
+{
+
+}
+
+.bannerAvatar img{
+    height:30px;
+    width:30px;
+}
+
+
 /* Image */
 .responsiveImage {
     max-width: 100%;
@@ -189,4 +201,10 @@ textarea {
 }
 .pr_actionDetail {
     display: inline;
+}
+.addProduct{
+    display: inline;
+}
+.productQuantityChanger{
+    display: none;
 }

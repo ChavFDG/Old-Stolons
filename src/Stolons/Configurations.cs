@@ -119,7 +119,7 @@ namespace Stolons
 
         public static string NewsImageStockagePath = Path.Combine("uploads", "images", "news");
         public static string UserAvatarStockagePath = Path.Combine("uploads", "images", "avatars");
-        public static string UserProductsStockagePath = Path.Combine("uploads", "images", "products");
+        public static string ProductsStockagePath = Path.Combine("uploads", "images", "products");
         public static string DefaultProductImage = Path.Combine("uploads", "images", "products", "Default.png");
         public static string DefaultFileName = "Default.png";
         private static string _labelImagePath = Path.Combine("images", "labels");

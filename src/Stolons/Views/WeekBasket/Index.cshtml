@@ -9,14 +9,33 @@
 <h2>@ViewData["Title"]</h2>
 
 <script>
-    $(document).ready(function () {
-        console.log("start");
-        //Hide / Show quantity input
-        var trs = $('tr').each(function(){
-        
+    function TrAdded(jqueryTr) {
+        console.log("Row added for " + jqueryTr.attr('data-productId'));
+        //Row added
+        var productId = jqueryTr.attr('data-productId');
+        //Hide add
+        var div = $('div.addProduct[data-productId=' + productId + ']')[0];
+        div.style.display = "none";
+        //Show Quantity
+        var div = $('div.productQuantityChanger[data-productId=' + productId + ']')[0];
+        div.style.display = "inline";
+    }
+
+    $("tr.billEntry").livequery(function () {
+        TrAdded($(this));
+    }
+        , function () {
+            //Row added
+            var productId = $(this).attr('data-productId');
+            //Show Add
+            var div = $('div.addProduct[data-productId=' + productId + ']')[0];
+            div.style.display = "inline";
+            //Hide Quantity
+            var div = $('div.productQuantityChanger[data-productId=' + productId + ']')[0];
+            div.style.display = "none";
         });
 
-        //
+    $(document).ready(function () {
         $('button.addProductBtn').click(function () {
             var basketId = '@(Model.WeekBasket.Id.ToString())';
             $.ajax({
@@ -33,7 +52,9 @@
 
                     // Create an empty <tr> element and add it to the 1st position of the table:
                     var row = table.insertRow(-1);
-                    row.node().to$().attr("data-productId", response.Product.Id);
+                    console.log(row);
+                    $(row).attr("data-productId", response.Product.Id);
+                    console.log("ok");
                     // Insert new cells (<td> elements) at the 1st and 2nd position of the "new" <tr> element:
                     var cellProductName = row.insertCell(0);
                     var cellQuantity = row.insertCell(1);
@@ -47,10 +68,11 @@
                     cellPrice.innerHTML = response.Product.Price * response.Quantity;
                     cellDetail.innerHTML = 'D';
                     cellDelete.innerHTML = "Del";
+                    //Mise à jour boutons
+                    TrAdded($(row));
+
                 }
             });
-            $(this).hide();
-            $('div#data-productId' + $(this).attr('data-productId')).show();
         });
 
         $('a.plus').click(function () {
@@ -66,6 +88,33 @@
                     var spans = $('span[data-productId=' + productId + ']');
                     for (i = 0; i < spans.length; i++) {
                         spans[i].textContent = response.Quantity;
+                    }
+                }
+            });
+            return false;
+        });
+
+        $('a.minus').click(function () {
+            $.ajax({
+                url: '@Url.Action("MinusProduct", "WeekBasket")',
+                data: {
+                    productId: $(this).attr('data-productId'),
+                    weekBasketId: '@(Model.WeekBasket.Id.ToString())'
+                },
+                type: 'post',
+                success: function (response) {
+                    if (response != null)
+                    {
+                        var productId = response.Product.Id;
+                        var spans = $('span[data-productId=' + productId + ']');
+                        for (i = 0; i < spans.length; i++) {
+                            spans[i].textContent = response.Quantity;
+                        }
+                    }
+                    else
+                    {
+                        //On est arrivé à 0, on supprime le produit
+                        $('tr.billEntry[data-productId=' + productId + ']')[0].remove();                        
                     }
                 }
             });
@@ -101,7 +150,7 @@
 
                 @foreach (BillEntry entry in Model.WeekBasket.Products)
                 {
-                    <tr data-productId="@entry.Product.Id">
+                    <tr class="billEntry" data-productId="@entry.Product.Id">
                         <th>
                             @entry.Product.Name
                         </th>
@@ -174,7 +223,7 @@
             </div>
             @foreach (Product product in Model.Products)
             {
-                <div class="product" data-familly="@product.Familly.FamillyName" data-productname="@product.Name">
+                <div class="product" data-familly="@product.Familly.FamillyName" data-productname="@product.Name" data-productId="@product.Id">
                     <div class="product-top">
                         <div class="pr_img product-top">
                             <img src="@Configurations.GetUrl(product.GetFirstImage())" />
@@ -209,12 +258,14 @@
                             </div>
                         </div>
                         <div class="pr_actions">
-                            <button type="button" class="btn btn-default addProductBtn" data-productId="@product.Id" >Ajouter au panier</button>
+                            <div class="addProduct" data-productId="@product.Id">
+                                <button type="button" class="btn btn-default addProductBtn" data-productId="@product.Id">Ajouter au panier</button>
+                            </div>
                             <div class="productQuantityChanger" data-productId="@product.Id">
                                 <a href="" class="minus" data-productId="@product.Id"  >
                                     <img src="@Configurations.GetUrl("/images/basket-remove.png")" />
                                 </a>
-                                <span class="quantity" data-productId="@product.Id">rien</span>
+                                <span class="quantity" data-productId="@product.Id">@(Model.WeekBasket.Products.Any(x => x.Product.Id == product.Id) ? Model.WeekBasket.Products.First(x=>x.Product.Id == product.Id).Quantity : 1) </span>
                                 <a href="" class="plus" data-productId="@product.Id" >
                                     <img src="@Configurations.GetUrl("/images/basket-add.png")" />
                                 </a>

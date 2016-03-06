@@ -26,9 +26,10 @@
             <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
             <script src="~/js/site.js" asp-append-version="true"></script>
             <script type="text/javascript" src="http://code.jquery.com/ui/1.10.2/jquery-ui.js"></script>
+            <script src="~/lib/jquery.livequery.min.js"></script>
             <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.2/themes/smoothness/jquery-ui.css" />
         </environment>
-        <environment names="Staging,Production">
+        <environment names="Staging,Production">           
             <script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-2.1.4.min.js"
                     asp-fallback-src="~/lib/jquery/dist/jquery.min.js"
                     asp-fallback-test="window.jQuery">
@@ -38,6 +39,9 @@
                     asp-fallback-test="window.jQuery && window.jQuery.fn && window.jQuery.fn.modal">
             </script>
             <script src="~/js/site.min.js" asp-append-version="true"></script>
+            <script src="https://raw.githubusercontent.com/hazzik/livequery/master/dist/jquery.livequery.min.js"
+                    asp-fallback-src="~/lib/jquery.livequery.min.js">
+            </script>
         </environment>
     </head>
     <body>

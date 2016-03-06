@@ -38,6 +38,7 @@ namespace Stolons.Controllers
                 //Il n'a pas encore de panier de la semaine, on lui en crée un
                 weekBasket = new WeekBasket();
                 weekBasket.Consumer = consumer;
+                weekBasket.Products = new System.Collections.Generic.List<BillEntry>();
                 _context.Add(weekBasket);
                 _context.SaveChanges();
             }
@@ -60,25 +61,36 @@ namespace Stolons.Controllers
         [HttpPost, ActionName("PlusProduct")]
         public BillEntry PlusProduct(string weekBasketId, string productId)
         {
-            return AddProductQauntity(weekBasketId, productId, +1);
+            return AddProductQuantity(weekBasketId, productId, +1);
         }
 
         [HttpPost, ActionName("MinusProduct")]
         public BillEntry MinusProduct(string weekBasketId, string productId)
         {
-            return AddProductQauntity(weekBasketId, productId, -1);
+
+            return AddProductQuantity(weekBasketId, productId, -1);
         }
 
-        private BillEntry AddProductQauntity(string weekBasketId, string productId, int quantity)
+        private BillEntry AddProductQuantity(string weekBasketId, string productId, int quantity)
         {
             WeekBasket weekBasket = _context.WeekBaskets.Include(x => x.Products).First(x => x.Id.ToString() == weekBasketId);
-            BillEntry billEntry = _context.BillEntrys.Include(x => x.Product).First(x => x.Product.Id.ToString() == productId);
+            BillEntry billEntry = weekBasket.Products.First(x => x.ProductId.ToString() == productId);
+            billEntry.Product = _context.Products.First(x => x.Id.ToString() == productId);
             billEntry.Quantity = billEntry.Quantity + quantity;
-            billEntry.Validate = false;
-            _context.Update(billEntry);
+            if(billEntry.Quantity == 0)
+            {
+                //La quantité est à 0 on supprime le produit
+                _context.Remove(billEntry);
+                billEntry = null;
+            }
+            else
+            {
+                billEntry.Validate = false;
+                var test = _context.Entry(_context.Products.First(x => x.Id.ToString() == productId)).State ;
+            }
+            
             _context.SaveChanges();
             return billEntry;
-
         }
 
         [HttpPost, ActionName("ValidateBasket")]

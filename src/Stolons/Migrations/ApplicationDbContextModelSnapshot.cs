@@ -195,9 +195,11 @@ namespace Stolons.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<Guid?>("ProductId");
+                    b.Property<Guid>("ProductId");
 
                     b.Property<int>("Quantity");
+
+                    b.Property<int?>("UserId");
 
                     b.Property<bool>("Validate");
 
@@ -420,6 +422,10 @@ namespace Stolons.Migrations
                     b.HasOne("Stolons.Models.Product")
                         .WithMany()
                         .HasForeignKey("ProductId");
+
+                    b.HasOne("Stolons.Models.User")
+                        .WithMany()
+                        .HasForeignKey("UserId");
 
                     b.HasOne("Stolons.Models.WeekBasket")
                         .WithMany()

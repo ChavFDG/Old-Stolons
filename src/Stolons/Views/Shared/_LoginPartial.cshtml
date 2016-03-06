@@ -2,12 +2,14 @@
 
 @if (User.IsSignedIn())
 {
-    <div>
-        <a asp-controller="Manage" asp-action="Index" title="Manage">
-            <img class="avatar" src="@Configurations.GetUrl(Model.User.Avatar)" />
-        </a>
+    <div class="bannerAccount">
+        <div class="bannerAvatar">
+            <a asp-controller="Manage" asp-action="Index" title="Manage">
+                <img class="avatar" src="@Configurations.GetUrl(Model.User.Avatar)" />
+            </a>
+        </div>
+        <a asp-controller="Accounts" asp-action="Logoff" class="btn btn-link navbar-btn navbar-link">Se deconnecter</a>
     </div>
-    <a asp-controller="Accounts" asp-action="Logoff" class="btn btn-link navbar-btn navbar-link">Se deconnecter</a>
 }
 else
 {

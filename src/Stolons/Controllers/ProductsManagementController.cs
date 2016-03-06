@@ -83,7 +83,7 @@ namespace Stolons.Controllers
                     if (uploadFile != null)
                     {
                         //Image uploading
-                        string fileName = await Configurations.UploadFile(_environment, uploadFile, Configurations.UserProductsStockagePath);
+                        string fileName = await Configurations.UploadFile(_environment, uploadFile, Configurations.ProductsStockagePath);
                         if(!vmProduct.IsNew && vmProduct.Product.Pictures.Count > cpt)
                         {
                             //Replace

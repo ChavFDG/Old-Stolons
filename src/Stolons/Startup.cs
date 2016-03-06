@@ -116,6 +116,7 @@ namespace Stolons
             await CreateRoles(serviceProvider);
             await CreateAdminAcount(context, userManager);
             CreateProductCategories(context);
+            CreateProductsSamples(context);
         }
 
         private void SetConfigurations(ApplicationDbContext context)
@@ -160,6 +161,7 @@ namespace Stolons
 
             ProductType bakery = CreateProductType(context, "Boulangerie");
             CreateProductFamily(context, bakery, "Farines");
+            CreateProductFamily(context, bakery, "Pains");
 
             ProductType grocery = CreateProductType(context, "Epicerie");
             CreateProductFamily(context, grocery, "Conserves");
@@ -195,6 +197,86 @@ namespace Stolons
             }
             return family;
         }
+
+        private void CreateProductsSamples(ApplicationDbContext context)
+        {
+            if (context.Products.Any())
+                return;
+            Product pain = new Product();
+            pain.Name = "Pain complet";
+            pain.Description = "Pain farine complete T80";
+            pain.Labels.Add(Product.Label.Ab);
+            pain.PicturesSerialized= Path.Combine(Configurations.ProductsStockagePath, "pain.png");
+            pain.Price = 4;
+            pain.Producer = context.Producers.First();
+            pain.ProductUnit = Product.Unit.Kg;
+            pain.RemainingStock = 10;
+            pain.State = Product.ProductState.Enabled;
+            pain.Type = Product.SellType.Piece;
+            pain.WeekStock = 10;
+            pain.Familly = context.ProductFamillys.First(x => x.FamillyName == "Pains");
+            context.Add(pain);
+            Product tomate = new Product();
+            tomate.Name = "Tomates grappe";
+            tomate.Description = "";
+            tomate.Labels.Add(Product.Label.Ab);
+            tomate.PicturesSerialized = Path.Combine(Configurations.ProductsStockagePath, "tomate.jpg");
+            tomate.Price = 2;
+            tomate.Producer = context.Producers.First();
+            tomate.ProductUnit = Product.Unit.Kg;
+            tomate.RemainingStock = 10;
+            tomate.Familly = context.ProductFamillys.First(x => x.FamillyName == "Légumes");
+            tomate.State = Product.ProductState.Enabled;
+            tomate.Type = Product.SellType.Weigh;
+            tomate.WeekStock = 10;
+            context.Add(tomate);
+            Product pommedeterre = new Product();
+            pommedeterre.Name = "Pomme de terre";
+            pommedeterre.Description = "";
+            pommedeterre.Labels.Add(Product.Label.Ab);
+            pommedeterre.PicturesSerialized = Path.Combine(Configurations.ProductsStockagePath, "pommedeterre.jpg");
+            pommedeterre.Price = 2;
+            pommedeterre.Producer = context.Producers.First();
+            pommedeterre.ProductUnit = Product.Unit.Kg;
+            pommedeterre.RemainingStock = 10;
+            pommedeterre.Familly = context.ProductFamillys.First(x => x.FamillyName == "Légumes");
+            pommedeterre.State = Product.ProductState.Enabled;
+            pommedeterre.Type = Product.SellType.Weigh;
+            pommedeterre.WeekStock = 10;
+            context.Add(pommedeterre);
+            Product radis = new Product();
+            radis.Name = "Radis";
+            radis.Description = "Pain farine complete T80";
+            radis.Labels.Add(Product.Label.Ab);
+            radis.PicturesSerialized = Path.Combine(Configurations.ProductsStockagePath, "radis.jpg");
+            radis.Price = 4;
+            radis.Producer = context.Producers.First();
+            radis.ProductUnit = Product.Unit.Kg;
+            radis.RemainingStock = 10;
+            radis.Familly = context.ProductFamillys.First(x => x.FamillyName == "Légumes");
+            radis.State = Product.ProductState.Enabled;
+            radis.Type = Product.SellType.Piece;
+            radis.WeekStock = 10;
+            context.Add(radis);
+            Product salade = new Product();
+            salade.Name = "Salade";
+            salade.Description = "Pain farine complete T80";
+            salade.Labels.Add(Product.Label.Ab);
+            salade.PicturesSerialized = Path.Combine(Configurations.ProductsStockagePath, "salade.jpg");
+            salade.Price = 1;
+            salade.Producer = context.Producers.First();
+            salade.ProductUnit = Product.Unit.Gr;
+            salade.RemainingStock = 10;
+            salade.Familly = context.ProductFamillys.First(x => x.FamillyName == "Légumes");
+            salade.State = Product.ProductState.Enabled;
+            salade.Type = Product.SellType.Piece;
+            salade.WeekStock = 10;
+            context.Add(salade);
+
+            //
+            context.SaveChanges();
+        }
+
 
         private async Task CreateRoles(IServiceProvider serviceProvider)
         {
