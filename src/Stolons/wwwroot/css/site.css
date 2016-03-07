@@ -17,14 +17,22 @@ textarea {
 }
 
 /* Banner */
-.bannerAccount
-{
-
+.bannerAccount {
+    padding-top: 5px;
+    padding-bottom: 5px;
 }
 
-.bannerAvatar img{
-    height:30px;
-    width:30px;
+.bannerAccount form {
+    display: table-cell;
+}
+
+.bannerAvatar {
+    display: table-cell;
+}
+
+.bannerAvatar img {
+    max-height: 40px;
+    max-width: 40px;
 }
 
 

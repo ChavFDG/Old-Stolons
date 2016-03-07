@@ -8,7 +8,9 @@
                 <img class="avatar" src="@Configurations.GetUrl(Model.User.Avatar)" />
             </a>
         </div>
-        <a asp-controller="Accounts" asp-action="Logoff" class="btn btn-link navbar-btn navbar-link">Se deconnecter</a>
+	   <form asp-controller="Accounts" asp-action="LogOff" method="post" id="logoutForm">
+              <button type="submit" class="btn btn-link navbar-btn navbar-link">Se déconnecter</button>
+    	</form>
     </div>
 }
 else
