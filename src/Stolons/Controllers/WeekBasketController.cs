@@ -81,7 +81,6 @@ namespace Stolons.Controllers
             {
                 //La quantité est à 0 on supprime le produit
                 _context.Remove(billEntry);
-                billEntry = null;
             }
             else
             {
