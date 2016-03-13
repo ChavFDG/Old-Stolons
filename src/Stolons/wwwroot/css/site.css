@@ -109,9 +109,11 @@ textarea {
     border: 1px solid #222;
     margin: 5px;
 }
+
 .filters{
 
 }
+
 .product-top {
     height: 100px;
     position: relative;
@@ -132,6 +134,7 @@ textarea {
     top: 0;
     right: 0;
     padding: 5px;
+    margin: 5px;
 }
 .pr_avatar img {
     width: 25px;
@@ -161,7 +164,7 @@ textarea {
 }
 .pr_priceQuantity {
     text-align: right;
-    font-size:medium;
+    font-size: medium;
 }
 .pr_actions {
     text-align: center;
@@ -174,4 +177,37 @@ textarea {
 }
 .productQuantityChanger{
     display: none;
+}
+
+/* Product modal in week basket view */
+
+.productModal .modal-header .close {
+    margin-top: -10px;
+}
+
+#productModal-info ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+#productModal-desc {
+    padding-top: 10px;
+}
+
+#productModal-desc * {
+    margin: 5px
+}
+
+#productModal-pricing {
+}
+
+#productModal-pricing * {
+    margin: 5px
+}
+
+#productModal-img img {
+    max-width: 150px;
+    max-height: 150px;
+    display: inline-block;
 }
