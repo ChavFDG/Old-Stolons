@@ -58,8 +58,8 @@
 
                     // Add some text to the new cells:
                     cellProductName.innerHTML = "<a href=\"#\" onclick=\"openProductModal('" + response.Product.Id + "');return false;\">" + response.Product.Name + "</a>";
-                    cellQuantity.innerHTML = "<span data-productId='" + response.Product.Id + "'>" + response.Quantity + "</span>";
-                    cellPrice.innerHTML = response.Product.Price * response.Quantity;
+                    cellQuantity.innerHTML = "<span class=\"quantity\" data-productId='" + response.Product.Id + "'>" + response.Quantity + "</span>";
+                    cellPrice.innerHTML = "<span class=\"subTotalPrice\" data-productId='" + response.Product.Id + "'>" + response.Product.Price * response.Quantity + "€" + "</span>";
                     cellDelete.innerHTML = "Del";
                     //Mise à jour boutons
                     TrAdded($(row));
@@ -77,9 +77,13 @@
                 type: 'post',
                 success: function (response) {
                     var productId = response.Product.Id;
-                    var spans = $('span[data-productId=' + productId + ']');
+                    var spans = $('span.quantity[data-productId=' + productId + ']');
                     for (i = 0; i < spans.length; i++) {
                         spans[i].textContent = response.Quantity;
+                    }
+                    var spans = $('span.subTotalPrice[data-productId=' + productId + ']');
+                    for (i = 0; i < spans.length; i++) {
+                        spans[i].textContent = response.Product.Price * response.Quantity + "€";
                     }
                 }
             });
@@ -101,6 +105,10 @@
                         for (i = 0; i < spans.length; i++) {
                             spans[i].textContent = response.Quantity;
                         }
+                        var spans = $('span.subTotalPrice[data-productId=' + productId + ']');
+                        for (i = 0; i < spans.length; i++) {
+                            spans[i].textContent = response.Product.Price * response.Quantity + "€";
+                        }
                     }
                     else {
                         //On est arrivé à 0, on supprime le produit du panier
@@ -120,9 +128,50 @@
 </script>
 
 <div class="weekbasket">
-    <div class="row">
-        <!-- Mon panier-->
+    <div class="row">        
+        <!-- Mon panier -->
         <div class="myBasket col-lg-3" id="basketContent">
+            @if (Model.ValidatedWeekBasket != null)
+            {
+                <h3>Panier validé</h3>
+                <p>Panier à récupérer jeudi de 16h à 20h</p>
+                <table class="table">
+                        <tr>
+                            <th>
+                                <!-- Nom / Detail-->
+                                Produit
+                            </th>
+                            <th>
+                                <!-- Quantité-->
+                            </th>
+                            <th>
+                                <!-- Prix-->
+                                €
+                            </th>
+                        </tr>
+
+                        @foreach (BillEntry entry in Model.ValidatedWeekBasket.Products)
+                        {
+                            <tr class="billEntry">
+                                <th>
+                                    @entry.Product.Name
+                                </th>
+                                <th>
+                                    <span >@entry.Quantity</span>
+                                </th>
+                                <th>
+                                    <span >@(entry.Quantity * entry.Product.Price)€</span>
+                                </th>
+                            </tr>
+                        }
+                    </table>
+                    <p>Total : </p>
+                <h3>Modification non validé</h3>
+            }
+            else
+            {
+                <h3>Mon panier de la semaine</h3>
+            }
             <table class="table" id="weekBasket">
                 <tr>
                     <th>                        
@@ -145,15 +194,15 @@
                 {
                     <tr class="billEntry" data-productId="@entry.Product.Id">
                         <th>
-                            <a href="#" onclick="openProductModal('@entry.Id');return false;">
+                            <a href="#" onclick="openProductModal('@entry.Product.Id');return false;">
                                 @entry.Product.Name
                             </a>
                         </th>
                         <th>
-                            <span class="quantity" data-productId="@entry.Product.Id">@entry.Quantity</span>
+                            <span class="quantity" data-productId="@entry.ProductId">@entry.Quantity</span>
                         </th>
                         <th>
-                            @(entry.Quantity * entry.Product.Price)
+                            <span class="subTotalPrice" data-productId="@entry.ProductId">@(entry.Quantity * entry.Product.Price)€</span>
                         </th>
                         <th>
                             Del
@@ -162,10 +211,14 @@
                 }
             </table>
             <div class="basketValidation">
-
+                <form asp-action="ValidateBasket" method="post">
+                    <div hidden="hidden">
+                        <input value="@Model.TempWeekBasket.Id" name="basketId" class="form-control" />
+                    </div>                  
+                    <input type="submit" value="Valider mon panier" class="btn btn-default" />
+                </form>
             </div>
         </div>
-
         <!-- Les produits-->
         <div class="products col-lg-9">
             <!-- Les filtres-->

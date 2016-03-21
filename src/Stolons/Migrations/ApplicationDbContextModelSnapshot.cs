@@ -203,8 +203,6 @@ namespace Stolons.Migrations
 
                     b.Property<int?>("UserId");
 
-                    b.Property<bool>("Validate");
-
                     b.Property<Guid?>("ValidatedWeekBasketId");
 
                     b.HasKey("Id");

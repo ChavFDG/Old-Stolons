@@ -19,7 +19,15 @@ namespace Stolons.Models
         public Product Product { get; set; }
         [Display(Name = "Quantité")]
         public int Quantity { get; set; }
-        [Display(Name = "A valider, valider")]
-        public bool Validate { get; set; }
+
+        public BillEntry Clone()
+        {
+            BillEntry clonedBillEntry = new BillEntry();
+            clonedBillEntry.ProductId = this.ProductId;
+            clonedBillEntry.User = this.User;
+            clonedBillEntry.Product = this.Product;
+            clonedBillEntry.Quantity = this.Quantity;
+            return clonedBillEntry;
+        }
     }
 }

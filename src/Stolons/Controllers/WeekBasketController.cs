@@ -7,6 +7,7 @@ using Microsoft.AspNet.Hosting;
 using Stolons.ViewModels.WeekBasket;
 using Microsoft.Data.Entity;
 using System.Security.Claims;
+using System.Collections.Generic;
 
 namespace Stolons.Controllers
 {
@@ -34,7 +35,7 @@ namespace Stolons.Controllers
             }
             TempWeekBasket tempWeekBasket = _context.TempsWeekBaskets.Include(x => x.Consumer).Include(x=>x.Products).FirstOrDefault(x => x.Consumer.Id == consumer.Id);
             ValidatedWeekBasket validatedWeekBasket = _context.ValidatedWeekBaskets.Include(x => x.Consumer).Include(x => x.Products).FirstOrDefault(x => x.Consumer.Id == consumer.Id);
-            if (tempWeekBasket == null ||validatedWeekBasket == null)
+            if (tempWeekBasket == null)
             {
                 //Il n'a pas encore de panier de la semaine, on lui en crée un
                 tempWeekBasket = new TempWeekBasket();
@@ -49,12 +50,11 @@ namespace Stolons.Controllers
         [HttpPost, ActionName("AddToBasket")]
         public BillEntry AddToBasket(string weekBasketId, string productId)
         {
-            TempWeekBasket weekBasket = _context.TempsWeekBaskets.Include(x=>x.Products).First(x => x.Id.ToString() == weekBasketId);
+            TempWeekBasket tempWeekBasket = _context.TempsWeekBaskets.Include(x=>x.Products).First(x => x.Id.ToString() == weekBasketId);
             BillEntry billEntry = new BillEntry();
             billEntry.Product = _context.Products.First(x => x.Id.ToString() == productId);
             billEntry.Quantity = 1;
-            billEntry.Validate = false;
-            weekBasket.Products.Add(billEntry);
+            tempWeekBasket.Products.Add(billEntry);
             _context.SaveChanges();
             return billEntry;
         }
@@ -74,34 +74,66 @@ namespace Stolons.Controllers
 
         private BillEntry AddProductQuantity(string weekBasketId, string productId, int quantity)
         {
-            TempWeekBasket weekBasket = _context.TempsWeekBaskets.Include(x => x.Products).First(x => x.Id.ToString() == weekBasketId);
-            BillEntry billEntry = weekBasket.Products.First(x => x.ProductId.ToString() == productId);
+            TempWeekBasket tempWeekBasket = _context.TempsWeekBaskets.Include(x => x.Products).First(x => x.Id.ToString() == weekBasketId);
+            BillEntry billEntry = tempWeekBasket.Products.First(x => x.ProductId.ToString() == productId);
             billEntry.Product = _context.Products.First(x => x.Id.ToString() == productId);
             billEntry.Quantity = billEntry.Quantity + quantity;
             if(billEntry.Quantity == 0)
             {
                 //La quantité est à 0 on supprime le produit
                 _context.Remove(billEntry);
-            }
-            else
-            {
-                billEntry.Validate = false;
-                var test = _context.Entry(_context.Products.First(x => x.Id.ToString() == productId)).State ;
-            }
-            
+            }            
             _context.SaveChanges();
             return billEntry;
         }
 
         [HttpPost, ActionName("ValidateBasket")]
-        public void ValidateBasket(string weekBasketId)
+        public IActionResult ValidateBasket(string basketId)
         {
-            //TODO
-            /*
-            Valider le panier temporaire vérifie les quantités pour chaque produit.
-            Cela place et valide les éléments dans le panier valider.
-            Et laisse les autres dans le panier temporaire. Une page de résumé apparait.
-            */
+            TempWeekBasket tempWeekBasket = _context.TempsWeekBaskets.Include(x => x.Products).Include(x=>x.Consumer).First(x => x.Id.ToString() == basketId);
+            ValidatedWeekBasket validatedWeekBasket = _context.ValidatedWeekBaskets.Include(x => x.Consumer).Include(x => x.Products).FirstOrDefault(x => x.Consumer.Id == tempWeekBasket.Consumer.Id);
+            if (validatedWeekBasket == null)
+            {
+                //First validation of the week
+                validatedWeekBasket = new ValidatedWeekBasket();
+                validatedWeekBasket.Products = new List<BillEntry>();
+                validatedWeekBasket.Consumer = tempWeekBasket.Consumer;
+                _context.Add(validatedWeekBasket);
+            }
+            List<BillEntry> unValidBillEntry = new List<BillEntry>();
+            float totalPrice = 0;
+            //LOCK to prevent multi insert at this momment
+            foreach(BillEntry billEntry in tempWeekBasket.Products.ToList())
+            {
+                Product product = _context.Products.First(x => x.Id == billEntry.ProductId);
+                BillEntry validatedBillEntry = validatedWeekBasket.Products.FirstOrDefault(x => x.ProductId == product.Id);
+                int realQuantity = billEntry.Quantity;
+                if (validatedBillEntry != null)
+                    realQuantity = billEntry.Quantity - validatedBillEntry.Quantity;
+                //There is enouth stock
+                if (billEntry.Quantity <= product.RemainingStock)
+                {
+                    //On met à jour le panier valide
+                    if(validatedBillEntry == null)
+                    {
+                        validatedWeekBasket.Products.Add(billEntry.Clone());
+                    }
+                    else
+                    {
+                        validatedBillEntry.Quantity = billEntry.Quantity;
+                    }
+                    product.RemainingStock = product.RemainingStock - realQuantity;
+                    totalPrice += billEntry.Quantity * product.Price;
+                }
+                //Not enouth stock, we don't valid this product
+                else
+                {
+                    unValidBillEntry.Add(billEntry);
+                }
+            }
+            _context.SaveChanges();
+            //END LOCK
+            return View(new ValidationSummaryViewModel(validatedWeekBasket, unValidBillEntry) { Total = totalPrice });
         }
 
         private async Task<ApplicationUser> GetCurrentUserAsync()

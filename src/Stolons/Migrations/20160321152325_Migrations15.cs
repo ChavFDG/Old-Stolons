@@ -4,7 +4,7 @@ using Microsoft.Data.Entity.Migrations;
 
 namespace Stolons.Migrations
 {
-    public partial class Migrations14 : Migration
+    public partial class Migrations15 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -341,7 +341,6 @@ namespace Stolons.Migrations
                     Quantity = table.Column<int>(nullable: false),
                     TempWeekBasketId = table.Column<Guid>(nullable: true),
                     UserId = table.Column<int>(nullable: true),
-                    Validate = table.Column<bool>(nullable: false),
                     ValidatedWeekBasketId = table.Column<Guid>(nullable: true)
                 },
                 constraints: table =>
