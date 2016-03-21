@@ -11,7 +11,7 @@ namespace Stolons.Models
         [Display(Name = "Factures")]
         public List<Bill> Bills { get; set; }
         [Display(Name = "Panier de la semaine")]
-        public WeekBasket weekBasket { get; set; }
+        public TempWeekBasket weekBasket { get; set; }
 
 
     }

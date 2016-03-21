@@ -8,8 +8,8 @@ using Stolons.Models;
 namespace Stolons.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20160306202924_Migrations")]
-    partial class Migrations
+    [Migration("20160321125936_Migrations14")]
+    partial class Migrations14
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -200,11 +200,13 @@ namespace Stolons.Migrations
 
                     b.Property<int>("Quantity");
 
+                    b.Property<Guid?>("TempWeekBasketId");
+
                     b.Property<int?>("UserId");
 
                     b.Property<bool>("Validate");
 
-                    b.Property<Guid?>("WeekBasketId");
+                    b.Property<Guid?>("ValidatedWeekBasketId");
 
                     b.HasKey("Id");
                 });
@@ -288,6 +290,16 @@ namespace Stolons.Migrations
                     b.HasKey("Name");
                 });
 
+            modelBuilder.Entity("Stolons.Models.TempWeekBasket", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int?>("ConsumerId");
+
+                    b.HasKey("Id");
+                });
+
             modelBuilder.Entity("Stolons.Models.User", b =>
                 {
                     b.Property<int>("Id")
@@ -329,7 +341,7 @@ namespace Stolons.Migrations
                     b.HasAnnotation("Relational:DiscriminatorValue", "User");
                 });
 
-            modelBuilder.Entity("Stolons.Models.WeekBasket", b =>
+            modelBuilder.Entity("Stolons.Models.ValidatedWeekBasket", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
@@ -424,13 +436,17 @@ namespace Stolons.Migrations
                         .WithMany()
                         .HasForeignKey("ProductId");
 
+                    b.HasOne("Stolons.Models.TempWeekBasket")
+                        .WithMany()
+                        .HasForeignKey("TempWeekBasketId");
+
                     b.HasOne("Stolons.Models.User")
                         .WithMany()
                         .HasForeignKey("UserId");
 
-                    b.HasOne("Stolons.Models.WeekBasket")
+                    b.HasOne("Stolons.Models.ValidatedWeekBasket")
                         .WithMany()
-                        .HasForeignKey("WeekBasketId");
+                        .HasForeignKey("ValidatedWeekBasketId");
                 });
 
             modelBuilder.Entity("Stolons.Models.News", b =>
@@ -458,11 +474,18 @@ namespace Stolons.Migrations
                         .HasForeignKey("TypeName");
                 });
 
-            modelBuilder.Entity("Stolons.Models.WeekBasket", b =>
+            modelBuilder.Entity("Stolons.Models.TempWeekBasket", b =>
                 {
                     b.HasOne("Stolons.Models.Consumer")
                         .WithOne()
-                        .HasForeignKey("Stolons.Models.WeekBasket", "ConsumerId");
+                        .HasForeignKey("Stolons.Models.TempWeekBasket", "ConsumerId");
+                });
+
+            modelBuilder.Entity("Stolons.Models.ValidatedWeekBasket", b =>
+                {
+                    b.HasOne("Stolons.Models.Consumer")
+                        .WithMany()
+                        .HasForeignKey("ConsumerId");
                 });
         }
     }

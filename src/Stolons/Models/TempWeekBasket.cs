@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Stolons.Models
 {
-    public class WeekBasket
+    public class TempWeekBasket : IWeekBasket
     {
         [Key]
         public Guid Id { get; set; }

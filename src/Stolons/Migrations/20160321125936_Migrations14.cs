@@ -4,7 +4,7 @@ using Microsoft.Data.Entity.Migrations;
 
 namespace Stolons.Migrations
 {
-    public partial class Migrations : Migration
+    public partial class Migrations14 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -200,7 +200,7 @@ namespace Stolons.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
             migrationBuilder.CreateTable(
-                name: "WeekBasket",
+                name: "TempWeekBasket",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
@@ -208,9 +208,26 @@ namespace Stolons.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_WeekBasket", x => x.Id);
+                    table.PrimaryKey("PK_TempWeekBasket", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_WeekBasket_Consumer_ConsumerId",
+                        name: "FK_TempWeekBasket_Consumer_ConsumerId",
+                        column: x => x.ConsumerId,
+                        principalTable: "User",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+            migrationBuilder.CreateTable(
+                name: "ValidatedWeekBasket",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(nullable: false),
+                    ConsumerId = table.Column<int>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ValidatedWeekBasket", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ValidatedWeekBasket_Consumer_ConsumerId",
                         column: x => x.ConsumerId,
                         principalTable: "User",
                         principalColumn: "Id",
@@ -322,9 +339,10 @@ namespace Stolons.Migrations
                     Id = table.Column<Guid>(nullable: false),
                     ProductId = table.Column<Guid>(nullable: false),
                     Quantity = table.Column<int>(nullable: false),
+                    TempWeekBasketId = table.Column<Guid>(nullable: true),
                     UserId = table.Column<int>(nullable: true),
                     Validate = table.Column<bool>(nullable: false),
-                    WeekBasketId = table.Column<Guid>(nullable: true)
+                    ValidatedWeekBasketId = table.Column<Guid>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -336,15 +354,21 @@ namespace Stolons.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
+                        name: "FK_BillEntry_TempWeekBasket_TempWeekBasketId",
+                        column: x => x.TempWeekBasketId,
+                        principalTable: "TempWeekBasket",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
                         name: "FK_BillEntry_User_UserId",
                         column: x => x.UserId,
                         principalTable: "User",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_BillEntry_WeekBasket_WeekBasketId",
-                        column: x => x.WeekBasketId,
-                        principalTable: "WeekBasket",
+                        name: "FK_BillEntry_ValidatedWeekBasket_ValidatedWeekBasketId",
+                        column: x => x.ValidatedWeekBasketId,
+                        principalTable: "ValidatedWeekBasket",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -375,7 +399,8 @@ namespace Stolons.Migrations
             migrationBuilder.DropTable("AspNetRoles");
             migrationBuilder.DropTable("AspNetUsers");
             migrationBuilder.DropTable("Product");
-            migrationBuilder.DropTable("WeekBasket");
+            migrationBuilder.DropTable("TempWeekBasket");
+            migrationBuilder.DropTable("ValidatedWeekBasket");
             migrationBuilder.DropTable("ProductFamilly");
             migrationBuilder.DropTable("User");
             migrationBuilder.DropTable("ProductType");

@@ -32,23 +32,24 @@ namespace Stolons.Controllers
             {
                 return HttpNotFound();
             }
-            WeekBasket weekBasket = _context.WeekBaskets.Include(x => x.Consumer).Include(x=>x.Products).FirstOrDefault(x => x.Consumer.Id == consumer.Id);
-            if(weekBasket == null)
+            TempWeekBasket tempWeekBasket = _context.TempsWeekBaskets.Include(x => x.Consumer).Include(x=>x.Products).FirstOrDefault(x => x.Consumer.Id == consumer.Id);
+            ValidatedWeekBasket validatedWeekBasket = _context.ValidatedWeekBaskets.Include(x => x.Consumer).Include(x => x.Products).FirstOrDefault(x => x.Consumer.Id == consumer.Id);
+            if (tempWeekBasket == null ||validatedWeekBasket == null)
             {
                 //Il n'a pas encore de panier de la semaine, on lui en crée un
-                weekBasket = new WeekBasket();
-                weekBasket.Consumer = consumer;
-                weekBasket.Products = new System.Collections.Generic.List<BillEntry>();
-                _context.Add(weekBasket);
+                tempWeekBasket = new TempWeekBasket();
+                tempWeekBasket.Consumer = consumer;
+                tempWeekBasket.Products = new System.Collections.Generic.List<BillEntry>();
+                _context.Add(tempWeekBasket);
                 _context.SaveChanges();
             }
-            return View(new WeekBasketViewModel(consumer,weekBasket, _context));
+            return View(new WeekBasketViewModel(consumer,tempWeekBasket, validatedWeekBasket, _context));
         }
 
         [HttpPost, ActionName("AddToBasket")]
         public BillEntry AddToBasket(string weekBasketId, string productId)
         {
-            WeekBasket weekBasket = _context.WeekBaskets.Include(x=>x.Products).First(x => x.Id.ToString() == weekBasketId);
+            TempWeekBasket weekBasket = _context.TempsWeekBaskets.Include(x=>x.Products).First(x => x.Id.ToString() == weekBasketId);
             BillEntry billEntry = new BillEntry();
             billEntry.Product = _context.Products.First(x => x.Id.ToString() == productId);
             billEntry.Quantity = 1;
@@ -73,7 +74,7 @@ namespace Stolons.Controllers
 
         private BillEntry AddProductQuantity(string weekBasketId, string productId, int quantity)
         {
-            WeekBasket weekBasket = _context.WeekBaskets.Include(x => x.Products).First(x => x.Id.ToString() == weekBasketId);
+            TempWeekBasket weekBasket = _context.TempsWeekBaskets.Include(x => x.Products).First(x => x.Id.ToString() == weekBasketId);
             BillEntry billEntry = weekBasket.Products.First(x => x.ProductId.ToString() == productId);
             billEntry.Product = _context.Products.First(x => x.Id.ToString() == productId);
             billEntry.Quantity = billEntry.Quantity + quantity;
@@ -96,6 +97,11 @@ namespace Stolons.Controllers
         public void ValidateBasket(string weekBasketId)
         {
             //TODO
+            /*
+            Valider le panier temporaire vérifie les quantités pour chaque produit.
+            Cela place et valide les éléments dans le panier valider.
+            Et laisse les autres dans le panier temporaire. Une page de résumé apparait.
+            */
         }
 
         private async Task<ApplicationUser> GetCurrentUserAsync()
