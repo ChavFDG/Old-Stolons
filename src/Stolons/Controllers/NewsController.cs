@@ -27,6 +27,8 @@ namespace Stolons.Controllers
             _context = context;    
         }
 
+
+
         // GET: News
         public IActionResult Index()
         {
