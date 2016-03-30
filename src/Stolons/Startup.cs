@@ -13,6 +13,8 @@ using Stolons.Models;
 using Stolons.Services;
 using Microsoft.AspNet.Identity;
 using System.IO;
+using System.Threading;
+using Stolons.Tools;
 
 namespace Stolons
 {
@@ -117,6 +119,9 @@ namespace Stolons
             await CreateAdminAcount(context, userManager);
             CreateProductCategories(context);
             CreateProductsSamples(context);
+            Thread billManager = new Thread(() => BillGenerator.ManageBills(context));
+            Configurations.Environment = env;
+            billManager.Start();
         }
 
         private void SetConfigurations(ApplicationDbContext context)
@@ -393,7 +398,6 @@ namespace Stolons
         // Entry point for the application.
         public static void Main(string[] args) => WebApplication.Run<Startup>(args);
 
-        
 
     }
 }
