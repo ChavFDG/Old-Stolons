@@ -33,12 +33,4 @@ namespace Stolons.Models
             // Add your customizations after calling base.OnModelCreating(builder);
         }
     }
-
-    public static class DbTools
-    {
-        public static void Clear<T>(this DbSet<T> dbSet) where T : class
-        {
-            dbSet.RemoveRange(dbSet);
-        }
-    }
 }
