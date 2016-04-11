@@ -50,7 +50,7 @@ namespace Stolons.Controllers
         [HttpPost, ActionName("AddToBasket")]
         public BillEntry AddToBasket(string weekBasketId, string productId)
         {
-            TempWeekBasket tempWeekBasket = _context.TempsWeekBaskets.Include(x=>x.Products).First(x => x.Id.ToString() == weekBasketId);
+            TempWeekBasket tempWeekBasket = _context.TempsWeekBaskets.Include(x=>x.Consumer).Include(x=>x.Products).First(x => x.Id.ToString() == weekBasketId);
             BillEntry billEntry = new BillEntry();
             billEntry.Product = _context.Products.First(x => x.Id.ToString() == productId);
             billEntry.Quantity = 1;
@@ -74,11 +74,11 @@ namespace Stolons.Controllers
 
         private BillEntry AddProductQuantity(string weekBasketId, string productId, int quantity)
         {
-            TempWeekBasket tempWeekBasket = _context.TempsWeekBaskets.Include(x => x.Products).First(x => x.Id.ToString() == weekBasketId);
+            TempWeekBasket tempWeekBasket = _context.TempsWeekBaskets.Include(x=>x.Consumer).Include(x => x.Products).First(x => x.Id.ToString() == weekBasketId);
             BillEntry billEntry = tempWeekBasket.Products.First(x => x.ProductId.ToString() == productId);
             billEntry.Product = _context.Products.First(x => x.Id.ToString() == productId);
             billEntry.Quantity = billEntry.Quantity + quantity;
-            if(billEntry.Quantity == 0)
+            if (billEntry.Quantity == 0)
             {
                 //La quantité est à 0 on supprime le produit
                 _context.Remove(billEntry);

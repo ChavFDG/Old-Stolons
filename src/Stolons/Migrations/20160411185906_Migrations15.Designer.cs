@@ -8,7 +8,7 @@ using Stolons.Models;
 namespace Stolons.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20160321152325_Migrations15")]
+    [Migration("20160411185906_Migrations15")]
     partial class Migrations15
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -201,8 +201,6 @@ namespace Stolons.Migrations
                     b.Property<int>("Quantity");
 
                     b.Property<Guid?>("TempWeekBasketId");
-
-                    b.Property<int?>("UserId");
 
                     b.Property<Guid?>("ValidatedWeekBasketId");
 
@@ -437,10 +435,6 @@ namespace Stolons.Migrations
                     b.HasOne("Stolons.Models.TempWeekBasket")
                         .WithMany()
                         .HasForeignKey("TempWeekBasketId");
-
-                    b.HasOne("Stolons.Models.User")
-                        .WithMany()
-                        .HasForeignKey("UserId");
 
                     b.HasOne("Stolons.Models.ValidatedWeekBasket")
                         .WithMany()

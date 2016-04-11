@@ -201,8 +201,6 @@ namespace Stolons.Migrations
 
                     b.Property<Guid?>("TempWeekBasketId");
 
-                    b.Property<int?>("UserId");
-
                     b.Property<Guid?>("ValidatedWeekBasketId");
 
                     b.HasKey("Id");
@@ -436,10 +434,6 @@ namespace Stolons.Migrations
                     b.HasOne("Stolons.Models.TempWeekBasket")
                         .WithMany()
                         .HasForeignKey("TempWeekBasketId");
-
-                    b.HasOne("Stolons.Models.User")
-                        .WithMany()
-                        .HasForeignKey("UserId");
 
                     b.HasOne("Stolons.Models.ValidatedWeekBasket")
                         .WithMany()

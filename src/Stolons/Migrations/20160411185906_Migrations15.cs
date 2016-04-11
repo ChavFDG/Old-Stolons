@@ -340,7 +340,6 @@ namespace Stolons.Migrations
                     ProductId = table.Column<Guid>(nullable: false),
                     Quantity = table.Column<int>(nullable: false),
                     TempWeekBasketId = table.Column<Guid>(nullable: true),
-                    UserId = table.Column<int>(nullable: true),
                     ValidatedWeekBasketId = table.Column<Guid>(nullable: true)
                 },
                 constraints: table =>
@@ -356,12 +355,6 @@ namespace Stolons.Migrations
                         name: "FK_BillEntry_TempWeekBasket_TempWeekBasketId",
                         column: x => x.TempWeekBasketId,
                         principalTable: "TempWeekBasket",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_BillEntry_User_UserId",
-                        column: x => x.UserId,
-                        principalTable: "User",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(

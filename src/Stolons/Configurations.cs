@@ -130,7 +130,8 @@ namespace Stolons
         public static string ServerUrl = "http://localhost:5000";//TOdo
 
 
-        public static string BillsStockagePath = Path.Combine("bills");
+        public static string ConsumersBillsStockagePath = Path.Combine("bills","consumer");
+        public static string ProducersBillsStockagePath = Path.Combine("bills", "producer");
         public static string NewsImageStockagePath = Path.Combine("uploads", "images", "news");
         public static string UserAvatarStockagePath = Path.Combine("uploads", "images", "avatars");
         public static string ProductsStockagePath = Path.Combine("uploads", "images", "products");

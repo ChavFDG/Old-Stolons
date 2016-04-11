@@ -13,7 +13,6 @@ namespace Stolons.Models
         [Key]
         public Guid Id { get; set; }
         public Guid ProductId { get; set; }
-        public User User { get; set; }
         [Display(Name = "Fiche produit")]
         [ForeignKey("ProductId")]
         public Product Product { get; set; }
@@ -24,7 +23,6 @@ namespace Stolons.Models
         {
             BillEntry clonedBillEntry = new BillEntry();
             clonedBillEntry.ProductId = this.ProductId;
-            clonedBillEntry.User = this.User;
             clonedBillEntry.Product = this.Product;
             clonedBillEntry.Quantity = this.Quantity;
             return clonedBillEntry;
