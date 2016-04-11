@@ -16,6 +16,19 @@ namespace Stolons
     public static class Configurations
     {
         #region Configuration
+        private static IHostingEnvironment _environment;
+        public static IHostingEnvironment Environment
+        {
+            get
+            {
+                return _environment;
+            }
+
+            set
+            {
+                _environment = value;
+            }
+        }
         public static ApplicationConfig ApplicationConfig;
 
         public static int GetDaysDiff(DayOfWeek from, DayOfWeek to)
@@ -61,7 +74,7 @@ namespace Stolons
                 return ApplicationConfig.Modes.Order;
             }
         }
-            
+
 
 
         #endregion Configuration
@@ -115,8 +128,9 @@ namespace Stolons
         #region FileManagement
 
         public static string ServerUrl = "http://localhost:5000";//TOdo
-        
 
+
+        public static string BillsStockagePath = Path.Combine("bills");
         public static string NewsImageStockagePath = Path.Combine("uploads", "images", "news");
         public static string UserAvatarStockagePath = Path.Combine("uploads", "images", "avatars");
         public static string ProductsStockagePath = Path.Combine("uploads", "images", "products");
