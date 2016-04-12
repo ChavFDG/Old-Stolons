@@ -13,6 +13,17 @@ namespace Stolons.Tools
 {
     public static  class BillGenerator
     {
+        public class BillEntryConsumer
+        {
+            public BillEntry BillEntry { get; set; }
+            public Consumer Consumer { get; set; }
+
+            public BillEntryConsumer(BillEntry billEntry, Consumer consumer)
+            {
+                BillEntry = billEntry;
+                Consumer = consumer;
+            }
+        }
 
         public static void ManageBills(ApplicationDbContext dbContext)
         {
@@ -24,7 +35,7 @@ namespace Stolons.Tools
                 {
                     //We moved form Order to Preparation, create and send bills
                     List<Bill> bills = new List<Bill>();
-                    Dictionary<Producer, List<BillEntry>> producerBills = new Dictionary<Producer, List<BillEntry>>();
+                    Dictionary<Producer, List<BillEntryConsumer>> producerBills = new Dictionary<Producer, List<BillEntryConsumer>>();
                     //Consumer (create bills)
                     foreach (var weekBasket in dbContext.ValidatedWeekBaskets.Include(x => x.Products).Include(x=>x.Consumer))
                     {
@@ -37,9 +48,9 @@ namespace Stolons.Tools
                             Producer producer = billEntry.Product.Producer;
                             if (!producerBills.ContainsKey(producer))
                             {
-                                producerBills.Add(producer, new List<BillEntry>());
+                                producerBills.Add(producer, new List<BillEntryConsumer>());
                             }
-                            producerBills[producer].Add(billEntry);
+                            producerBills[producer].Add(new BillEntryConsumer(billEntry,weekBasket.Consumer));
                         }
                     }
                     //Producer (creates bills)
@@ -73,7 +84,7 @@ namespace Stolons.Tools
         */
 
 
-        private static Bill GenerateBill(Producer producer, List<BillEntry> billEntry, ApplicationDbContext dbContext)
+        private static Bill GenerateBill(Producer producer, List<BillEntryConsumer> billEntries, ApplicationDbContext dbContext)
         {
             Bill bill = CreateBill(producer);
             //Generate exel file with bill number for user
@@ -89,7 +100,7 @@ namespace Stolons.Tools
             {
                 Directory.CreateDirectory(filePath);
             }
-            /*
+            
             using (ExcelPackage package = new ExcelPackage(newFile))
             {
                 // add a new worksheet to the empty workbook
@@ -102,37 +113,66 @@ namespace Stolons.Tools
                 worksheet.Cells[3, 1].Value = "Semaine :";
                 worksheet.Cells[3, 2].Value = DateTime.Now.GetIso8601WeekOfYear();
                 //Add product informations
-                worksheet.Cells[5, 1].Value = "PRODUITS :";
-
-                // - Add the headers
-                worksheet.Cells[6, 1].Value = "Nom";
-                worksheet.Cells[6, 2].Value = "Famille";
-                worksheet.Cells[6, 3].Value = "Type";
-                worksheet.Cells[6, 4].Value = "Prix unitaire";
-                worksheet.Cells[6, 5].Value = "Quantité";
-                worksheet.Cells[6, 6].Value = "Prix total";
-                // - Add products
-                int row = 7;
-                foreach (var tmpBillEntry in weekBasket.Products)
+                worksheet.Cells[5, 1].Value = "PRODUITS :";                
+                //Create list of bill entry by product
+                Dictionary<Product, List<BillEntryConsumer>> products = new Dictionary<Product, List<BillEntryConsumer>>();
+                foreach (var billEntryConsumer in billEntries)
                 {
-                    var billEntry = dbContext.BillEntrys.Include(x => x.Product).ThenInclude(x => x.Familly).First(x => x.Id == tmpBillEntry.Id);
-                    worksheet.Cells[row, 1].Value = billEntry.Product.Name;
-                    worksheet.Cells[row, 2].Value = billEntry.Product.Familly.FamillyName;
-                    worksheet.Cells[row, 3].Value = billEntry.Product.Type;
-                    worksheet.Cells[row, 4].Value = billEntry.Product.Price;
-                    worksheet.Cells[row, 5].Value = billEntry.Quantity;
-                    worksheet.Cells[row, 6].Formula = new ExcelCellAddress(row, 4).Address + "*" + new ExcelCellAddress(row, 5).Address;
-                    row++;
+                    if(!products.ContainsKey(billEntryConsumer.BillEntry.Product))
+                    {
+                        products.Add(billEntryConsumer.BillEntry.Product, new List<BillEntryConsumer>());
+                    }
+                    products[billEntryConsumer.BillEntry.Product].Add(billEntryConsumer);
                 }
-                //- Add TOTAL
-                worksheet.Cells[row, 5].Value = "TOTAL : ";
-                worksheet.Cells[row, 6].Formula = "TOTAL : ";
+                List<int> rowsTotal = new List<int>(); ;
+                // - Add products
+                int row = 6;
+                foreach (var prod in products)
+                {
+                    // - Add the headers
+                    worksheet.Cells[row, 2].Value = "Type de vente";
+                    worksheet.Cells[row, 3].Value = "Prix unitaire";
+                    row++;
+                    worksheet.Cells[row, 1].Value = prod.Key.Name;
+                    worksheet.Cells[row, 2].Value = prod.Key.Type.ToString() + " ("+ prod.Key.ProductUnit.ToString() +")";
+                    worksheet.Cells[row, 3].Value = prod.Key.Price;
+                    row++;
+                    worksheet.Cells[row, 2].Value = "Quantité";
+                    worksheet.Cells[row, 3].Value = "Prix total";
+                    int rowTotal = row++;
+                    rowsTotal.Add(rowTotal);
+                    worksheet.Cells[row, 1].Value = "Consomateur";
+                    int rowStart = row++;
+                    foreach (var billEntryConsumer in prod.Value.OrderBy(x=>x.Consumer.Id))
+                    {
+                        worksheet.Cells[row, 1].Value = "• " + billEntryConsumer.Consumer.Id;
+                        worksheet.Cells[row, 1].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Right;
+                        worksheet.Cells[row, 2].Value = billEntryConsumer.BillEntry.Quantity;
+                        row++;
+                    }
+                    //Do total (quantity and price)
+                    //Quantity
+                    worksheet.Cells[rowTotal, 2].Formula = string.Format("SUBTOTAL(9,{0})", new ExcelAddress(rowStart, 1, row - 1, 1).Address);
+                    //Prix
+                    worksheet.Cells[rowTotal, 3].Formula = new ExcelCellAddress(rowTotal -2, 3).Address + "*" + new ExcelCellAddress(rowTotal, 2).Address;
+                }
+                //Super total
+                string totalFormula ="";
+                for(int cpt = 0; cpt<rowsTotal.Count;cpt++)
+                {
+                    totalFormula += new ExcelCellAddress(rowsTotal[cpt], 3).Address;
+                    if(cpt != rowsTotal.Count -1)
+                    {
+                        totalFormula += "+";
+                    }
+                }
+                worksheet.Cells[row, 2].Value = "TOTAL :";
+                worksheet.Cells[row, 3].Formula = totalFormula;
 
-                //Add a formula for the value-column
-                worksheet.Cells[row, 6].Formula = string.Format("SUBTOTAL(9,{0})", new OfficeOpenXml.ExcelAddress(7, 6, row - 1, 6).Address);
 
-                //Format values :
                 /*
+                //Format values :
+                
                 using (var range = worksheet.Cells[1, 1, 1, 5])
                 {
                     range.Style.Font.Bold = true;
@@ -176,7 +216,7 @@ namespace Stolons.Tools
                 // Change the sheet view to show it in page layout mode
                 worksheet.View.PageLayoutView = true;
                 
-
+                */
                 // Document properties
                 package.Workbook.Properties.Title = "Facture : " + bill.BillNumber;
                 package.Workbook.Properties.Author = "Stolons";
@@ -189,7 +229,7 @@ namespace Stolons.Tools
                 package.Save();
 
             }
-        */
+        
 
             //
             return bill;
