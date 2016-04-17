@@ -9,6 +9,7 @@ using System.Threading;
 using Microsoft.Data.Entity;
 using System.Globalization;
 using OfficeOpenXml.Style;
+using Stolons.Helpers;
 
 namespace Stolons.Tools
 {
@@ -106,18 +107,30 @@ namespace Stolons.Tools
             {
                 // add a new worksheet to the empty workbook
                 ExcelWorksheet worksheet = package.Workbook.Worksheets.Add("Facture");
+                int row = 1;
                 //Add global informations
-                worksheet.Cells[1, 1].Value = "Numéro de facture :";
-                worksheet.Cells[1, 2].Value = bill.BillNumber;
-                worksheet.Cells[1, 2].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Right;
-                worksheet.Cells[2, 1].Value = "Année :";
-                worksheet.Cells[2, 2].Value = DateTime.Now.Year;
-                worksheet.Cells[2, 2].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Right;
-                worksheet.Cells[3, 1].Value = "Semaine :";
-                worksheet.Cells[3, 2].Value = DateTime.Now.GetIso8601WeekOfYear();
-                worksheet.Cells[3, 2].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Right;
+                worksheet.Cells[row, 1].Value = "Producteur :";
+                worksheet.Cells[row, 2].Value = producer.CompanyName;
+                worksheet.Cells[row, 2].Style.Font.Bold = true;
+                worksheet.Cells[row ,2].Style.Font.Size = 14;
+                row++;
+                worksheet.Cells[row, 1].Value = "Numéro de facture :";
+                worksheet.Cells[row, 2].Value = bill.BillNumber;
+                row++;
+                worksheet.Cells[row, 1].Value = "Année :";
+                worksheet.Cells[row, 2].Value = DateTime.Now.Year;
+                row++;
+                worksheet.Cells[row, 1].Value = "Semaine :";
+                worksheet.Cells[row, 2].Value = DateTime.Now.GetIso8601WeekOfYear();
+                row++;
+                worksheet.Cells[1, 1, row, 2].Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
+                worksheet.Cells[1, 1, row, 1].Style.Font.Bold = true;
                 //Add product informations
-                worksheet.Cells[5, 1].Value = "PRODUITS :";                
+                row++;
+                row++;
+                worksheet.Cells[row, 1].Value = "PRODUITS :";
+                worksheet.Cells[row, 1].Style.Font.Size = 18;
+                worksheet.Cells[row, 1].Style.Font.Bold = true;
                 //Create list of bill entry by product
                 Dictionary<Product, List<BillEntryConsumer>> products = new Dictionary<Product, List<BillEntryConsumer>>();
                 foreach (var billEntryConsumer in billEntries)
@@ -128,15 +141,12 @@ namespace Stolons.Tools
                     }
                     products[billEntryConsumer.BillEntry.Product].Add(billEntryConsumer);
                 }
-                List<int> rowsTotal = new List<int>(); ;
+                List<int> rowsTotal = new List<int>();
                 // - Add products
-                int row = 4;
                 foreach (var prod in products)
                 {
-                    row++;
-                    row++;
                     // - Add the headers
-                    worksheet.Cells[row, 2].Value = prod.Key.Type.ToString() + " (" + prod.Key.ProductUnit.ToString() + ")";
+                    worksheet.Cells[row, 2].Value = EnumHelper<Product.SellType>.GetDisplayValue(prod.Key.Type) + ( prod.Key.Type == Product.SellType.Piece ? "" : " (" + prod.Key.ProductUnit.ToString() + ")"  );
                     worksheet.Cells[row, 3].Value = prod.Key.Price ;
                     worksheet.Cells[row, 3].Style.Numberformat.Format = "0.00€";
                     worksheet.Cells[row, 2, row, 3].Style.Font.Bold = true;
@@ -167,6 +177,9 @@ namespace Stolons.Tools
                         worksheet.Cells[row, 2].Value = billEntryConsumer.BillEntry.Quantity;
                         worksheet.Cells[row, 3].Formula = new ExcelCellAddress(row, 2).Address + "*" + new ExcelCellAddress(unitPriceRow, 3).Address;
                         worksheet.Cells[row, 3].Style.Numberformat.Format = "0.00€";
+                        worksheet.Cells[row, 4].Value = "☐";
+                        worksheet.Cells[row, 4].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+
                         row++;
                     }
                     worksheet.Cells[productStartRow, 1,row,1].Style.Border.BorderAround(ExcelBorderStyle.Thin);
@@ -187,6 +200,9 @@ namespace Stolons.Tools
                     worksheet.Cells[row, 1, row, 3].Style.Font.Bold = true;
                     worksheet.Cells[row, 1, row, 3].Style.Font.Size = 14;
                     worksheet.Cells[row, 1, row, 3].Style.Border.BorderAround(ExcelBorderStyle.Thin);
+                    //Next product
+                    row++;
+                    row++;
                 }
                 //Super total
                 string totalFormula ="";
@@ -198,15 +214,12 @@ namespace Stolons.Tools
                         totalFormula += "+";
                     }
                 }
-                row++;
-                row++;
                 worksheet.Cells[row, 2].Value = "TOTAL :";
                 worksheet.Cells[row, 2].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
                 worksheet.Cells[row, 3].Formula = totalFormula;
                 worksheet.Cells[row, 3].Style.Numberformat.Format = "0.00€";
                 worksheet.Cells[row, 2, row, 3].Style.Font.Bold = true;
                 worksheet.Cells[row, 2, row ,3].Style.Font.Size = 18;
-                
 
                 /*
                 //Format values :
@@ -262,6 +275,13 @@ namespace Stolons.Tools
 
                 // Extended property values
                 package.Workbook.Properties.Company = "Association Stolons";
+
+                //
+                worksheet.View.PageLayoutView = true;
+                worksheet.Column(1).Width = (300 - 12 + 5) / 7d + 1;
+                worksheet.Column(2).Width = (125 - 12 + 5) / 7d + 1;
+                worksheet.Column(3).Width = (125 - 12 + 5) / 7d + 1;
+                worksheet.Column(4).Width = (40 - 12 + 5) / 7d + 1;
 
                 // save our new workbook and we are done!
                 package.Save();
