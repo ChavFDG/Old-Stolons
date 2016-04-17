@@ -8,6 +8,7 @@ using Stolons.Models;
 using System.Threading;
 using Microsoft.Data.Entity;
 using System.Globalization;
+using OfficeOpenXml.Style;
 
 namespace Stolons.Tools
 {
@@ -108,10 +109,13 @@ namespace Stolons.Tools
                 //Add global informations
                 worksheet.Cells[1, 1].Value = "Numéro de facture :";
                 worksheet.Cells[1, 2].Value = bill.BillNumber;
+                worksheet.Cells[1, 2].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Right;
                 worksheet.Cells[2, 1].Value = "Année :";
                 worksheet.Cells[2, 2].Value = DateTime.Now.Year;
+                worksheet.Cells[2, 2].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Right;
                 worksheet.Cells[3, 1].Value = "Semaine :";
                 worksheet.Cells[3, 2].Value = DateTime.Now.GetIso8601WeekOfYear();
+                worksheet.Cells[3, 2].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Right;
                 //Add product informations
                 worksheet.Cells[5, 1].Value = "PRODUITS :";                
                 //Create list of bill entry by product
@@ -126,35 +130,63 @@ namespace Stolons.Tools
                 }
                 List<int> rowsTotal = new List<int>(); ;
                 // - Add products
-                int row = 6;
+                int row = 4;
                 foreach (var prod in products)
                 {
+                    row++;
+                    row++;
                     // - Add the headers
-                    worksheet.Cells[row, 2].Value = "Type de vente";
-                    worksheet.Cells[row, 3].Value = "Prix unitaire";
+                    worksheet.Cells[row, 2].Value = prod.Key.Type.ToString() + " (" + prod.Key.ProductUnit.ToString() + ")";
+                    worksheet.Cells[row, 3].Value = prod.Key.Price ;
+                    worksheet.Cells[row, 3].Style.Numberformat.Format = "0.00€";
+                    worksheet.Cells[row, 2, row, 3].Style.Font.Bold = true;
+                    worksheet.Cells[row, 2, row, 3].Style.Font.Size = 12;
+                    worksheet.Cells[row, 2, row, 3].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                    worksheet.Cells[row, 2, row, 3].Style.Border.BorderAround(ExcelBorderStyle.Thin);
+                    int unitPriceRow = row;
                     row++;
-                    worksheet.Cells[row, 1].Value = prod.Key.Name;
-                    worksheet.Cells[row, 2].Value = prod.Key.Type.ToString() + " ("+ prod.Key.ProductUnit.ToString() +")";
-                    worksheet.Cells[row, 3].Value = prod.Key.Price;
-                    row++;
+                    worksheet.Cells[row - 1, 1, row, 1].Merge = true;
+                    worksheet.Cells[row - 1, 1, row, 1].Value = prod.Key.Name;
+                    worksheet.Cells[row - 1, 1, row, 1].Style.Font.Bold = true;
+                    worksheet.Cells[row - 1, 1, row, 1].Style.Font.Size = 16;
+                    worksheet.Cells[row - 1, 1, row, 1].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                    worksheet.Cells[row - 1, 1, row, 1].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
+                    worksheet.Cells[row - 1, 1, row, 1].Style.Border.BorderAround(ExcelBorderStyle.Thin);
+
                     worksheet.Cells[row, 2].Value = "Quantité";
                     worksheet.Cells[row, 3].Value = "Prix total";
-                    int rowTotal = row++;
-                    rowsTotal.Add(rowTotal);
-                    worksheet.Cells[row, 1].Value = "Consomateur";
-                    int rowStart = row++;
+                    worksheet.Cells[row, 2, row, 3].Style.Font.Bold = true;
+                    worksheet.Cells[row, 2, row, 3].Style.Font.Size = 12;
+                    worksheet.Cells[row, 2, row, 3].Style.Border.BorderAround(ExcelBorderStyle.Thin);
+                    row++;
+                    int productStartRow = row;
                     foreach (var billEntryConsumer in prod.Value.OrderBy(x=>x.Consumer.Id))
                     {
                         worksheet.Cells[row, 1].Value = "• " + billEntryConsumer.Consumer.Id;
-                        worksheet.Cells[row, 1].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Right;
+                        worksheet.Cells[row, 1].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
                         worksheet.Cells[row, 2].Value = billEntryConsumer.BillEntry.Quantity;
+                        worksheet.Cells[row, 3].Formula = new ExcelCellAddress(row, 2).Address + "*" + new ExcelCellAddress(unitPriceRow, 3).Address;
+                        worksheet.Cells[row, 3].Style.Numberformat.Format = "0.00€";
                         row++;
                     }
-                    //Do total (quantity and price)
+                    worksheet.Cells[productStartRow, 1,row,1].Style.Border.BorderAround(ExcelBorderStyle.Thin);
+                    worksheet.Cells[productStartRow, 2, row, 3].Style.Border.BorderAround(ExcelBorderStyle.Thin);
+                    worksheet.Cells[productStartRow, 2, row, 3].Style.Border.BorderAround(ExcelBorderStyle.Thin);
+                    rowsTotal.Add(row);
+                    //Total
+                    worksheet.Cells[row, 1].Value = "TOTAL";
+                    worksheet.Cells[row, 1].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
                     //Quantity
-                    worksheet.Cells[rowTotal, 2].Formula = string.Format("SUBTOTAL(9,{0})", new ExcelAddress(rowStart, 1, row - 1, 1).Address);
+                    worksheet.Cells[row, 2].Formula = string.Format("SUBTOTAL(9,{0})", new ExcelAddress(productStartRow, 2, row - 1, 2).Address);
+                    worksheet.Cells[row, 2].Style.Border.BorderAround(ExcelBorderStyle.Thin);
                     //Prix
-                    worksheet.Cells[rowTotal, 3].Formula = new ExcelCellAddress(rowTotal -2, 3).Address + "*" + new ExcelCellAddress(rowTotal, 2).Address;
+                    worksheet.Cells[row, 3].Formula = new ExcelCellAddress(row, 2).Address + "*" + new ExcelCellAddress(unitPriceRow, 3).Address;
+                    worksheet.Cells[row, 3].Style.Numberformat.Format = "0.00€";
+                    worksheet.Cells[row, 3].Style.Border.BorderAround(ExcelBorderStyle.Thin);
+                    //
+                    worksheet.Cells[row, 1, row, 3].Style.Font.Bold = true;
+                    worksheet.Cells[row, 1, row, 3].Style.Font.Size = 14;
+                    worksheet.Cells[row, 1, row, 3].Style.Border.BorderAround(ExcelBorderStyle.Thin);
                 }
                 //Super total
                 string totalFormula ="";
@@ -166,9 +198,15 @@ namespace Stolons.Tools
                         totalFormula += "+";
                     }
                 }
+                row++;
+                row++;
                 worksheet.Cells[row, 2].Value = "TOTAL :";
+                worksheet.Cells[row, 2].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
                 worksheet.Cells[row, 3].Formula = totalFormula;
-
+                worksheet.Cells[row, 3].Style.Numberformat.Format = "0.00€";
+                worksheet.Cells[row, 2, row, 3].Style.Font.Bold = true;
+                worksheet.Cells[row, 2, row ,3].Style.Font.Size = 18;
+                
 
                 /*
                 //Format values :
