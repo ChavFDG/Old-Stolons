@@ -37,7 +37,7 @@ namespace Stolons.Controllers
             ValidatedWeekBasket validatedWeekBasket = _context.ValidatedWeekBaskets.Include(x => x.Consumer).Include(x => x.Products).FirstOrDefault(x => x.Consumer.Id == consumer.Id);
             if (tempWeekBasket == null)
             {
-                //Il n'a pas encore de panier de la semaine, on lui en crée un
+                //Il n'a pas encore de panier de la semaine, on lui en crï¿½e un
                 tempWeekBasket = new TempWeekBasket();
                 tempWeekBasket.Consumer = consumer;
                 tempWeekBasket.Products = new System.Collections.Generic.List<BillEntry>();
@@ -77,10 +77,16 @@ namespace Stolons.Controllers
             TempWeekBasket tempWeekBasket = _context.TempsWeekBaskets.Include(x=>x.Consumer).Include(x => x.Products).First(x => x.Id.ToString() == weekBasketId);
             BillEntry billEntry = tempWeekBasket.Products.First(x => x.ProductId.ToString() == productId);
             billEntry.Product = _context.Products.First(x => x.Id.ToString() == productId);
+
+            if (quantity > 0 && billEntry.Product.RemainingStock < billEntry.Quantity + quantity) {
+                return billEntry;
+            }
+
             billEntry.Quantity = billEntry.Quantity + quantity;
+
             if (billEntry.Quantity == 0)
             {
-                //La quantité est à 0 on supprime le produit
+                //La quantitï¿½ est ï¿½ 0 on supprime le produit
                 _context.Remove(billEntry);
             }            
             _context.SaveChanges();
@@ -113,7 +119,7 @@ namespace Stolons.Controllers
                 //There is enouth stock
                 if (billEntry.Quantity <= product.RemainingStock)
                 {
-                    //On met à jour le panier valide
+                    //On met ï¿½ jour le panier valide
                     if(validatedBillEntry == null)
                     {
                         validatedWeekBasket.Products.Add(billEntry.Clone());

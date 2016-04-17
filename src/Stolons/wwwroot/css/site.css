@@ -1,4 +1,5 @@
-﻿body {
+﻿
+body {
     padding-top: 50px;
     padding-bottom: 20px;
 }
@@ -108,7 +109,7 @@ textarea {
     display: inline-block;
     float: left;
     width: 250px;
-    height: 200px;
+    height: 220px;
     border: 1px solid #222;
     margin: 5px;
 }
@@ -150,13 +151,14 @@ textarea {
 .pr_label {
     float: left;
     margin: 0 1px;
+    padding-left: 5px;
 }
 .pr_label img {
     width: 20px;
     height: 20px;
 }
 .product-bottom {
-    height: 100px;    
+    height: 100px;
 }
 .pr_text {
 
@@ -165,12 +167,17 @@ textarea {
     text-align: center;
     font-size:large
 }
+.pr_qtystock {
+    padding: 10px;
+}
 .pr_priceQuantity {
     text-align: right;
     font-size: medium;
+    float: right;
 }
 .pr_actions {
     text-align: center;
+    padding-top: 10px;
 }
 .pr_actionDetail {
     display: inline;
@@ -180,6 +187,11 @@ textarea {
 }
 .productQuantityChanger{
     display: none;
+}
+.quantity {
+    font-weight: 900;
+    padding-left: 5px;
+    padding-right: 5px;
 }
 
 /* Product modal in week basket view */
@@ -213,4 +225,26 @@ textarea {
     max-width: 150px;
     max-height: 150px;
     display: inline-block;
+}
+
+.glyphicon-refresh-animate {
+    -animation: spin .7s infinite linear;
+    -ms-animation: spin .7s infinite linear;
+    -webkit-animation: spinw .7s infinite linear;
+    -moz-animation: spinm .7s infinite linear;
+}
+
+@keyframes spin {
+    from { transform: scale(1) rotate(0deg);}
+    to { transform: scale(1) rotate(360deg);}
+}
+  
+@-webkit-keyframes spinw {
+    from { -webkit-transform: rotate(0deg);}
+    to { -webkit-transform: rotate(360deg);}
+}
+
+@-moz-keyframes spinm {
+    from { -moz-transform: rotate(0deg);}
+    to { -moz-transform: rotate(360deg);}
 }
