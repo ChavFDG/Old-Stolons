@@ -54,10 +54,6 @@ namespace Stolons
 
             services.AddMvc();
 
-            // Add application services.
-            services.AddTransient<IEmailSender, AuthMessageSender>();
-            services.AddTransient<ISmsSender, AuthMessageSender>();
-
             //Password policy
             //stackoverflow.com/questions/27831597/how-do-i-define-the-password-rules-for-identity-in-asp-net-5-mvc-6-vnext
             services.AddIdentity<ApplicationUser, IdentityRole>(o => {
@@ -134,6 +130,11 @@ namespace Stolons
             else
             {
                 Configurations.ApplicationConfig = new ApplicationConfig();
+                //Email
+                Configurations.ApplicationConfig.StolonsMailAdress = "asso.stolons@gmail.com";
+                Configurations.ApplicationConfig.StolonsMailPassword = "ProjectStolons2016";
+                //Message
+                Configurations.ApplicationConfig.OrderDeliveryMessage= "Votre panier est disponible jeudi de 16h à 20 au : chemin de Saint Clair 07000 PRIVAS";
                 //Préparation commande
                 Configurations.ApplicationConfig.PreparationDayStartDate = DayOfWeek.Wednesday;
                 Configurations.ApplicationConfig.PreparationHourStartDate = 12;

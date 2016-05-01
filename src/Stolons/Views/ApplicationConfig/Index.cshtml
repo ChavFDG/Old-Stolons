@@ -7,6 +7,30 @@
 <h2>@ViewData["Title"]</h2>
 <p>Mode actuel : @Configurations.Mode</p>
 <div>
+    <h4>Courriel de Stolons pour envoie des messages aux utilisateurs</h4>
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.StolonsMailAdress)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.StolonsMailAdress)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.StolonsMailPassword)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.StolonsMailPassword)
+        </dd>
+    </dl>
+    <h4>Message d'information utilisateurs</h4>
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.OrderDeliveryMessage)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.OrderDeliveryMessage)
+        </dd>
+    </dl>
     <h4>Début préparation des commandes :</h4>
     <dl class="dl-horizontal">
         <dt>

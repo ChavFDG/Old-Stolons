@@ -9,6 +9,32 @@
 <form asp-action="Edit">
     <div class="form-horizontal">
 
+        <h4>Courriel de Stolons pour envoie des messages aux utilisateurs :</h4>
+        <div class="form-group">
+            <label asp-for="StolonsMailAdress" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="StolonsMailAdress" class="form-control" />
+                <span asp-validation-for="StolonsMailAdress" class="text-danger" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="StolonsMailPassword" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="StolonsMailPassword" class="form-control" />
+                <span asp-validation-for="StolonsMailPassword" class="text-danger" />
+            </div>
+        </div>
+
+        <h4>Message d'information utilisateurs :</h4>
+        <div class="form-group">
+            <label asp-for="OrderDeliveryMessage" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="OrderDeliveryMessage" class="form-control" />
+                <span asp-validation-for="OrderDeliveryMessage" class="text-danger" />
+            </div>
+        </div>
+       
+
         <h4>Début préparation des commandes :</h4>
         <div class="form-group">
             <label asp-for="PreparationDayStartDate" class="col-md-2 control-label"></label>

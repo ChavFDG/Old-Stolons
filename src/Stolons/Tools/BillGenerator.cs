@@ -60,6 +60,7 @@ namespace Stolons.Tools
                     {
                         //Generate bill for producer
                         bills.Add(GenerateBill(producerBill.Key, producerBill.Value, dbContext));
+                        //Send email to producer
                     }
                     //Bills (save bills and send mails to user)
                     foreach(var bill in bills)

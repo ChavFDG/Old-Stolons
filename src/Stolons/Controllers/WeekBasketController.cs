@@ -8,6 +8,7 @@ using Stolons.ViewModels.WeekBasket;
 using Microsoft.Data.Entity;
 using System.Security.Claims;
 using System.Collections.Generic;
+using System.Text;
 
 namespace Stolons.Controllers
 {
@@ -133,6 +134,33 @@ namespace Stolons.Controllers
             }
             _context.SaveChanges();
             //END LOCK
+            //Send email to user
+            string subject;
+            StringBuilder message = new StringBuilder();
+            if(unValidBillEntry.Count == 0)
+            {
+                subject = "Validation total de votre panier de la semaine";
+                message.Append("Votre panier vient d'être validé avec succés.");
+                message.AppendLine(Configurations.ApplicationConfig.OrderDeliveryMessage);
+                message.AppendLine();
+                message.AppendLine("Résumé de votre panier");
+                message.AppendLine("PRODUIT\t\tQuantité\tPrix\tTotal");
+                float total = 0;
+                foreach(BillEntry entry in validatedWeekBasket.Products)
+                {
+                    message.AppendLine(entry.Product.Name + "\t\t" + entry.Quantity + "t" + entry.Product.Price +"€\t"+ entry.Quantity* entry.Product.Price +"€");
+                    total = total + (entry.Quantity * entry.Product.Price);
+                }
+                message.AppendLine("\t\t\t\t TOTAL : " + total + "€");
+
+            }
+            else
+            {
+                subject = "Validation partielle de votre panier de la semaine";
+
+            }
+            Services.AuthMessageSender.SendEmailAsync(validatedWeekBasket.Consumer.Email, subject, message.ToString());
+            //Return view
             return View(new ValidationSummaryViewModel(validatedWeekBasket, unValidBillEntry) { Total = totalPrice });
         }
 

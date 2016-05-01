@@ -134,7 +134,7 @@
             @if (Model.ValidatedWeekBasket != null)
             {
                 <h3>Panier validé</h3>
-                <p>Panier à récupérer jeudi de 16h à 20h</p>
+                <p>@Configurations.ApplicationConfig.OrderDeliveryMessage</p>
                 <table class="table">
                         <tr>
                             <th>

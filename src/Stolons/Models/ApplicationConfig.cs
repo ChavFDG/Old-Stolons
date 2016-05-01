@@ -12,6 +12,15 @@ namespace Stolons.Models
         [Key]
         public Guid Id { get; set; }
 
+        [Display(Name = "Courriel d'envoie des mails")]
+        public string StolonsMailAdress { get; set; }
+
+        [Display(Name = "Mot de passe d'envoie des mails")]
+        public string StolonsMailPassword{ get; set; }
+
+        [Display(Name = "Message de récupération du panier (jour, lieu, plage horraire)")]
+        public string OrderDeliveryMessage { get; set; }
+
         [Display(Name = "Jour")]
         public DayOfWeek PreparationDayStartDate{ get; set; }
         [Display(Name = "Heure")]
