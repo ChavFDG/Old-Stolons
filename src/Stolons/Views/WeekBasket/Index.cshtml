@@ -68,14 +68,29 @@
         });
 
         $('a.plus').click(function () {
+            var productId = $(this).attr('data-productId');
+            var loadingDiv = $('div.productQuantityLoading[data-productId=' + productId + ']');
+            var qtyChangerDiv = $('div.productQuantityChanger[data-productId=' + productId + ']');
+
+            loadingDiv.css("display", "inline");
+            qtyChangerDiv.css("display", "none");
+
             $.ajax({
                 url: '@Url.Action("PlusProduct", "WeekBasket")',
                 data: {
-                    productId: $(this).attr('data-productId'),
+                    productId: productId,
                     weekBasketId: '@(Model.TempWeekBasket.Id.ToString())'
                 },
                 type: 'post',
                 success: function (response) {
+                    loadingDiv.css("display", "none");
+                    qtyChangerDiv.css("display", "inline");
+
+                    if (response.Quantity === response.Product.RemainingStock) {
+                        //Maximum atteint, desactivaton du '+'.
+                        $('a.plus[data-productId=' + productId + ']').css("display", "none");
+                    }
+
                     var productId = response.Product.Id;
                     var spans = $('span.quantity[data-productId=' + productId + ']');
                     for (i = 0; i < spans.length; i++) {
@@ -91,16 +106,29 @@
         });
 
         $('a.minus').click(function () {
+            var productId = $(this).attr('data-productId');
+            var loadingDiv = $('div.productQuantityLoading[data-productId=' + productId + ']');
+            var qtyChangerDiv = $('div.productQuantityChanger[data-productId=' + productId + ']');
+
+            loadingDiv.css("display", "inline");
+            qtyChangerDiv.css("display", "none");
+
             $.ajax({
                 url: '@Url.Action("MinusProduct", "WeekBasket")',
                 data: {
-                    productId: $(this).attr('data-productId'),
+                    productId: productId,
                     weekBasketId: '@(Model.TempWeekBasket.Id.ToString())'
                 },
                 type: 'post',
                 success: function (response) {
+                    loadingDiv.css("display", "none");
+                    qtyChangerDiv.css("display", "inline");
+
                     var productId = response.Product.Id;
                     if (response.Quantity != 0) {
+                        //Affichage du bouton '+'
+                        $('a.plus[data-productId=' + productId + ']').css("display", "inline");
+
                         var spans = $('span[data-productId=' + productId + ']');
                         for (i = 0; i < spans.length; i++) {
                             spans[i].textContent = response.Quantity;
@@ -117,7 +145,7 @@
                         //Show Add
                         $('div.addProduct[data-productId=' + productId + ']').css("display", "inline");
                         //Hide Quantity
-                        $('div.productQuantityChanger[data-productId=' + productId + ']').css("display", "none");
+                        qtyChangerDiv.css("display", "none");
                     }
                 }
             });
@@ -201,7 +229,7 @@
                         <th>
                             <span class="quantity" data-productId="@entry.ProductId">@entry.Quantity</span>
                         </th>
-                        <th>
+                        <th>f
                             <span class="subTotalPrice" data-productId="@entry.ProductId">@(entry.Quantity * entry.Product.Price)€</span>
                         </th>
                         <th>
@@ -293,8 +321,14 @@
                             <div class="pr_name">
                                 @product.Name
                             </div>
-                            <div class="pr_priceQuantity">
+                            <div class="pr_qtystock">
+                                <span class="pr_stock">
+                                    Stock: <b>@product.RemainingStock</b>
+                                </span>
+                                <span class="pr_priceQuantity">
+                                 <b>
                                 @(product.Price + "€")
+                                </b>
                                 @if (product.Type == Product.SellType.Piece)
                                 {
                                     @(" la pièce")
@@ -303,7 +337,8 @@
                                 {
                                     @(" / " + product.ProductUnit.ToString())
                                 }
-                            </div>
+                                </span>
+                          </div>
                         </div>
                         <div class="pr_actions">
                             <div class="addProduct" data-productId="@product.Id">
@@ -314,9 +349,13 @@
                                     <img src="@Configurations.GetUrl("/images/basket-remove.png")" />
                                 </a>
                                 <span class="quantity" data-productId="@product.Id">@(Model.TempWeekBasket.Products.Any(x => x.Product.Id == product.Id) ? Model.TempWeekBasket.Products.First(x => x.Product.Id == product.Id).Quantity : 1) </span>
-                                <a href="" class="plus" data-productId="@product.Id">
+                                <a href="" class="plus" data-productId="@product.Id" >
                                     <img src="@Configurations.GetUrl("/images/basket-add.png")" />
                                 </a>
+                            </div>
+                            <div class="productQuantityLoading" data-productId="@product.Id" style="display: none;">
+                                <span class="glyphicon glyphicon-refresh glyphicon-refresh-animate">
+                                </span>
                             </div>
                         </div>
                     </div>
@@ -352,7 +391,7 @@
                                         <li><b>Type de vente: <b>emballé</b></li>
                                     }
                                     <li>
-                                        Stock restant:
+                                        Stock:
                                         <b>
                                             @product.RemainingStock
                                             @if (product.Type == Product.SellType.Piece)
@@ -404,6 +443,10 @@
                                 <a href="#" class="plus" data-productId="@product.Id">
                                     <img src="@Configurations.GetUrl("/images/basket-add.png")" />
                                 </a>
+                            </div>
+                            <div class="productQuantityLoading" data-productId="@product.Id" style="display: none;">
+                                <span class="glyphicon glyphicon-refresh glyphicon-refresh-animate">
+                                </span>
                             </div>
                         </div>
                     </div>
