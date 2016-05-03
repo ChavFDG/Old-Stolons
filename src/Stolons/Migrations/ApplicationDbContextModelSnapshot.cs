@@ -183,19 +183,6 @@ namespace Stolons.Migrations
                     b.HasAnnotation("Relational:TableName", "AspNetUsers");
                 });
 
-            modelBuilder.Entity("Stolons.Models.Bill", b =>
-                {
-                    b.Property<string>("BillNumber");
-
-                    b.Property<int?>("ConsumerId");
-
-                    b.Property<int>("State");
-
-                    b.Property<int?>("UserId");
-
-                    b.HasKey("BillNumber");
-                });
-
             modelBuilder.Entity("Stolons.Models.BillEntry", b =>
                 {
                     b.Property<Guid>("Id")
@@ -210,6 +197,19 @@ namespace Stolons.Migrations
                     b.Property<Guid?>("ValidatedWeekBasketId");
 
                     b.HasKey("Id");
+                });
+
+            modelBuilder.Entity("Stolons.Models.ConsumerBill", b =>
+                {
+                    b.Property<string>("BillNumber");
+
+                    b.Property<int?>("ConsumerId");
+
+                    b.Property<DateTime>("EditionDate");
+
+                    b.Property<int>("State");
+
+                    b.HasKey("BillNumber");
                 });
 
             modelBuilder.Entity("Stolons.Models.News", b =>
@@ -230,6 +230,19 @@ namespace Stolons.Migrations
                     b.Property<int>("UserForeignKey");
 
                     b.HasKey("Id");
+                });
+
+            modelBuilder.Entity("Stolons.Models.ProducerBill", b =>
+                {
+                    b.Property<string>("BillNumber");
+
+                    b.Property<DateTime>("EditionDate");
+
+                    b.Property<int?>("ProducerId");
+
+                    b.Property<int>("State");
+
+                    b.HasKey("BillNumber");
                 });
 
             modelBuilder.Entity("Stolons.Models.Product", b =>
@@ -420,17 +433,6 @@ namespace Stolons.Migrations
                         .HasForeignKey("UserId");
                 });
 
-            modelBuilder.Entity("Stolons.Models.Bill", b =>
-                {
-                    b.HasOne("Stolons.Models.Consumer")
-                        .WithMany()
-                        .HasForeignKey("ConsumerId");
-
-                    b.HasOne("Stolons.Models.Producer")
-                        .WithMany()
-                        .HasForeignKey("UserId");
-                });
-
             modelBuilder.Entity("Stolons.Models.BillEntry", b =>
                 {
                     b.HasOne("Stolons.Models.Product")
@@ -446,11 +448,25 @@ namespace Stolons.Migrations
                         .HasForeignKey("ValidatedWeekBasketId");
                 });
 
+            modelBuilder.Entity("Stolons.Models.ConsumerBill", b =>
+                {
+                    b.HasOne("Stolons.Models.Consumer")
+                        .WithMany()
+                        .HasForeignKey("ConsumerId");
+                });
+
             modelBuilder.Entity("Stolons.Models.News", b =>
                 {
                     b.HasOne("Stolons.Models.User")
                         .WithMany()
                         .HasForeignKey("UserForeignKey");
+                });
+
+            modelBuilder.Entity("Stolons.Models.ProducerBill", b =>
+                {
+                    b.HasOne("Stolons.Models.Producer")
+                        .WithMany()
+                        .HasForeignKey("ProducerId");
                 });
 
             modelBuilder.Entity("Stolons.Models.Product", b =>

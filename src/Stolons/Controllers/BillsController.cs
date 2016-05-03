@@ -27,8 +27,16 @@ namespace Stolons.Controllers
         public async Task<IActionResult> Index()
         {
             var appUser = await GetCurrentUserAsync();
-            var products = _context.Bills.Where(x => x.User.Email == appUser.Email).ToList();
-            return View(_context.Bills.ToList());
+            var stolonsUser = _context.StolonsUsers.First(x => x.Email == appUser.Email);
+            if(stolonsUser is Producer)
+            {
+                return View(_context.ProducerBills.Where(x=>x.Producer.Email == stolonsUser.Email).OrderBy(x=>x.EditionDate).ToList<IBill>());
+            }
+            else if (stolonsUser is Consumer)
+            {
+                return View(_context.ConsumerBills.Where(x => x.Consumer.Email == stolonsUser.Email).OrderBy(x => x.EditionDate).ToList<IBill>());
+            }
+            return View();//ERROR
         }
 
         // GET: Bills/Download/5

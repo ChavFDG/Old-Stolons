@@ -9,7 +9,7 @@ namespace Stolons.Models
     public class Consumer : User
     {
         [Display(Name = "Factures")]
-        public List<Bill> Bills { get; set; }
+        public List<ConsumerBill> Bills { get; set; }
         [Display(Name = "Panier de la semaine")]
         public TempWeekBasket weekBasket { get; set; }
 

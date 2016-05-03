@@ -36,13 +36,15 @@ namespace Stolons.Tools
                 if (lastMode == ApplicationConfig.Modes.Order && currentMode == ApplicationConfig.Modes.Preparation)
                 {
                     //We moved form Order to Preparation, create and send bills
-                    List<Bill> bills = new List<Bill>();
+                    List<IBill> bills = new List<IBill>();
                     Dictionary<Producer, List<BillEntryConsumer>> producerBills = new Dictionary<Producer, List<BillEntryConsumer>>();
                     //Consumer (create bills)
                     foreach (var weekBasket in dbContext.ValidatedWeekBaskets.Include(x => x.Products).Include(x=>x.Consumer))
                     {
                         //Generate bill for consumer
-                        bills.Add(GenerateBill(weekBasket, dbContext));
+                        ConsumerBill consumerBill = GenerateBill(weekBasket, dbContext);
+                        bills.Add(consumerBill);
+                        dbContext.Add(consumerBill);
                         //Add to producer bill entry
                         foreach (var tmpBillEntry in weekBasket.Products)
                         {
@@ -59,8 +61,12 @@ namespace Stolons.Tools
                     foreach (var producerBill in producerBills)
                     {
                         //Generate bill for producer
-                        bills.Add(GenerateBill(producerBill.Key, producerBill.Value, dbContext));
+                        ProducerBill bill = GenerateBill(producerBill.Key, producerBill.Value, dbContext);
+                        bills.Add(bill);
+                        dbContext.Add(bill);
                         //Send email to producer
+                        //TODO
+
                     }
                     //Bills (save bills and send mails to user)
                     foreach(var bill in bills)
@@ -81,15 +87,16 @@ namespace Stolons.Tools
                 Thread.Sleep(5000);
             } while (true);
         }
+
         /*
         *BILL NAME INFORMATION
         *Bills are stored like that : bills\UserId\Year_WeekNumber
         */
 
 
-        private static Bill GenerateBill(Producer producer, List<BillEntryConsumer> billEntries, ApplicationDbContext dbContext)
+        private static ProducerBill GenerateBill(Producer producer, List<BillEntryConsumer> billEntries, ApplicationDbContext dbContext)
         {
-            Bill bill = CreateBill(producer);
+            ProducerBill bill = CreateBill<ProducerBill>(producer);
             //Generate exel file with bill number for user
             string filePath = Path.Combine(Configurations.Environment.WebRootPath, Configurations.ProducersBillsStockagePath, bill.User.Id.ToString());
             FileInfo newFile = new FileInfo(filePath + @"\" + bill.BillNumber + ".xlsx");
@@ -294,9 +301,9 @@ namespace Stolons.Tools
             return bill;
         }
 
-        private static Bill GenerateBill(ValidatedWeekBasket weekBasket, ApplicationDbContext dbContext)
+        private static ConsumerBill GenerateBill(ValidatedWeekBasket weekBasket, ApplicationDbContext dbContext)
         {
-            Bill bill = CreateBill(weekBasket.Consumer);
+            ConsumerBill bill = CreateBill<ConsumerBill>(weekBasket.Consumer);
             //Generate exel file with bill number for user
             string filePath = Path.Combine(Configurations.Environment.WebRootPath, Configurations.ConsumersBillsStockagePath,bill.User.Id.ToString());
             FileInfo newFile = new FileInfo(filePath + @"\"+ bill .BillNumber+ ".xlsx");
@@ -415,13 +422,14 @@ namespace Stolons.Tools
             return bill;
         }
 
-        private static Bill CreateBill(User user)
+        private static T CreateBill<T>(User user) where T : class, IBill , new()
         {
-            Bill bill = new Bill();
+            IBill bill = new T();
             bill.BillNumber = DateTime.Now.Year + "_" + DateTime.Now.GetIso8601WeekOfYear();
             bill.User = user;
-            bill.State = Bill.BillState.Pending;
-            return bill;
+            bill.State = BillState.Pending;
+            bill.EditionDate = DateTime.Now;
+            return bill as T;
         }
 
         public static void GenerateExel(string filePath)

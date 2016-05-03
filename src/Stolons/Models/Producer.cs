@@ -59,6 +59,6 @@ namespace Stolons.Models
         [Url]
         public string WebSiteLink { get; set; }
         [Display(Name = "Factures")]
-        public List<Bill> Bills { get; set; }
+        public List<ProducerBill> Bills { get; set; }
     }
 }

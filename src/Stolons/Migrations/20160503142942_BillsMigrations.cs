@@ -4,7 +4,7 @@ using Microsoft.Data.Entity.Migrations;
 
 namespace Stolons.Migrations
 {
-    public partial class Migrations : Migration
+    public partial class BillsMigrations : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -157,26 +157,20 @@ namespace Stolons.Migrations
                         onDelete: ReferentialAction.Restrict);
                 });
             migrationBuilder.CreateTable(
-                name: "Bill",
+                name: "ConsumerBill",
                 columns: table => new
                 {
                     BillNumber = table.Column<string>(nullable: false),
                     ConsumerId = table.Column<int>(nullable: true),
-                    State = table.Column<int>(nullable: false),
-                    UserId = table.Column<int>(nullable: true)
+                    EditionDate = table.Column<DateTime>(nullable: false),
+                    State = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Bill", x => x.BillNumber);
+                    table.PrimaryKey("PK_ConsumerBill", x => x.BillNumber);
                     table.ForeignKey(
-                        name: "FK_Bill_Consumer_ConsumerId",
+                        name: "FK_ConsumerBill_Consumer_ConsumerId",
                         column: x => x.ConsumerId,
-                        principalTable: "User",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_Bill_Producer_UserId",
-                        column: x => x.UserId,
                         principalTable: "User",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
@@ -201,6 +195,25 @@ namespace Stolons.Migrations
                         principalTable: "User",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                });
+            migrationBuilder.CreateTable(
+                name: "ProducerBill",
+                columns: table => new
+                {
+                    BillNumber = table.Column<string>(nullable: false),
+                    EditionDate = table.Column<DateTime>(nullable: false),
+                    ProducerId = table.Column<int>(nullable: true),
+                    State = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ProducerBill", x => x.BillNumber);
+                    table.ForeignKey(
+                        name: "FK_ProducerBill_Producer_ProducerId",
+                        column: x => x.ProducerId,
+                        principalTable: "User",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                 });
             migrationBuilder.CreateTable(
                 name: "TempWeekBasket",
@@ -388,9 +401,10 @@ namespace Stolons.Migrations
             migrationBuilder.DropTable("AspNetUserLogins");
             migrationBuilder.DropTable("AspNetUserRoles");
             migrationBuilder.DropTable("ApplicationConfig");
-            migrationBuilder.DropTable("Bill");
             migrationBuilder.DropTable("BillEntry");
+            migrationBuilder.DropTable("ConsumerBill");
             migrationBuilder.DropTable("News");
+            migrationBuilder.DropTable("ProducerBill");
             migrationBuilder.DropTable("AspNetRoles");
             migrationBuilder.DropTable("AspNetUsers");
             migrationBuilder.DropTable("Product");

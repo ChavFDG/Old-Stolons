@@ -1,25 +1,85 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace Stolons.Models
 {
-    public class Bill
+
+    public interface IBill
+    {
+        string BillNumber { get; set; }
+        User User { get; set; }
+        BillState State { get; set; }
+
+        DateTime EditionDate { get; set; }
+    }
+    public class ConsumerBill : IBill
     {
         [Key]
         [Display(Name = "Numéro de facture")] //NumAdherant_Annee_Semaine
         public string BillNumber { get; set; }
+
         [Display(Name = "Adhérant")]
-        public User User { get; set; }
+        public Consumer Consumer { get; set; }
+
+        [Display(Name = "Date d'édition de la facture")]
+        public DateTime EditionDate { get; set; }
+
         [Display(Name = "Etat")]
         public BillState State { get; set; }
 
-        public enum BillState
+        [NotMapped]
+        public User User
         {
-            Pending = 0,
-            Validated = 1
+            get
+            {
+                return Consumer;
+            }
+
+            set
+            {
+                Consumer = value as Consumer;
+            }
         }
+    }
+
+    public class ProducerBill : IBill
+    {
+        [Key]
+        [Display(Name = "Numéro de facture")] //NumAdherant_Annee_Semaine
+        public string BillNumber { get; set; }
+
+        [Display(Name = "Producteur")]
+        public Producer Producer { get; set; }
+
+        [Display(Name = "Date d'édition de la facture")]
+        public DateTime EditionDate { get; set; }
+
+        [Display(Name = "Etat")]
+        public BillState State { get; set; }
+
+        [NotMapped]
+        public User User
+        {
+            get
+            {
+                return Producer;
+            }
+
+            set
+            {
+                Producer = value as Producer;
+            }
+        }
+    }
+
+    public enum BillState
+    {
+        Pending = 0,
+        Delivered = 1,
+        Paid = 2
     }
 }

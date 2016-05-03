@@ -13,7 +13,8 @@ namespace Stolons.Models
         public DbSet<Producer> Producers { get; set; }
         public DbSet<Consumer> Consumers { get; set; }
         public DbSet<News> News { get; set; }
-        public DbSet<Bill> Bills { get; set; }
+        public DbSet<ConsumerBill> ConsumerBills { get; set; }
+        public DbSet<ProducerBill> ProducerBills { get; set; }
         public DbSet<BillEntry> BillEntrys { get; set; }
         public DbSet<Product> Products { get; set; }
         public DbSet<ProductFamilly> ProductFamillys { get; set; }
