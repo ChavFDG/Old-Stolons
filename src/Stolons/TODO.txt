@@ -1,15 +1,16 @@
-﻿- Ajouter l'envoie de mail après génération des factures
+﻿- Ajouter l'envoie de mail après génération des factures (En cours)
 - Bloquer les pages en fonctions du mode du site et des utilisateurs
 - Faire la page "nos producteurs"
 - Faire la page "nos produits"
 - Faire la page "qui sommes-nous"
+- Faire la page "mes factures"
+- Faire la page "Gérer les paniers"
 - Dans "mon panier", ajouter le bouton de suppression d'un produit à la place de "DEL"
 - Dans "mon panier", ajouter le total du panier validé
 - Dans "mon panier", ajouter le chargement lors de l'appuie sur + ou -
 - Dans "mon panier", ajotuer le stock max courent
 - Lors de la valiadtion ou non d'un panier envoyer un mail récapitulatif
-- Faire la page "mes factures"
-- Faire la page "Gérer les paniers"
 - Passer tout les produits à stock au passage en mode livraison
 - Dans l'ajout / édition d'un produit vérifier l'éxécution des javascript => BUG
 - Vérifier le fonctionnement sur les navigateurs des scripts => BUG
+- Intégrer les images de Marion

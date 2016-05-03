@@ -9,15 +9,15 @@ namespace Stolons.Models
 {
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
+        public DbSet<User> StolonsUsers { get; set; }
+        public DbSet<Producer> Producers { get; set; }
+        public DbSet<Consumer> Consumers { get; set; }
         public DbSet<News> News { get; set; }
         public DbSet<Bill> Bills { get; set; }
         public DbSet<BillEntry> BillEntrys { get; set; }
-        public DbSet<Consumer> Consumers { get; set; }
-        public DbSet<Producer> Producers { get; set; }
         public DbSet<Product> Products { get; set; }
         public DbSet<ProductFamilly> ProductFamillys { get; set; }
         public DbSet<ProductType> ProductTypes { get; set; }
-        public DbSet<User> StolonsUsers { get; set; }
         public DbSet<TempWeekBasket> TempsWeekBaskets { get; set; }
         public DbSet<ValidatedWeekBasket> ValidatedWeekBaskets { get; set; }
         public DbSet<ApplicationConfig> ApplicationConfig { get; set; }
