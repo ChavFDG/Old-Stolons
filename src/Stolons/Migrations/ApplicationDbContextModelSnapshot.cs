@@ -126,6 +126,8 @@ namespace Stolons.Migrations
 
                     b.Property<int>("StockUpdateMinuteStartDate");
 
+                    b.Property<string>("StolonsAboutPageText");
+
                     b.Property<string>("StolonsAddress");
 
                     b.Property<string>("StolonsLabel");

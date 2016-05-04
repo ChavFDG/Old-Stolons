@@ -8,7 +8,7 @@ using Stolons.Models;
 namespace Stolons.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20160504123817_Migrations999")]
+    [Migration("20160504125455_Migrations999")]
     partial class Migrations999
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -126,6 +126,8 @@ namespace Stolons.Migrations
                     b.Property<int>("StockUpdateHourStartDate");
 
                     b.Property<int>("StockUpdateMinuteStartDate");
+
+                    b.Property<string>("StolonsAboutPageText");
 
                     b.Property<string>("StolonsAddress");
 

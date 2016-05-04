@@ -149,7 +149,7 @@ namespace Stolons.Tools
                         worksheet.Cells[1, 5, row, 5].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
                         row++;
                         worksheet.Cells[row, 4, row + 1, 5].Merge = true;
-                        var total = worksheet.Cells[row, 5, row + 1, 6];
+                        var total = worksheet.Cells[row, 6, row + 1, 6];
                         total.Merge = true;
                         worksheet.Cells[row, 4, row + 1, 5].Value = "TOTAL";
                         worksheet.Cells[row, 4, row + 1, 6].Style.Font.Size = 18;
@@ -442,29 +442,35 @@ namespace Stolons.Tools
                 int row = 1;
                 worksheet.Cells[row, 1].Value = Configurations.ApplicationConfig.StolonsLabel;
                 row++;
-                worksheet.Cells[row, 1].Value = Configurations.ApplicationConfig.StolonsAddress;
-                row++;
-                row++;
                 worksheet.Cells[row, 1].Value = Configurations.ApplicationConfig.StolonsMailAdress;
                 row++;
-                worksheet.Cells[row, 6].Value = weekBasket.Consumer.Surname + ", " + weekBasket.Consumer.Name;
+                worksheet.Cells[row, 1].Value = Configurations.ApplicationConfig.StolonsPhoneNumber;
                 row++;
-                worksheet.Cells[row, 6].Value = weekBasket.Consumer.Email;
+                worksheet.Cells[row, 1].Value = Configurations.ApplicationConfig.StolonsAddress;
+                row++;
+                worksheet.Cells[row, 5].Value = weekBasket.Consumer.Surname + ", " + weekBasket.Consumer.Name;
+                row++;
+                worksheet.Cells[row, 5].Value = weekBasket.Consumer.Email;
                 row++;
                 worksheet.Cells[row, 1].Value = "Numéro d'adhérent :";
                 worksheet.Cells[row, 2].Value = weekBasket.Consumer.Id;
+                worksheet.Cells[row, 2].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
                 row++;
                 worksheet.Cells[row, 1].Value = "Numéro de facture :";
                 worksheet.Cells[row, 2].Value = bill.BillNumber;
+                worksheet.Cells[row, 2].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
                 row++;
                 worksheet.Cells[row, 1].Value = "Année :";
                 worksheet.Cells[row, 2].Value = DateTime.Now.Year;
+                worksheet.Cells[row, 2].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
                 row++;
                 worksheet.Cells[row, 1].Value = "Semaine :";
                 worksheet.Cells[row, 2].Value = DateTime.Now.GetIso8601WeekOfYear();
+                worksheet.Cells[row, 2].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
                 row++;
                 worksheet.Cells[row, 1].Value = "Edité le :";
                 worksheet.Cells[row, 2].Value = DateTime.Now.ToString();
+                worksheet.Cells[row, 2].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
                 row++;
                 row++;
                 //Add product informations
@@ -482,6 +488,7 @@ namespace Stolons.Tools
                 worksheet.Cells[row, 5].Value = "QUANTITE ";
                 worksheet.Cells[row, 6].Value = "MONTANT";
                 worksheet.Cells[row, 1, row, 6].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                worksheet.Cells[row, 1, row, 6].Style.Font.Bold = true;
                 row++;
                 int startRow = row;
                 // - Add products
@@ -523,12 +530,12 @@ namespace Stolons.Tools
                 package.Workbook.Properties.Company = "Association Stolons";
                 //Column size
                 worksheet.View.PageLayoutView = true;
-                worksheet.Column(1).Width = (98 - 12 + 5) / 7d + 1;
-                worksheet.Column(2).Width = (98 - 12 + 5) / 7d + 1;
-                worksheet.Column(3).Width = (98 - 12 + 5) / 7d + 1;
-                worksheet.Column(4).Width = (98 - 12 + 5) / 7d + 1;
-                worksheet.Column(5).Width = (98 - 12 + 5) / 7d + 1;
-                worksheet.Column(6).Width = (98 - 12 + 5) / 7d + 1;
+                worksheet.Column(1).Width = (138 - 12 + 5) / 7d + 1;
+                worksheet.Column(2).Width = (90 - 12 + 5) / 7d + 1;
+                worksheet.Column(3).Width = (90 - 12 + 5) / 7d + 1;
+                worksheet.Column(4).Width = (90 - 12 + 5) / 7d + 1;
+                worksheet.Column(5).Width = (90 - 12 + 5) / 7d + 1;
+                worksheet.Column(6).Width = (90 - 12 + 5) / 7d + 1;
                 // save our new workbook and we are done!
                 package.Save();
             }

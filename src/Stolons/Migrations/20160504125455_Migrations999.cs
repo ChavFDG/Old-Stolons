@@ -38,6 +38,7 @@ namespace Stolons.Migrations
                     StockUpdateDayStartDate = table.Column<int>(nullable: false),
                     StockUpdateHourStartDate = table.Column<int>(nullable: false),
                     StockUpdateMinuteStartDate = table.Column<int>(nullable: false),
+                    StolonsAboutPageText = table.Column<string>(nullable: true),
                     StolonsAddress = table.Column<string>(nullable: true),
                     StolonsLabel = table.Column<string>(nullable: true),
                     StolonsMailAdress = table.Column<string>(nullable: true),

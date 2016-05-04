@@ -372,7 +372,9 @@ namespace Stolons
             switch (userType)
             {
                 case Configurations.UserType.Producer:
-                    context.Producers.Add(user as Producer);
+                    Producer producer = user as Producer;
+                    producer.CompanyName = "La ferme de " + producer.Name;
+                    context.Producers.Add(producer);
                     break;
                 case Configurations.UserType.Consumer:
                     context.Consumers.Add(user as Consumer);
