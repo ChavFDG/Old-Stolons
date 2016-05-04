@@ -126,9 +126,15 @@ namespace Stolons.Migrations
 
                     b.Property<int>("StockUpdateMinuteStartDate");
 
+                    b.Property<string>("StolonsAddress");
+
+                    b.Property<string>("StolonsLabel");
+
                     b.Property<string>("StolonsMailAdress");
 
                     b.Property<string>("StolonsMailPassword");
+
+                    b.Property<string>("StolonsPhoneNumber");
 
                     b.HasKey("Id");
                 });

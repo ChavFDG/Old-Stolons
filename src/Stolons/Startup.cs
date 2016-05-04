@@ -130,6 +130,11 @@ namespace Stolons
             else
             {
                 Configurations.ApplicationConfig = new ApplicationConfig();
+                //General
+                Configurations.ApplicationConfig.StolonsLabel = "Association Stolons";
+                Configurations.ApplicationConfig.StolonsAddress = "Chemin de Saint Clair, 07000 PRIVAS";
+                Configurations.ApplicationConfig.StolonsPhoneNumber = "06 64 86 66 93";
+                Configurations.ApplicationConfig.StolonsAboutPageText = @"Stolons est une struture visant à favoriser ....blablabla";
                 //Email
                 Configurations.ApplicationConfig.StolonsMailAdress = "asso.stolons@gmail.com";
                 Configurations.ApplicationConfig.StolonsMailPassword = "ProjectStolons2016";

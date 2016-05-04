@@ -8,8 +8,8 @@ using Stolons.Models;
 namespace Stolons.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20160503142942_BillsMigrations")]
-    partial class BillsMigrations
+    [Migration("20160504123817_Migrations999")]
+    partial class Migrations999
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -127,9 +127,15 @@ namespace Stolons.Migrations
 
                     b.Property<int>("StockUpdateMinuteStartDate");
 
+                    b.Property<string>("StolonsAddress");
+
+                    b.Property<string>("StolonsLabel");
+
                     b.Property<string>("StolonsMailAdress");
 
                     b.Property<string>("StolonsMailPassword");
+
+                    b.Property<string>("StolonsPhoneNumber");
 
                     b.HasKey("Id");
                 });

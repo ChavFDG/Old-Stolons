@@ -392,54 +392,7 @@ namespace Stolons.Tools
                 worksheet.Cells[row, 3].Style.Numberformat.Format = "0.00€";
                 worksheet.Cells[row, 2, row, 3].Style.Font.Bold = true;
                 worksheet.Cells[row, 2, row ,3].Style.Font.Size = 18;
-
-                /*
-                //Format values :
                 
-                using (var range = worksheet.Cells[1, 1, 1, 5])
-                {
-                    range.Style.Font.Bold = true;
-                    range.Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
-                    range.Style.Fill.BackgroundColor.SetColor(System.Drawing.Color.DarkBlue);
-                    range.Style.Font.Color.SetColor(System.Drawing.Color.White);
-                }
-
-                worksheet.Cells["A5:E5"].Style.Border.Top.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
-                worksheet.Cells["A5:E5"].Style.Font.Bold = true;
-
-                worksheet.Cells[5, 3, 5, 5].Formula = string.Format("SUBTOTAL(9,{0})", new OfficeOpenXml.ExcelAddress(2, 3, 4, 3).Address);
-                worksheet.Cells["C2:C5"].Style.Numberformat.Format = "#,##0";
-                worksheet.Cells["D2:E5"].Style.Numberformat.Format = "#,##0.00";
-
-                //Create an autofilter for the range
-                worksheet.Cells["A1:E4"].AutoFilter = true;
-
-                worksheet.Cells["A2:A4"].Style.Numberformat.Format = "@";   //Format as text
-
-                //There is actually no need to calculate, Excel will do it for you, but in some cases it might be useful. 
-                //For example if you link to this workbook from another workbook or you will open the workbook in a program that hasn't a calculation engine or 
-                //you want to use the result of a formula in your program.
-                worksheet.Calculate();
-
-                worksheet.Cells.AutoFitColumns(0);  //Autofit columns for all cells
-                
-                // lets set the header text 
-                worksheet.HeaderFooter.OddHeader.CenteredText = "&24&U&\"Arial,Regular Bold\" Inventory";
-                // add the page number to the footer plus the total number of pages
-                worksheet.HeaderFooter.OddFooter.RightAlignedText =
-                    string.Format("Page {0} of {1}", OfficeOpenXml.ExcelHeaderFooter.PageNumber, OfficeOpenXml.ExcelHeaderFooter.NumberOfPages);
-                // add the sheet name to the footer
-                worksheet.HeaderFooter.OddFooter.CenteredText = OfficeOpenXml.ExcelHeaderFooter.SheetName;
-                // add the file path to the footer
-                worksheet.HeaderFooter.OddFooter.LeftAlignedText = OfficeOpenXml.ExcelHeaderFooter.FilePath + OfficeOpenXml.ExcelHeaderFooter.FileName;
-
-                worksheet.PrinterSettings.RepeatRows = worksheet.Cells["1:2"];
-                worksheet.PrinterSettings.RepeatColumns = worksheet.Cells["A:G"];
-
-                // Change the sheet view to show it in page layout mode
-                worksheet.View.PageLayoutView = true;
-                
-                */
                 // Document properties
                 package.Workbook.Properties.Title = "Facture : " + bill.BillNumber;
                 package.Workbook.Properties.Author = "Stolons";
@@ -486,28 +439,57 @@ namespace Stolons.Tools
                 // add a new worksheet to the empty workbook
                 ExcelWorksheet worksheet = package.Workbook.Worksheets.Add("Facture");
                 //Add global informations
-                worksheet.Cells[1, 1].Value = "Numéro de facture :";
-                worksheet.Cells[1, 2].Value = bill.BillNumber;
-                worksheet.Cells[2, 1].Value = "Année :";
-                worksheet.Cells[2, 2].Value = DateTime.Now.Year;
-                worksheet.Cells[3, 1].Value = "Semaine :";
-                worksheet.Cells[3, 2].Value = DateTime.Now.GetIso8601WeekOfYear();
+                int row = 1;
+                worksheet.Cells[row, 1].Value = Configurations.ApplicationConfig.StolonsLabel;
+                row++;
+                worksheet.Cells[row, 1].Value = Configurations.ApplicationConfig.StolonsAddress;
+                row++;
+                row++;
+                worksheet.Cells[row, 1].Value = Configurations.ApplicationConfig.StolonsMailAdress;
+                row++;
+                worksheet.Cells[row, 6].Value = weekBasket.Consumer.Surname + ", " + weekBasket.Consumer.Name;
+                row++;
+                worksheet.Cells[row, 6].Value = weekBasket.Consumer.Email;
+                row++;
+                worksheet.Cells[row, 1].Value = "Numéro d'adhérent :";
+                worksheet.Cells[row, 2].Value = weekBasket.Consumer.Id;
+                row++;
+                worksheet.Cells[row, 1].Value = "Numéro de facture :";
+                worksheet.Cells[row, 2].Value = bill.BillNumber;
+                row++;
+                worksheet.Cells[row, 1].Value = "Année :";
+                worksheet.Cells[row, 2].Value = DateTime.Now.Year;
+                row++;
+                worksheet.Cells[row, 1].Value = "Semaine :";
+                worksheet.Cells[row, 2].Value = DateTime.Now.GetIso8601WeekOfYear();
+                row++;
+                worksheet.Cells[row, 1].Value = "Edité le :";
+                worksheet.Cells[row, 2].Value = DateTime.Now.ToString();
+                row++;
+                row++;
                 //Add product informations
-                worksheet.Cells[5, 1].Value = "PRODUITS :";
-
+                worksheet.Cells[row, 1, row + 1, 6].Merge = true;
+                worksheet.Cells[row, 1, row + 1, 6].Value = "Produits de votre panier de la semaine";
+                worksheet.Cells[row, 1, row + 1, 6].Style.Font.Bold = true;
+                worksheet.Cells[row, 1, row + 1, 6].Style.Font.Size = 14;
+                row++;
+                row++;
                 // - Add the headers
-                worksheet.Cells[6, 1].Value = "Nom";
-                worksheet.Cells[6, 2].Value = "Famille";
-                worksheet.Cells[6, 3].Value = "Type";
-                worksheet.Cells[6, 4].Value = "Prix unitaire";
-                worksheet.Cells[6, 5].Value = "Quantité";
-                worksheet.Cells[6, 6].Value = "Prix total";
+                worksheet.Cells[row, 1].Value = "NOM";
+                worksheet.Cells[row, 2].Value = "FAMILLE";
+                worksheet.Cells[row, 3].Value = "TYPE";
+                worksheet.Cells[row, 4].Value = "PRIX UNITAIRE";
+                worksheet.Cells[row, 5].Value = "QUANTITE ";
+                worksheet.Cells[row, 6].Value = "MONTANT";
+                worksheet.Cells[row, 1, row, 6].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                row++;
+                int startRow = row;
                 // - Add products
-                int row = 7;
-                foreach(var tmpBillEntry in weekBasket.Products)
+                foreach (var tmpBillEntry in weekBasket.Products)
                 {
                     var billEntry = dbContext.BillEntrys.Include(x => x.Product).ThenInclude(x => x.Familly).First(x => x.Id == tmpBillEntry.Id);
                     worksheet.Cells[row, 1].Value = billEntry.Product.Name;
+                    worksheet.Cells[row, 1].Style.Font.Bold = true;
                     worksheet.Cells[row, 2].Value = billEntry.Product.Familly.FamillyName;
                     worksheet.Cells[row, 3].Value = EnumHelper<Product.SellType>.GetDisplayValue(billEntry.Product.Type);
                     worksheet.Cells[row, 4].Value = billEntry.Product.Price;
@@ -517,59 +499,20 @@ namespace Stolons.Tools
                     worksheet.Cells[row, 6].Style.Numberformat.Format = "0.00€";
                     row++;
                 }
+                worksheet.Cells[startRow - 1, 1, row - 1, 6].Style.Border.BorderAround(ExcelBorderStyle.Thin);
                 //- Add TOTAL
                 worksheet.Cells[row, 5].Value = "TOTAL : ";
-                worksheet.Cells[row, 6].Formula = "TOTAL : ";
+                worksheet.Cells[row, 5].Style.Font.Bold = true;
 
                 //Add a formula for the value-column
-                worksheet.Cells[row,6].Formula = string.Format("SUBTOTAL(9,{0})", new OfficeOpenXml.ExcelAddress(7, 6, row -1, 6).Address);
+                worksheet.Cells[row, 6].Formula = string.Format("SUBTOTAL(9,{0})", new OfficeOpenXml.ExcelAddress(7, 6, row -1, 6).Address);
                 worksheet.Cells[row, 6].Style.Numberformat.Format = "0.00€";
+                worksheet.Cells[row, 6].Style.Font.Bold = true;
 
-                //Format values :
-                /*
-                using (var range = worksheet.Cells[1, 1, 1, 5])
-                {
-                    range.Style.Font.Bold = true;
-                    range.Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
-                    range.Style.Fill.BackgroundColor.SetColor(System.Drawing.Color.DarkBlue);
-                    range.Style.Font.Color.SetColor(System.Drawing.Color.White);
-                }
-
-                worksheet.Cells["A5:E5"].Style.Border.Top.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
-                worksheet.Cells["A5:E5"].Style.Font.Bold = true;
-
-                worksheet.Cells[5, 3, 5, 5].Formula = string.Format("SUBTOTAL(9,{0})", new OfficeOpenXml.ExcelAddress(2, 3, 4, 3).Address);
-                worksheet.Cells["C2:C5"].Style.Numberformat.Format = "#,##0";
-                worksheet.Cells["D2:E5"].Style.Numberformat.Format = "#,##0.00";
-
-                //Create an autofilter for the range
-                worksheet.Cells["A1:E4"].AutoFilter = true;
-
-                worksheet.Cells["A2:A4"].Style.Numberformat.Format = "@";   //Format as text
-
-                //There is actually no need to calculate, Excel will do it for you, but in some cases it might be useful. 
-                //For example if you link to this workbook from another workbook or you will open the workbook in a program that hasn't a calculation engine or 
-                //you want to use the result of a formula in your program.
-                worksheet.Calculate();
-
-                worksheet.Cells.AutoFitColumns(0);  //Autofit columns for all cells
-                
-                // lets set the header text 
-                worksheet.HeaderFooter.OddHeader.CenteredText = "&24&U&\"Arial,Regular Bold\" Inventory";
-                // add the page number to the footer plus the total number of pages
-                worksheet.HeaderFooter.OddFooter.RightAlignedText =
-                    string.Format("Page {0} of {1}", OfficeOpenXml.ExcelHeaderFooter.PageNumber, OfficeOpenXml.ExcelHeaderFooter.NumberOfPages);
-                // add the sheet name to the footer
-                worksheet.HeaderFooter.OddFooter.CenteredText = OfficeOpenXml.ExcelHeaderFooter.SheetName;
-                // add the file path to the footer
-                worksheet.HeaderFooter.OddFooter.LeftAlignedText = OfficeOpenXml.ExcelHeaderFooter.FilePath + OfficeOpenXml.ExcelHeaderFooter.FileName;
-
-                worksheet.PrinterSettings.RepeatRows = worksheet.Cells["1:2"];
-                worksheet.PrinterSettings.RepeatColumns = worksheet.Cells["A:G"];
-
-                // Change the sheet view to show it in page layout mode
-                worksheet.View.PageLayoutView = true;
-                */
+                row++;
+                row++;
+                worksheet.Cells[row, 1].Value = Configurations.ApplicationConfig.OrderDeliveryMessage;
+                worksheet.Cells[row, 1].Style.Font.Bold = true;
 
                 // Document properties
                 package.Workbook.Properties.Title = "Facture : " + bill.BillNumber;
@@ -578,13 +521,17 @@ namespace Stolons.Tools
 
                 // Extended property values
                 package.Workbook.Properties.Company = "Association Stolons";
-
+                //Column size
+                worksheet.View.PageLayoutView = true;
+                worksheet.Column(1).Width = (98 - 12 + 5) / 7d + 1;
+                worksheet.Column(2).Width = (98 - 12 + 5) / 7d + 1;
+                worksheet.Column(3).Width = (98 - 12 + 5) / 7d + 1;
+                worksheet.Column(4).Width = (98 - 12 + 5) / 7d + 1;
+                worksheet.Column(5).Width = (98 - 12 + 5) / 7d + 1;
+                worksheet.Column(6).Width = (98 - 12 + 5) / 7d + 1;
                 // save our new workbook and we are done!
                 package.Save();
-
             }
-
-
             //
             return bill;
         }
