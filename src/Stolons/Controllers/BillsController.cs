@@ -39,23 +39,6 @@ namespace Stolons.Controllers
             return View();//ERROR
         }
 
-        // GET: Bills/Download/5
-        public async Task<IActionResult> Download(string id)
-        {
-            var appUser = await GetCurrentUserAsync();
-            var stolonsUser = _context.StolonsUsers.First(x => x.Email == appUser.Email);
-            if (stolonsUser is Producer)
-            {
-                return View(_context.ProducerBills.Where(x => x.Producer.Email == stolonsUser.Email).OrderBy(x => x.EditionDate).ToList<IBill>());
-            }
-            else if (stolonsUser is Consumer)
-            {
-                return View(_context.ConsumerBills.Where(x => x.Consumer.Email == stolonsUser.Email).OrderBy(x => x.EditionDate).ToList<IBill>());
-            }
-            
-            return View( );
-        }
-
         private async Task<ApplicationUser> GetCurrentUserAsync()
         {
             return await _userManager.FindByIdAsync(HttpContext.User.GetUserId());

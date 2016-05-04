@@ -31,7 +31,7 @@
                     }
                     @if (User.IsInRole(Configurations.Role.Volunteer.ToString()) || User.IsInRole(Configurations.Role.Administrator.ToString()))
                     {
-                        <li><a asp-controller="Weekbasket" asp-action="Baskets">Gérer les paniers</a></li>
+                        <li><a asp-controller="WeekBasketManagement" asp-action="Index">Gérer les paniers</a></li>
                         <li><a asp-controller="Users" asp-action="Index">Adhérents</a></li>
                         <li><a asp-controller="Producers" asp-action="Index">Producteurs</a></li>
                     }

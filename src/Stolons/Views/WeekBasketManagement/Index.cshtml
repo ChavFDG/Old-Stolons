@@ -1,76 +1,167 @@
-﻿@model IEnumerable<Stolons.Models.IBill>
+﻿@model Stolons.ViewModels.WeekBasketManagement.VmWeekBasketManagement
 @using Stolons.Helpers
 @using Stolons.Models
+@using Stolons.Tools
 
 @{
-    ViewData["Title"] = "Gestion des paniers de la semaine";
+    ViewData["Title"] = "Gestion des paniers";
 }
 
-<h2>@ViewData["Title"]</h2>
+<script>
+    function UpdateBillConfirm(name) {
+        if (confirm("Confirmation de changement d'état de la facture de " + name))
+            return true;
+        else
+            return false;
+    }
+</script>
 
+<h2>@ViewData["Title"]</h2>
+@if (Stolons.Configurations.Mode == ApplicationConfig.Modes.Preparation)
+{
+    <h4>Les paniers de la semaine </h4>
+        
+    string fileName = DateTime.Now.Year + "_" + DateTime.Now.GetIso8601WeekOfYear();
+    string downloadPath = "/Bills/Stolons/" + fileName + ".xlsx";
+    <a href=@downloadPath>Télécharger les factures utilisateur de la semaine</a>
+    
+}
+<h4>Producteur ayant une commande à livrer ou à se faire payer cette semaine </h4>
+@if (Model.ProducerBills.Any())
+{
 <table class="table">
     <tr>
         <th>
-            Consomateur
+            Numéro
         </th>
         <th>
-            Producteur
+            Raison social
+        </th>
+        <th>
+            Téléphone
+        </th>
+        <th>
+            Etat
+        </th>
+        <th>
+            Facture
         </th>
     </tr>
-    <tr>
-        <td>
-            <table class="table">
-                <tr>
-                    <th>
-                        @Html.DisplayNameFor(model => model.EditionDate)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.BillNumber)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.State)
-                    </th>
-                    <th>
-                    </th>
-                </tr>
-
-                @foreach (var item in Model)
-                {
-                    <tr>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.EditionDate)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.BillNumber)
-                        </td>
-                        <td>
-                            @(EnumHelper<BillState>.GetDisplayValue(@item.State))
-                        </td>
-                        <td>
-                            @{
-                                string downloadPath = "/Bills/";
-                                if (item.User is Consumer)
-                                {
-                                    downloadPath += "Consumer";
-                                }
-                                if (item.User is Producer)
-                                {
-                                    downloadPath += "Producer";
-                                }
-                                downloadPath += "/" + item.User.Id + "/" + item.BillNumber + ".xlsx";
-                                <a href="@downloadPath">Télécharger</a>
-                            }
-                        </td>
-                    </tr>
+    @foreach (var item in Model.ProducerBills)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Producer.Id)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Producer.CompanyName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Producer.PhoneNumber)
+            </td>
+            <td>
+                @Html.ActionLink((EnumHelper<BillState>.GetDisplayValue(@item.State)),
+                      "UpdateProducerBill",
+                      new { billNumber = item.BillNumber },
+                      new { onclick = " return UpdateBillConfirm(\"" + item.Producer.CompanyName + "\")" })
+            </td>
+            <td>
+                @{
+                    string downloadPath = "/Bills/";
+                    if (item.User is Consumer)
+                    {
+                        downloadPath += "Consumer";
                     }
-            </table>
-        </td>
-        <td>
-
-        </td>
-            
-    </tr>
+                    if (item.User is Producer)
+                    {
+                        downloadPath += "Producer";
+                    }
+                    downloadPath += "/" + item.User.Id + "/" + item.BillNumber + ".xlsx";
+                    <a href="@downloadPath">@item.BillNumber</a>
+                }
+            </td>
+        </tr>
+                    }
 </table>
+}
+else
+{
+<p>Plus de command à livrer ou payer par / aux producteurs</p>
+}
+
+<h4>Adhérents ayant commandé un panier cette semaine</h4>
+@if (Model.ConsumerBills.Any())
+{
+    <table class="table">
+        <tr>
+            <th>
+                Numéro
+            </th>
+            <th>
+                Nom
+            </th>
+            <th>
+                Prénom
+            </th>
+            <th>
+                Téléphone
+            </th>
+            <th>
+                Etat
+            </th>
+            <th>
+                Facture
+            </th>
+        </tr>
+        @foreach (var item in Model.ConsumerBills)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Consumer.Id)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Consumer.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Consumer.Surname)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Consumer.PhoneNumber)
+                </td>
+                <td>
+                    @Html.ActionLink((EnumHelper<BillState>.GetDisplayValue(@item.State)),
+                                 "UpdateConsumerBill",
+                                 new { billNumber = item.BillNumber },
+                                 new { onclick = " return UpdateBillConfirm(\"" + item.Consumer.Name + "\")" })
+                </td>
+                <td>
+                    @{
+                        string downloadPath = "/Bills/";
+                        if (item.User is Consumer)
+                        {
+                            downloadPath += "Consumer";
+                        }
+                        if (item.User is Producer)
+                        {
+                            downloadPath += "Producer";
+                        }
+                        downloadPath += "/" + item.User.Id + "/" + item.BillNumber + ".xlsx";
+                        <a href="@downloadPath">@item.BillNumber</a>
+                    }
+                </td>
+            </tr>
+}
+    </table>
+
+}
+else
+{
+    <p>Plus de panier cette semaine</p>
+}
+
+
+
+
 
 
 

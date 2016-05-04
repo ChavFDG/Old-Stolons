@@ -10,7 +10,7 @@ namespace Stolons.Models
 
     public interface IBill
     {
-        [Display(Name = "Numéro de facture")] //NumAdherant_Annee_Semaine
+        [Display(Name = "Numéro de facture")] //Year_WeekNumber_UserId
         string BillNumber { get; set; }
         [Display(Name = "Utilisateur")]
         User User { get; set; }
@@ -23,7 +23,7 @@ namespace Stolons.Models
     public class ConsumerBill : IBill
     {
         [Key]
-        [Display(Name = "Numéro de facture")] //NumAdherant_Annee_Semaine
+        [Display(Name = "Numéro de facture")] //Year_WeekNumber_UserId
         public string BillNumber { get; set; }
 
         [Display(Name = "Adhérant")]
@@ -53,7 +53,7 @@ namespace Stolons.Models
     public class ProducerBill : IBill
     {
         [Key]
-        [Display(Name = "Numéro de facture")] //NumAdherant_Annee_Semaine
+        [Display(Name = "Numéro de facture")] //Year_WeekNumber_UserId
         public string BillNumber { get; set; }
 
         [Display(Name = "Producteur")]

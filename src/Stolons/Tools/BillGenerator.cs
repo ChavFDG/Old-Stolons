@@ -39,7 +39,9 @@ namespace Stolons.Tools
                     List<IBill> bills = new List<IBill>();
                     Dictionary<Producer, List<BillEntryConsumer>> producerBills = new Dictionary<Producer, List<BillEntryConsumer>>();
                     //Consumer (create bills)
-                    foreach (var weekBasket in dbContext.ValidatedWeekBaskets.Include(x => x.Products).Include(x=>x.Consumer))
+                    List<ValidatedWeekBasket> consumerWeekBaskets = dbContext.ValidatedWeekBaskets.Include(x => x.Products).Include(x => x.Consumer).ToList();
+                    GenerateBill(consumerWeekBaskets,dbContext);
+                    foreach (var weekBasket in consumerWeekBaskets)
                     {
                         //Generate bill for consumer
                         ConsumerBill consumerBill = GenerateBill(weekBasket, dbContext);
@@ -88,9 +90,171 @@ namespace Stolons.Tools
             } while (true);
         }
 
+        private static void GenerateBill(List<ValidatedWeekBasket> consumerWeekBaskets, ApplicationDbContext dbContext)
+        {
+            //Generate exel file with bill number for user
+            #region File creation
+            string filePath = Path.Combine(Configurations.Environment.WebRootPath, Configurations.StolonsBillsStockagePath);
+            string billNumber = DateTime.Now.Year + "_" + DateTime.Now.GetIso8601WeekOfYear();
+            FileInfo newFile = new FileInfo(filePath + @"\" + billNumber + ".xlsx");
+            if (newFile.Exists)
+            {
+                //Normaly impossible
+                newFile.Delete();  // ensures we create a new workbook
+                newFile = new FileInfo(filePath + @"\" + billNumber + ".xlsx");
+            }
+            else
+            {
+                Directory.CreateDirectory(filePath);
+            }
+            #endregion File creation
+            //
+            using (ExcelPackage package = new ExcelPackage(newFile))
+            {
+                if(!consumerWeekBaskets.Any())
+                {
+                    //Rien de commander cette semaine :'(
+                    ExcelWorksheet worksheet = package.Workbook.Worksheets.Add("Rien :'(");
+                    worksheet.Cells[1, 1].Value = "Rien cette semaine ! C'est trop triste :'(";
+                }
+                else
+                {
+                    foreach (ValidatedWeekBasket weekBasket in consumerWeekBaskets.OrderBy(x => x.Consumer.Id))
+                    {
+                        // add a new worksheet to the empty workbook
+                        ExcelWorksheet worksheet = package.Workbook.Worksheets.Add(weekBasket.Consumer.Id.ToString() + " (" + weekBasket.Consumer.Name + ")");
+                        int row = 1;
+                        //Add global informations
+                        worksheet.Cells[row, 1, 8, 3].Merge = true;
+                        worksheet.Cells[row, 1, 8, 3].Value = weekBasket.Consumer.Id;
+                        worksheet.Cells[row, 1, 8, 3].Style.Font.Size = 100;
+                        worksheet.Cells[row, 1, 8, 3].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                        worksheet.Cells[row, 1, 8, 3].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
+
+                        worksheet.Cells[row, 4].Value = "Facture";
+                        worksheet.Cells[row, 5].Value = billNumber;
+                        row++;
+                        worksheet.Cells[row, 4].Value = "Semaine";
+                        worksheet.Cells[row, 5].Value = DateTime.Now.GetIso8601WeekOfYear();
+                        row++;
+                        worksheet.Cells[row, 4].Value = "Nom";
+                        worksheet.Cells[row, 5].Value = weekBasket.Consumer.Name;
+                        row++;
+                        worksheet.Cells[row, 4].Value = "Prénom";
+                        worksheet.Cells[row, 5].Value = weekBasket.Consumer.Surname;
+                        row++;
+                        worksheet.Cells[row, 4].Value = "Téléphone";
+                        worksheet.Cells[row, 5].Value = weekBasket.Consumer.PhoneNumber;
+                        worksheet.Cells[1, 4, row, 4].Style.Font.Bold = true;
+                        worksheet.Cells[1, 5, row, 5].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                        row++;
+                        worksheet.Cells[row, 4, row + 1, 5].Merge = true;
+                        var total = worksheet.Cells[row, 5, row + 1, 6];
+                        total.Merge = true;
+                        worksheet.Cells[row, 4, row + 1, 5].Value = "TOTAL";
+                        worksheet.Cells[row, 4, row + 1, 6].Style.Font.Size = 18;
+                        worksheet.Cells[row, 4, row + 1, 6].Style.Font.Bold = true;
+                        worksheet.Cells[row, 4, row + 1, 6].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                        worksheet.Cells[row, 4, row + 1, 6].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
+                        //Add product informations
+                        row++;
+                        row++;
+                        row++;
+                        worksheet.Cells[row, 1, row, 2].Merge = true;
+                        worksheet.Cells[row, 1, row, 2].Value = "NOM";
+                        worksheet.Cells[row, 3].Value = "TYPE";
+                        worksheet.Cells[row, 4].Value = "PRIX UNITAIRE";
+                        worksheet.Cells[row, 5].Value = "QUANTITE";
+                        worksheet.Cells[row, 6].Value = "PRIX TOTAL";
+
+                        //Create list of bill entry by product
+                        Dictionary<Producer, List<BillEntry>> producersProducts = new Dictionary<Producer, List<BillEntry>>();
+                        foreach (var billEntryConsumer in weekBasket.Products)
+                        {
+                            var billEntry = dbContext.BillEntrys.Include(x => x.Product).ThenInclude(x=>x.Producer).First(x => x.Id == billEntryConsumer.Id);
+                            if (!producersProducts.ContainsKey(billEntry.Product.Producer))
+                            {
+                                producersProducts.Add(billEntry.Product.Producer, new List<BillEntry>());
+                            }
+                            producersProducts[billEntry.Product.Producer].Add(billEntry);
+                        }
+                        List<int> rowsTotal = new List<int>();
+                        // - Add products by producer
+                        foreach (var producer in producersProducts.Keys.OrderBy(x => x.Id))
+                        {
+                            row++;
+                            worksheet.Cells[row, 1, row + 1, 6].Merge = true;
+                            worksheet.Cells[row, 1, row + 1, 6].Value = producer.CompanyName;
+                            worksheet.Cells[row, 1, row + 1, 6].Style.Font.Size = 22;
+                            worksheet.Cells[row, 1, row + 1, 6].Style.Font.Bold = true;
+                            row++;
+                            row++;
+                            int startRow = row;
+                            foreach (var billEntry in producersProducts[producer].OrderBy(x => x.Product.Name))
+                            {
+                                worksheet.Cells[row, 1, row, 2].Merge = true;
+                                worksheet.Cells[row, 1, row, 2].Value = billEntry.Product.Name; ;
+                                worksheet.Cells[row, 3].Value = EnumHelper<Product.SellType>.GetDisplayValue(billEntry.Product.Type);
+                                worksheet.Cells[row, 4].Value = billEntry.Product.Price;
+                                worksheet.Cells[row, 4].Style.Numberformat.Format = "0.00€";
+                                worksheet.Cells[row, 5].Value = billEntry.Quantity;
+                                worksheet.Cells[row, 6].Formula = new ExcelCellAddress(row, 4).Address + "*" + new ExcelCellAddress(row, 5).Address;
+                                worksheet.Cells[row, 6].Style.Numberformat.Format = "0.00€";
+                                worksheet.Cells[row, 1, row, 6].Style.Font.Bold = true;
+                                worksheet.Cells[row, 1, row, 6].Style.Font.Size = 13;
+                                worksheet.Cells[row, 1, row, 6].Style.Border.BorderAround(ExcelBorderStyle.Thin);
+                                row++;
+                            }
+                            //Total
+                            worksheet.Cells[row, 5].Value = "TOTAL : ";
+                            worksheet.Cells[row, 6].Formula = string.Format("SUBTOTAL(9,{0})", new OfficeOpenXml.ExcelAddress(startRow, 6, row - 1, 6).Address);
+                            worksheet.Cells[row, 6].Style.Numberformat.Format = "0.00€";
+                            worksheet.Cells[row, 5, row, 6].Style.Font.Bold = true;
+                            worksheet.Cells[row, 5, row, 6].Style.Font.Size = 13;
+                            worksheet.Cells[row, 5, row, 6].Style.Border.BorderAround(ExcelBorderStyle.Thin);
+                            rowsTotal.Add(row);
+                        }
+
+                        //Super total
+                        string totalFormula = "";
+                        for (int cpt = 0; cpt < rowsTotal.Count; cpt++)
+                        {
+                            totalFormula += new ExcelCellAddress(rowsTotal[cpt], 6).Address;
+                            if (cpt != rowsTotal.Count - 1)
+                            {
+                                totalFormula += "+";
+                            }
+                        }
+                        total.Formula = totalFormula;
+                        total.Style.Numberformat.Format = "0.00€";
+                        //
+                        worksheet.View.PageLayoutView = true;
+                        worksheet.Column(1).Width = (98 - 12 + 5) / 7d + 1;
+                        worksheet.Column(2).Width = (98 - 12 + 5) / 7d + 1;
+                        worksheet.Column(3).Width = (98 - 12 + 5) / 7d + 1;
+                        worksheet.Column(4).Width = (98 - 12 + 5) / 7d + 1;
+                        worksheet.Column(5).Width = (98 - 12 + 5) / 7d + 1;
+                        worksheet.Column(6).Width = (98 - 12 + 5) / 7d + 1;
+                    }
+                }
+             
+
+
+                // Document properties
+                package.Workbook.Properties.Title = "Factures : " + billNumber;
+                package.Workbook.Properties.Author = "Stolons";
+                package.Workbook.Properties.Comments = "Factures des adhérants de la semaine " + billNumber;
+
+                // Extended property values
+                package.Workbook.Properties.Company = "Association Stolons";
+                // save our new workbook and we are done!
+                package.Save();
+            }
+        }
+
         /*
         *BILL NAME INFORMATION
-        *Bills are stored like that : bills\UserId\Year_WeekNumber
+        *Bills are stored like that : bills\UserId\Year_WeekNumber_UserId
         */
 
 
@@ -345,10 +509,12 @@ namespace Stolons.Tools
                     var billEntry = dbContext.BillEntrys.Include(x => x.Product).ThenInclude(x => x.Familly).First(x => x.Id == tmpBillEntry.Id);
                     worksheet.Cells[row, 1].Value = billEntry.Product.Name;
                     worksheet.Cells[row, 2].Value = billEntry.Product.Familly.FamillyName;
-                    worksheet.Cells[row, 3].Value = billEntry.Product.Type;
+                    worksheet.Cells[row, 3].Value = EnumHelper<Product.SellType>.GetDisplayValue(billEntry.Product.Type);
                     worksheet.Cells[row, 4].Value = billEntry.Product.Price;
+                    worksheet.Cells[row, 4].Style.Numberformat.Format = "0.00€";
                     worksheet.Cells[row, 5].Value = billEntry.Quantity;
                     worksheet.Cells[row, 6].Formula = new ExcelCellAddress(row,4).Address +"*" + new ExcelCellAddress(row, 5).Address;
+                    worksheet.Cells[row, 6].Style.Numberformat.Format = "0.00€";
                     row++;
                 }
                 //- Add TOTAL
@@ -357,6 +523,7 @@ namespace Stolons.Tools
 
                 //Add a formula for the value-column
                 worksheet.Cells[row,6].Formula = string.Format("SUBTOTAL(9,{0})", new OfficeOpenXml.ExcelAddress(7, 6, row -1, 6).Address);
+                worksheet.Cells[row, 6].Style.Numberformat.Format = "0.00€";
 
                 //Format values :
                 /*
@@ -425,13 +592,14 @@ namespace Stolons.Tools
         private static T CreateBill<T>(User user) where T : class, IBill , new()
         {
             IBill bill = new T();
-            bill.BillNumber = DateTime.Now.Year + "_" + DateTime.Now.GetIso8601WeekOfYear();
+            bill.BillNumber = DateTime.Now.Year + "_" + DateTime.Now.GetIso8601WeekOfYear() +"_" + user.Id;
             bill.User = user;
             bill.State = BillState.Pending;
             bill.EditionDate = DateTime.Now;
             return bill as T;
         }
 
+        //Exemple de comment générer un ficher exel
         public static void GenerateExel(string filePath)
         {
             FileInfo newFile = new FileInfo(filePath + @"\sample1.xlsx");
@@ -531,7 +699,7 @@ namespace Stolons.Tools
             }
         }
 
-        private static int GetIso8601WeekOfYear(this DateTime time)
+        public static int GetIso8601WeekOfYear(this DateTime time)
         {
             // Seriously cheat.  If its Monday, Tuesday or Wednesday, then it'll 
             // be the same week# as whatever Thursday, Friday or Saturday are,
