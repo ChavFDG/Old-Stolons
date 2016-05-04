@@ -258,7 +258,7 @@
                     </optgroup>
                     @foreach (var productType in Model.ProductTypes)
                     {
-                        <optgroup label="@productType.Name">
+                        <optgroup label="@productType.Name" > 
                             @foreach (var productFamily in productType.ProductFamilly)
                             {
                                 <option value="@productFamily.FamillyName">@productFamily.FamillyName</option>

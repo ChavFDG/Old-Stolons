@@ -170,7 +170,7 @@ namespace Stolons
             CreateProductFamily(context, fresh, "Produits laitiers");
             CreateProductFamily(context, fresh, "Oeufs");
 
-            ProductType bakery = CreateProductType(context, "Boulangerie");
+            ProductType bakery = CreateProductType(context, "Boulangerie", "boulangerie_118.png");
             CreateProductFamily(context, bakery, "Farines");
             CreateProductFamily(context, bakery, "Pains");
 
@@ -187,13 +187,17 @@ namespace Stolons
             context.SaveChanges();
         }
 
-        private ProductType CreateProductType(ApplicationDbContext context, string name)
+        private ProductType CreateProductType(ApplicationDbContext context, string name,string imageName = null)
         {
             ProductType type = context.ProductTypes.FirstOrDefault(x=> x.Name == name);
             if (type == null)
             {
                 type = new ProductType(name);
                 context.ProductTypes.Add(type);
+                if(imageName != null)
+                {
+                    type.Image = Path.Combine(Configurations.ProductsTypeAndFamillyIconsStockagesPath, imageName);
+                }
             }
             return type;
         }
