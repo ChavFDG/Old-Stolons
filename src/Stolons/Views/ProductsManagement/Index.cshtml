@@ -68,7 +68,10 @@
             @Html.DisplayFor(model => item.Price) @("€")
         </th>
         <th>
-            @Html.DisplayFor(model => item.ProductUnit)
+            @if (item.Type != Product.SellType.Piece)
+            {
+                @Html.DisplayFor(model => item.ProductUnit)
+            }
         </th>
         <th>
             @(EnumHelper<Product.SellType>.GetDisplayValue(@item.Type))
