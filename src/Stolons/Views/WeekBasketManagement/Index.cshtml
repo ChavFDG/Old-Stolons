@@ -1,0 +1,76 @@
+﻿@model IEnumerable<Stolons.Models.IBill>
+@using Stolons.Helpers
+@using Stolons.Models
+
+@{
+    ViewData["Title"] = "Gestion des paniers de la semaine";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<table class="table">
+    <tr>
+        <th>
+            Consomateur
+        </th>
+        <th>
+            Producteur
+        </th>
+    </tr>
+    <tr>
+        <td>
+            <table class="table">
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.EditionDate)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.BillNumber)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.State)
+                    </th>
+                    <th>
+                    </th>
+                </tr>
+
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.EditionDate)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.BillNumber)
+                        </td>
+                        <td>
+                            @(EnumHelper<BillState>.GetDisplayValue(@item.State))
+                        </td>
+                        <td>
+                            @{
+                                string downloadPath = "/Bills/";
+                                if (item.User is Consumer)
+                                {
+                                    downloadPath += "Consumer";
+                                }
+                                if (item.User is Producer)
+                                {
+                                    downloadPath += "Producer";
+                                }
+                                downloadPath += "/" + item.User.Id + "/" + item.BillNumber + ".xlsx";
+                                <a href="@downloadPath">Télécharger</a>
+                            }
+                        </td>
+                    </tr>
+                    }
+            </table>
+        </td>
+        <td>
+
+        </td>
+            
+    </tr>
+</table>
+
+
+
