@@ -10,10 +10,14 @@ namespace Stolons.Models
 
     public interface IBill
     {
+        [Display(Name = "Numéro de facture")] //NumAdherant_Annee_Semaine
         string BillNumber { get; set; }
+        [Display(Name = "Utilisateur")]
         User User { get; set; }
+        [Display(Name = "Etat")]
         BillState State { get; set; }
 
+        [Display(Name = "Date d'édition")]
         DateTime EditionDate { get; set; }
     }
     public class ConsumerBill : IBill
@@ -78,8 +82,11 @@ namespace Stolons.Models
 
     public enum BillState
     {
+        [Display(Name = "Edité (attente de livraison / récupération)")]
         Pending = 0,
+        [Display(Name = "Livré (attente de payement)")]
         Delivered = 1,
+        [Display(Name = "Payé")]
         Paid = 2
     }
 }

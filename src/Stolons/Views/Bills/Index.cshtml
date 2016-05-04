@@ -1,4 +1,6 @@
 ﻿@model IEnumerable<Stolons.Models.IBill>
+@using Stolons.Helpers
+@using Stolons.Models
 
 @{
     ViewData["Title"] = "Mes Factures";
@@ -11,19 +13,44 @@
     <table class="table">
         <tr>
             <th>
+                @Html.DisplayNameFor(model => model.EditionDate)
+            </th>
+            <th>
                 @Html.DisplayNameFor(model => model.BillNumber)
             </th>
-            <th></th>
+            <th>
+                @Html.DisplayNameFor(model => model.State)
+            </th>
+            <th>
+            </th>
         </tr>
 
         @foreach (var item in Model)
         {
             <tr>
                 <td>
+                    @Html.DisplayFor(modelItem => item.EditionDate)
+                </td>
+                <td>
                     @Html.DisplayFor(modelItem => item.BillNumber)
                 </td>
                 <td>
-                    <a asp-action="Download" asp-route-id="@item.BillNumber">Télécharger</a>
+                    @(EnumHelper<BillState>.GetDisplayValue(@item.State))
+                </td>
+                <td>
+                    @{
+                        string downloadPath = "/Bills/";
+                        if (item.User is Consumer)
+                        {
+                            downloadPath += "Consumer";
+                        }
+                        if (item.User is Producer)
+                        {
+                            downloadPath += "Producer";
+                        }
+                        downloadPath += "/" + item.User.Id + "/" + item.BillNumber + ".xlsx";
+                        <a href="@downloadPath">Télécharger</a>
+                    }
                 </td>
             </tr>
         }
