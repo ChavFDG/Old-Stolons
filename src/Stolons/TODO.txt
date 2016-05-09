@@ -1,11 +1,13 @@
 ﻿A faire :
 - (1) Ajouter l'envoie de mail après génération des factures (En cours, problème de blocage par google, Nico need)
 - (1) Lors de la validation ou non d'un panier envoyer un mail récapitulatif (En cours, problème de blocage par google, Nico need)
-- (1) Bloquer les pages en fonctions du mode du site et des utilisateurs
-- (1) Dans "mon panier", ajouter le bouton de suppression d'un produit à la place de "DEL"
-- (1) Dans "mon panier", ajouter le total du panier validé
+
 - (1) Dans l'ajout / édition d'un produit vérifier l'éxécution des javascript => BUG 
 - (1) Vérifier le fonctionnement sur les navigateurs des scripts => BUG 
+- (1) Dans "mon panier", ajouter le bouton de suppression d'un produit à la place de "DEL"
+- (1) Dans "mon panier", ajouter le total du panier validé
+- (1) Bloquer les pages en fonctions du mode du site et des utilisateurs
+
 - (2) Faire la page "nos producteurs"
 - (2) Faire la page "nos produits"
 - (3) Intégrer les images de Marion 

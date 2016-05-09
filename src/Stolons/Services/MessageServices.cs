@@ -1,4 +1,5 @@
-﻿using MailKit.Net.Smtp;
+﻿using MailKit;
+using MailKit.Net.Smtp;
 using MimeKit;
 using System;
 using System.Collections.Generic;
@@ -21,10 +22,11 @@ namespace Stolons.Services
                 Text = message
             };
 
-            using (var client = new SmtpClient())
+            using (var client = new SmtpClient(new ProtLogger()))
             {
-                client.Connect("smtp.gmail.com", 465, true);
-
+                client.Connect("smtp.zoho.com", 465, true);
+                
+                client.AuthenticationMechanisms.Remove("XOAUTH2");
                 // Note: only needed if the SMTP server requires authentication
                 client.Authenticate(Configurations.ApplicationConfig.StolonsMailAdress, Configurations.ApplicationConfig.StolonsMailPassword);
 
@@ -38,6 +40,31 @@ namespace Stolons.Services
         {
             // Plug in your SMS service here to send a text message.
             return Task.FromResult(0);
+        }
+    }
+
+    public class ProtLogger : IProtocolLogger
+    {
+        public void Dispose()
+        {
+
+        }
+
+        public void LogClient(byte[] buffer, int offset, int count)
+        {
+            string result = System.Text.Encoding.UTF8.GetString(buffer);
+            Console.WriteLine(result);
+        }
+
+        public void LogConnect(Uri uri)
+        {
+            Console.WriteLine(uri);
+        }
+
+        public void LogServer(byte[] buffer, int offset, int count)
+        {
+            string result = System.Text.Encoding.UTF8.GetString(buffer);
+            Console.WriteLine(result);
         }
     }
 }
