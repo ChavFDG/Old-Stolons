@@ -165,7 +165,7 @@ namespace Stolons.Controllers
                 subject = "Validation partielle de votre panier de la semaine";
 
             }
-            Services.AuthMessageSender.SendEmailAsync(validatedWeekBasket.Consumer.Email, subject, message.ToString());
+            Services.AuthMessageSender.SendEmailAsync(validatedWeekBasket.Consumer.Email, validatedWeekBasket.Consumer.Name, subject, message.ToString());
             //Return view
             return View(new ValidationSummaryViewModel(validatedWeekBasket, unValidBillEntry) { Total = totalPrice });
         }

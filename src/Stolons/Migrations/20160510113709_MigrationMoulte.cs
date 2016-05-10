@@ -4,7 +4,7 @@ using Microsoft.Data.Entity.Migrations;
 
 namespace Stolons.Migrations
 {
-    public partial class Migrations999 : Migration
+    public partial class MigrationMoulte : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -27,6 +27,10 @@ namespace Stolons.Migrations
                 {
                     Id = table.Column<Guid>(nullable: false),
                     IsModeSimulated = table.Column<bool>(nullable: false),
+                    MailApiFrom = table.Column<string>(nullable: true),
+                    MailApiKey = table.Column<string>(nullable: true),
+                    MailBaseUri = table.Column<string>(nullable: true),
+                    MailRequestUri = table.Column<string>(nullable: true),
                     OrderDayStartDate = table.Column<int>(nullable: false),
                     OrderDeliveryMessage = table.Column<string>(nullable: true),
                     OrderHourStartDate = table.Column<int>(nullable: false),
@@ -42,7 +46,6 @@ namespace Stolons.Migrations
                     StolonsAddress = table.Column<string>(nullable: true),
                     StolonsLabel = table.Column<string>(nullable: true),
                     StolonsMailAdress = table.Column<string>(nullable: true),
-                    StolonsMailPassword = table.Column<string>(nullable: true),
                     StolonsPhoneNumber = table.Column<string>(nullable: true)
                 },
                 constraints: table =>

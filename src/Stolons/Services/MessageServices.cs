@@ -4,36 +4,35 @@ using MimeKit;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace Stolons.Services
 {
     public static class AuthMessageSender 
     {
-        public static Task SendEmailAsync(string destinationMail, string subject, string message)
+        /// <summary>
+        /// Info : http://www.elanderson.net/2016/02/emails-using-mailgun-in-asp-net-core/
+        /// </summary>
+        public static async Task SendEmailAsync(string email, string name, string subject, string message)
         {
-            var mineMessage = new MimeMessage();
-            mineMessage.From.Add(new MailboxAddress("Association Stolons", Configurations.ApplicationConfig.StolonsMailAdress));
-            mineMessage.To.Add(new MailboxAddress(destinationMail, destinationMail));
-            mineMessage.Subject = subject;
-
-            mineMessage.Body = new TextPart("plain")
+            using (var client = new HttpClient { BaseAddress = new Uri(Configurations.ApplicationConfig.MailBaseUri) })
             {
-                Text = message
-            };
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic",
+                    Convert.ToBase64String(Encoding.Unicode.GetBytes(Configurations.ApplicationConfig.MailApiKey)));
 
-            using (var client = new SmtpClient(new ProtLogger()))
-            {
-                client.Connect("smtp.zoho.com", 465, true);
-                
-                client.AuthenticationMechanisms.Remove("XOAUTH2");
-                // Note: only needed if the SMTP server requires authentication
-                client.Authenticate(Configurations.ApplicationConfig.StolonsMailAdress, Configurations.ApplicationConfig.StolonsMailPassword);
+                var content = new FormUrlEncodedContent(new[]
+                {
+                    new KeyValuePair<string, string>("from", Configurations.ApplicationConfig.MailApiFrom),
+                    new KeyValuePair<string, string>("to", name+"<"+email+">"),
+                    new KeyValuePair<string, string>("subject", subject),
+                    new KeyValuePair<string, string>("text", message)
+                });
 
-                client.Send(mineMessage);
-                client.Disconnect(true);
+                await client.PostAsync(Configurations.ApplicationConfig.MailRequestUri, content).ConfigureAwait(false);
             }
-            return Task.FromResult(0);
         }
 
         public static Task SendSmsAsync(string number, string message)
@@ -42,29 +41,5 @@ namespace Stolons.Services
             return Task.FromResult(0);
         }
     }
-
-    public class ProtLogger : IProtocolLogger
-    {
-        public void Dispose()
-        {
-
-        }
-
-        public void LogClient(byte[] buffer, int offset, int count)
-        {
-            string result = System.Text.Encoding.UTF8.GetString(buffer);
-            Console.WriteLine(result);
-        }
-
-        public void LogConnect(Uri uri)
-        {
-            Console.WriteLine(uri);
-        }
-
-        public void LogServer(byte[] buffer, int offset, int count)
-        {
-            string result = System.Text.Encoding.UTF8.GetString(buffer);
-            Console.WriteLine(result);
-        }
-    }
+   
 }

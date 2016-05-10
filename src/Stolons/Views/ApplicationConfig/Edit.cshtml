@@ -50,10 +50,31 @@
             </div>
         </div>
         <div class="form-group">
-            <label asp-for="StolonsMailPassword" class="col-md-2 control-label"></label>
+            <label asp-for="MailApiKey" class="col-md-2 control-label"></label>
             <div class="col-md-10">
-                <input asp-for="StolonsMailPassword" class="form-control" />
-                <span asp-validation-for="StolonsMailPassword" class="text-danger" />
+                <input asp-for="MailApiKey" class="form-control" />
+                <span asp-validation-for="MailApiKey" class="text-danger" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="MailApiFrom" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="MailApiFrom" class="form-control" />
+                <span asp-validation-for="MailApiFrom" class="text-danger" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="MailBaseUri" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="MailBaseUri" class="form-control" />
+                <span asp-validation-for="MailBaseUri" class="text-danger" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="MailRequestUri" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="MailRequestUri" class="form-control" />
+                <span asp-validation-for="MailRequestUri" class="text-danger" />
             </div>
         </div>
 
