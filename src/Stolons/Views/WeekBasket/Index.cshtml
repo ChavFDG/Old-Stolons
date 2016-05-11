@@ -25,8 +25,7 @@
 
     $("tr.billEntry").livequery(function () {
         TrAdded($(this));
-    }
-    , function () {
+    }, function () {
     });
 
     $(document).ready(function () {
@@ -82,16 +81,20 @@
                     weekBasketId: '@(Model.TempWeekBasket.Id.ToString())'
                 },
                 type: 'post',
-                success: function (response) {
+		success: function (response) {
+		    if (!response) {
+		       return;
+		    }
+	            var productId = response.Product.Id;
                     loadingDiv.css("display", "none");
                     qtyChangerDiv.css("display", "inline");
 
                     if (response.Quantity === response.Product.RemainingStock) {
-                        //Maximum atteint, desactivaton du '+'.
-                        $('a.plus[data-productId=' + productId + ']').css("display", "none");
+			//Maximum atteint, desactivaton du '+'.
+			console.log("jquery elem: ", $('a.plus[data-productId=' + productId + ']'));
+			console.log("productId = ", productId);
+			$('a.plus[data-productId=' + productId + ']').css("display", "none");
                     }
-
-                    var productId = response.Product.Id;
                     var spans = $('span.quantity[data-productId=' + productId + ']');
                     for (i = 0; i < spans.length; i++) {
                         spans[i].textContent = response.Quantity;
@@ -229,11 +232,11 @@
                         <th>
                             <span class="quantity" data-productId="@entry.ProductId">@entry.Quantity</span>
                         </th>
-                        <th>f
+                        <th>
                             <span class="subTotalPrice" data-productId="@entry.ProductId">@(entry.Quantity * entry.Product.Price)€</span>
                         </th>
                         <th>
-                            Del
+                            x
                         </th>
                     </tr>
                 }
@@ -297,6 +300,9 @@
             </div>
             @foreach (Product product in Model.Products)
             {
+	    
+	    var TmpBillQuantity = Model.TempWeekBasket.Products.Any(x => x.Product.Id == product.Id) ? Model.TempWeekBasket.Products.First(x => x.Product.Id == product.Id).Quantity : 1;
+
                 <div class="product" data-familly="@product.Familly.FamillyName" data-productname="@product.Name" data-productId="@product.Id">
                     <div class="product-top">
                         <div class="pr_img product-top">
@@ -327,18 +333,18 @@
                                 </span>
                                 <span class="pr_priceQuantity">
                                  <b>
-                                @(product.Price + "€")
-                                </b>
-                                @if (product.Type == Product.SellType.Piece)
-                                {
-                                    @(" la pièce")
-                                }
-                                else
-                                {
-                                    @(" / " + product.ProductUnit.ToString())
-                                }
+                                   @(product.Price + "€")
+                                 </b>
+                                 @if (product.Type == Product.SellType.Piece)
+                                 {
+				 @(" la pièce")
+                                 }
+                                 else
+                                 {
+                                 @(" / " + product.ProductUnit.ToString())
+                                 }
                                 </span>
-                          </div>
+                            </div>
                         </div>
                         <div class="pr_actions">
                             <div class="addProduct" data-productId="@product.Id">
@@ -348,10 +354,13 @@
                                 <a href="" class="minus" data-productId="@product.Id">
                                     <img src="@Configurations.GetUrl("/images/basket-remove.png")" />
                                 </a>
-                                <span class="quantity" data-productId="@product.Id">@(Model.TempWeekBasket.Products.Any(x => x.Product.Id == product.Id) ? Model.TempWeekBasket.Products.First(x => x.Product.Id == product.Id).Quantity : 1) </span>
-                                <a href="" class="plus" data-productId="@product.Id" >
-                                    <img src="@Configurations.GetUrl("/images/basket-add.png")" />
-                                </a>
+                                <span class="quantity" data-productId="@product.Id"> @TmpBillQuantity </span>
+				    @if (TmpBillQuantity < product.RemainingStock && product.RemainingStock > 0)
+				    {
+					<a href="" class="plus" data-productId="@product.Id">
+					  <img src="@Configurations.GetUrl("/images/basket-add.png")" />
+					</a>
+				    }
                             </div>
                             <div class="productQuantityLoading" data-productId="@product.Id" style="display: none;">
                                 <span class="glyphicon glyphicon-refresh glyphicon-refresh-animate">
@@ -366,6 +375,8 @@
 
     @foreach (Product product in Model.Products)
     {
+
+	var TmpBillQuantity = Model.TempWeekBasket.Products.Any(x => x.Product.Id == product.Id) ? Model.TempWeekBasket.Products.First(x => x.Product.Id == product.Id).Quantity : 1;
 
         <div id="productModal-@product.Id" class="productModal modal fade">
             <div class="modal-dialog">
@@ -439,7 +450,7 @@
                                 <a href="" class="minus" data-productId="@product.Id">
                                     <img src="@Configurations.GetUrl("/images/basket-remove.png")" />
                                 </a>
-                                <span class="quantity" data-productId="@product.Id">@(Model.TempWeekBasket.Products.Any(x => x.Product.Id == product.Id) ? Model.TempWeekBasket.Products.First(x => x.Product.Id == product.Id).Quantity : 1) </span>
+                                <span class="quantity" data-productId="@product.Id">@TmpBillQuantity</span>
                                 <a href="#" class="plus" data-productId="@product.Id">
                                     <img src="@Configurations.GetUrl("/images/basket-add.png")" />
                                 </a>
