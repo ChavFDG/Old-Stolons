@@ -26,8 +26,75 @@
     <a href=@downloadPath>Télécharger les factures utilisateur de la semaine</a>
     
 }
-<h4>Producteur ayant une commande à livrer ou à se faire payer cette semaine </h4>
-@if (Model.ProducerBills.Any())
+
+
+<h4>Facture à régler aux producteurs </h4>
+@if (Model.ProducerBills.Any(x => x.State == BillState.Delivered))
+{
+    <table class="table">
+        <tr>
+            <th>
+                Numéro
+            </th>
+            <th>
+                Raison social
+            </th>
+            <th>
+                Téléphone
+            </th>
+            <th>
+                Etat
+            </th>
+            <th>
+                Facture
+            </th>
+        </tr>
+        @foreach (var item in Model.ProducerBills.Where(x => x.State == BillState.Delivered))
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Producer.Id)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Producer.CompanyName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Producer.PhoneNumber)
+                </td>
+                <td>
+                    @Html.ActionLink("Valider la payement de la facture",
+                      "UpdateProducerBill",
+                      new { billNumber = item.BillNumber },
+                      new { onclick = " return UpdateBillConfirm(\"" + item.Producer.CompanyName + "\")" })
+                </td>
+                <td>
+                    @{
+                        string downloadPath = "/Bills/";
+                        if (item.User is Consumer)
+                        {
+                            downloadPath += "Consumer";
+                        }
+                        if (item.User is Producer)
+                        {
+                            downloadPath += "Producer";
+                        }
+                        downloadPath += "/" + item.User.Id + "/" + item.BillNumber + ".xlsx";
+                        <a href="@downloadPath">@item.BillNumber</a>
+                    }
+                </td>
+            </tr>
+            }
+    </table>
+}
+else
+{
+    <p>Aucune facture à régler</p>
+}
+
+
+
+<h4>Producteur ayant une commande à livrer cette semaine </h4>
+@if (Model.ProducerBills.Any(x => x.State == BillState.Pending))
 {
 <table class="table">
     <tr>
@@ -47,7 +114,7 @@
             Facture
         </th>
     </tr>
-    @foreach (var item in Model.ProducerBills)
+    @foreach (var item in Model.ProducerBills.Where(x => x.State == BillState.Pending))
     {
         <tr>
             <td>
@@ -60,7 +127,7 @@
                 @Html.DisplayFor(modelItem => item.Producer.PhoneNumber)
             </td>
             <td>
-                @Html.ActionLink((EnumHelper<BillState>.GetDisplayValue(@item.State)),
+                @Html.ActionLink("Valider la livraison",
                       "UpdateProducerBill",
                       new { billNumber = item.BillNumber },
                       new { onclick = " return UpdateBillConfirm(\"" + item.Producer.CompanyName + "\")" })
@@ -81,7 +148,7 @@
                 }
             </td>
         </tr>
-                    }
+    }
 </table>
 }
 else
@@ -129,7 +196,7 @@ else
                     @Html.DisplayFor(modelItem => item.Consumer.PhoneNumber)
                 </td>
                 <td>
-                    @Html.ActionLink((EnumHelper<BillState>.GetDisplayValue(@item.State)),
+                    @Html.ActionLink("Valider la récupération et le payement",
                                  "UpdateConsumerBill",
                                  new { billNumber = item.BillNumber },
                                  new { onclick = " return UpdateBillConfirm(\"" + item.Consumer.Name + "\")" })

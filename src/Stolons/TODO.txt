@@ -1,13 +1,21 @@
 ﻿A faire :
+Damien
 - (1) Ajouter l'envoie de mail après génération des factures (En cours, problème de blocage par google, Nico need)
 - (1) Lors de la validation ou non d'un panier envoyer un mail récapitulatif (En cours, problème de blocage par google, Nico need)
-
-- (1) Dans l'ajout / édition d'un produit vérifier l'éxécution des javascript => BUG 
-- (1) Vérifier le fonctionnement sur les navigateurs des scripts => BUG 
-- (1) Dans "mon panier", ajouter le bouton de suppression d'un produit à la place de "DEL"
-- (1) Dans "mon panier", ajouter le total du panier validé
 - (1) Bloquer les pages en fonctions du mode du site et des utilisateurs
+Nico
+- (1) Ne pas afficher direct le panier en modifier, mais devoir appuyer sur un bouton ( ou au pire le + et - ) pour le faire apparaitre. Si bouton inactiver le + et - des produits
+- (1) Bug sur la disparition du bouton de Stock lors d'un panier déjà valider. Exemple 5 unité de pain validé , 5 en stock = possibilité d'aller jusqu'à 10 en tout.
+- (1) Dans l'ajout / édition d'un produit vérifier l'éxécution des javascript => BUG 
+- (1) Vérifier le fonctionnement sur les navigateurs des scripts => BUG (bug avec chrome) => Production pas production le javascript
+- (2) Dans "mon panier", ajouter le bouton de suppression d'un produit à la place de "DEL"
+- (2) Dans "mon panier", ajouter le total du panier validé
+- (1) Quand le stock d'un produit est à 0, je peux quand même l'ajouter
+- (1) On peut valider son panier quand on a rien dedant
+- (2) Quand le panier en cours est vide il faudrait qu'il y ai écrit "Annulé son panier" à la place de "Valider son panier" 
 
+
+Plus tard
 - (2) Faire la page "nos producteurs"
 - (2) Faire la page "nos produits"
 - (3) Intégrer les images de Marion 
@@ -17,3 +25,5 @@ Fait :
 - (1) Faire la page "Gérer les paniers" => Ok c'est bon
 - (1) Faire la page "qui sommes-nous" => Fait rapidement mais pour l'instant ça devrait suffir, il faudra à terme faire une vraie présentation
 - (3) Refaire la facture utilisateur en plus beau ( car elle est bien moche !) => Ok c'est bon
+- (2) Dans Le recap de Mon panier validé ou non, faire un lien de retour à la modification du panier ( "Cliquer ici pour modifier le panier")=> Avec moulte correction de bug sur la validation du panier
+- (2) Dans gerer les panier, séparer les facture producteur à payer de à livrer

@@ -95,80 +95,106 @@ namespace Stolons.Controllers
         }
 
         [HttpPost, ActionName("ValidateBasket")]
-        public IActionResult ValidateBasket(string basketId)
+        public async Task<IActionResult> ValidateBasket(string basketId)
         {
             TempWeekBasket tempWeekBasket = _context.TempsWeekBaskets.Include(x => x.Products).Include(x=>x.Consumer).First(x => x.Id.ToString() == basketId);
+            tempWeekBasket.RetrieveProducts(_context);
             ValidatedWeekBasket validatedWeekBasket = _context.ValidatedWeekBaskets.Include(x => x.Consumer).Include(x => x.Products).FirstOrDefault(x => x.Consumer.Id == tempWeekBasket.Consumer.Id);
+            bool newBasket = false;
             if (validatedWeekBasket == null)
             {
+                newBasket = true;
                 //First validation of the week
                 validatedWeekBasket = new ValidatedWeekBasket();
                 validatedWeekBasket.Products = new List<BillEntry>();
                 validatedWeekBasket.Consumer = tempWeekBasket.Consumer;
                 _context.Add(validatedWeekBasket);
             }
+            else
+            {
+                validatedWeekBasket.RetrieveProducts(_context);
+            }
             List<BillEntry> unValidBillEntry = new List<BillEntry>();
             float totalPrice = 0;
             //LOCK to prevent multi insert at this momment
-            foreach(BillEntry billEntry in tempWeekBasket.Products.ToList())
+            if(tempWeekBasket.Products.Any())
             {
-                Product product = _context.Products.First(x => x.Id == billEntry.ProductId);
-                BillEntry validatedBillEntry = validatedWeekBasket.Products.FirstOrDefault(x => x.ProductId == product.Id);
-                int realQuantity = billEntry.Quantity;
-                if (validatedBillEntry != null)
-                    realQuantity = billEntry.Quantity - validatedBillEntry.Quantity;
-                //There is enouth stock
-                if (billEntry.Quantity <= product.RemainingStock)
+                foreach (BillEntry billEntry in tempWeekBasket.Products.ToList())
                 {
-                    //On met ï¿½ jour le panier valide
-                    if(validatedBillEntry == null)
+                    BillEntry validatedBillEntry = validatedWeekBasket.Products.FirstOrDefault(x => x.ProductId == billEntry.ProductId);
+                    int realQuantity = billEntry.Quantity;
+                    int alreadyTakenQuantity = 0;
+                    if (validatedBillEntry != null)
                     {
-                        validatedWeekBasket.Products.Add(billEntry.Clone());
+                        realQuantity = billEntry.Quantity - validatedBillEntry.Quantity;
+                        alreadyTakenQuantity = validatedBillEntry.Quantity;
                     }
+                    //There is enouth stock
+                    if (billEntry.Quantity <= billEntry.Product.RemainingStock + alreadyTakenQuantity)
+                    {
+                        //On met à jour le panier valide
+                        if (validatedBillEntry == null)
+                        {
+                            //C'est un nouveau panier, il n'existe pas donc on l'ajoute, sinon c'est que le produit a été supprimé !
+                            if (newBasket)
+                                validatedWeekBasket.Products.Add(billEntry.Clone());
+                        }
+                        else
+                        {
+                            validatedBillEntry.Quantity = billEntry.Quantity;
+                        }
+                        billEntry.Product.RemainingStock = billEntry.Product.RemainingStock - realQuantity;
+                        totalPrice += billEntry.Quantity * billEntry.Product.Price;
+                    }
+                    //Not enouth stock, we don't valid this product
                     else
                     {
-                        validatedBillEntry.Quantity = billEntry.Quantity;
+                        unValidBillEntry.Add(billEntry);
                     }
-                    product.RemainingStock = product.RemainingStock - realQuantity;
-                    totalPrice += billEntry.Quantity * product.Price;
                 }
-                //Not enouth stock, we don't valid this product
+                _context.SaveChanges();
+                //END LOCK
+                //Send email to user
+                string subject;
+                StringBuilder message = new StringBuilder();
+                if (unValidBillEntry.Count == 0)
+                {
+                    subject = "Validation total de votre panier de la semaine";
+                    message.Append("Votre panier vient d'être validé avec succés.");
+                    message.AppendLine(Configurations.ApplicationConfig.OrderDeliveryMessage);
+                    message.AppendLine();
+                    message.AppendLine("Résumé de votre panier");
+                    message.AppendLine("PRODUIT\t\tQuantité\tPrix\tTotal");
+                    float total = 0;
+                    foreach (BillEntry entry in validatedWeekBasket.Products)
+                    {
+                        message.AppendLine(entry.Product.Name + "\t\t" + entry.Quantity + "t" + entry.Product.Price + "€\t" + entry.Quantity * entry.Product.Price + "€");
+                        total = total + (entry.Quantity * entry.Product.Price);
+                    }
+                    message.AppendLine("\t\t\t\t TOTAL : " + total + "€");
+
+                }
                 else
                 {
-                    unValidBillEntry.Add(billEntry);
+                    subject = "Validation partielle de votre panier de la semaine";
+                    //TODO
                 }
-            }
-            _context.SaveChanges();
-            //END LOCK
-            //Send email to user
-            string subject;
-            StringBuilder message = new StringBuilder();
-            if(unValidBillEntry.Count == 0)
-            {
-                subject = "Validation total de votre panier de la semaine";
-                message.Append("Votre panier vient d'être validé avec succés.");
-                message.AppendLine(Configurations.ApplicationConfig.OrderDeliveryMessage);
-                message.AppendLine();
-                message.AppendLine("Résumé de votre panier");
-                message.AppendLine("PRODUIT\t\tQuantité\tPrix\tTotal");
-                float total = 0;
-                foreach(BillEntry entry in validatedWeekBasket.Products)
-                {
-                    message.AppendLine(entry.Product.Name + "\t\t" + entry.Quantity + "t" + entry.Product.Price +"€\t"+ entry.Quantity* entry.Product.Price +"€");
-                    total = total + (entry.Quantity * entry.Product.Price);
-                }
-                message.AppendLine("\t\t\t\t TOTAL : " + total + "€");
-
+                await Services.AuthMessageSender.SendEmailAsync(validatedWeekBasket.Consumer.Email, validatedWeekBasket.Consumer.Name, subject, message.ToString());
+                //Return view
+                return View(new ValidationSummaryViewModel(validatedWeekBasket, unValidBillEntry) { Total = totalPrice });
             }
             else
             {
-                subject = "Validation partielle de votre panier de la semaine";
-
+                //Il ne commande rien du tout
+                //On lui signale
+                await Services.AuthMessageSender.SendEmailAsync(validatedWeekBasket.Consumer.Email, validatedWeekBasket.Consumer.Name, "Panier de la semaine annulé","Votre panier de la semaine a été annulé.");
+                _context.Remove(tempWeekBasket);
+                _context.Remove(validatedWeekBasket);
+                _context.SaveChanges();
+                return View();
             }
-            Services.AuthMessageSender.SendEmailAsync(validatedWeekBasket.Consumer.Email, validatedWeekBasket.Consumer.Name, subject, message.ToString());
-            //Return view
-            return View(new ValidationSummaryViewModel(validatedWeekBasket, unValidBillEntry) { Total = totalPrice });
         }
+
 
         private async Task<ApplicationUser> GetCurrentUserAsync()
         {
