@@ -10,6 +10,7 @@ using Microsoft.Data.Entity;
 using System.Globalization;
 using OfficeOpenXml.Style;
 using Stolons.Helpers;
+using Stolons.Services;
 
 namespace Stolons.Tools
 {
@@ -64,18 +65,36 @@ namespace Stolons.Tools
                     {
                         //Generate bill for producer
                         ProducerBill bill = GenerateBill(producerBill.Key, producerBill.Value, dbContext);
-                        bills.Add(bill);
                         dbContext.Add(bill);
-                        //Send email to producer
-                        //TODO
-
+                        //Send mail to producer
+                        AuthMessageSender.SendEmail(bill.Producer.Email, 
+                                                        bill.Producer.CompanyName,
+                                                        "Votre commande de la semaine (Facture "+ bill.BillNumber +")",
+                                                        "<h3>En pièce jointe votre commande de la semaine (Facture " + bill.BillNumber + ")</h3>", 
+                                                        File.ReadAllBytes(bill.GetFilePath()),
+                                                        "Facture "+ bill.BillNumber +".xlsx");
+                    }
+                    // => Producer, send mails
+                    foreach (var producer in dbContext.Producers.Where(x=> !producerBills.Keys.Contains(x)))
+                    {
+                        //Un mail à tout les producteurs n'ayant pas de commande
+                        AuthMessageSender.SendEmail(producer.Email, producer.CompanyName, "Aucune commande cette semaine", "<h3>Vous n'avez pas de commande cette semaine</h3>");
                     }
                     //Bills (save bills and send mails to user)
                     foreach(var bill in bills)
                     {
                         dbContext.Add(bill);
                         //Send mail to user with bill
-                        //TODO
+                        string message = "<h3>"+Configurations.ApplicationConfig.OrderDeliveryMessage+"</h3>";
+                        message += "<br/>";
+                        message += "<h4>En pièce jointe votre commande de la semaine (Facture " + bill.BillNumber + ")</h4>";
+
+                        AuthMessageSender.SendEmail(bill.User.Email,
+                                                        bill.User.Name,
+                                                        "Votre commande de la semaine (Facture " + bill.BillNumber + ")", 
+                                                        message,
+                                                        File.ReadAllBytes(bill.GetFilePath()),
+                                                        "Facture " + bill.BillNumber + ".xlsx");
                     }
                     //Remove week basket
                     dbContext.TempsWeekBaskets.Clear();
@@ -88,6 +107,14 @@ namespace Stolons.Tools
                 lastMode = currentMode;
                 Thread.Sleep(5000);
             } while (true);
+        }
+
+        private static string GetFilePath(this IBill bill)
+        {
+            return Path.Combine(Configurations.Environment.WebRootPath,
+                                            bill.User is Producer ? Configurations.ProducersBillsStockagePath : Configurations.ConsumersBillsStockagePath,
+                                            bill.User.Id.ToString(),
+                                            bill.BillNumber + ".xlsx");
         }
 
         private static void GenerateBill(List<ValidatedWeekBasket> consumerWeekBaskets, ApplicationDbContext dbContext)

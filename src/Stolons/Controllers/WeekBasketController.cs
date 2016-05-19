@@ -168,7 +168,7 @@ namespace Stolons.Controllers
                     subject = "Validation partielle de votre panier de la semaine";
                 }
                 ValidationSummaryViewModel validationSummaryViewModel = new ValidationSummaryViewModel(validatedWeekBasket, unValidBillEntry) { Total = totalPrice };
-                await Services.AuthMessageSender.SendEmailAsync(validatedWeekBasket.Consumer.Email, validatedWeekBasket.Consumer.Name, subject, base.RenderPartialViewToString("ValidateBasket", validationSummaryViewModel));
+                Services.AuthMessageSender.SendEmail(validatedWeekBasket.Consumer.Email, validatedWeekBasket.Consumer.Name, subject, base.RenderPartialViewToString("ValidateBasket", validationSummaryViewModel));
                 //Return view
                 return View(validationSummaryViewModel);
             }
@@ -176,7 +176,7 @@ namespace Stolons.Controllers
             {
                 //Il ne commande rien du tout
                 //On lui signale
-                await Services.AuthMessageSender.SendEmailAsync(validatedWeekBasket.Consumer.Email, validatedWeekBasket.Consumer.Name, "Panier de la semaine annule", base.RenderPartialViewToString("ValidateBasket", null));
+                Services.AuthMessageSender.SendEmail(validatedWeekBasket.Consumer.Email, validatedWeekBasket.Consumer.Name, "Panier de la semaine annule", base.RenderPartialViewToString("ValidateBasket", null));
                 _context.Remove(tempWeekBasket);
                 _context.Remove(validatedWeekBasket);
                 _context.SaveChanges();

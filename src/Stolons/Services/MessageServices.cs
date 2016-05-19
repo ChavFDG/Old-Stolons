@@ -18,13 +18,15 @@ namespace Stolons.Services
         /// MAIL KIT
         /// Info : http://dotnetthoughts.net/how-to-send-emails-from-aspnet-core/
         /// </summary>
-        public static async Task SendEmailAsync(string email, string name, string subject, string message)
+        public static void SendEmail(string email, string name, string subject, string message,byte[] attachment = null,string attachmentName ="Facture")
         {
             var mimeMessage = new MimeMessage();
             mimeMessage.From.Add(new MailboxAddress(Configurations.ApplicationConfig.StolonsLabel, Configurations.ApplicationConfig.MailAddress));
             mimeMessage.To.Add(new MailboxAddress(name, email));
             mimeMessage.Subject = subject;
             var bodyBuilder = new BodyBuilder();
+            if(attachment != null)
+                bodyBuilder.Attachments.Add(attachmentName,attachment);
             bodyBuilder.HtmlBody = message;
             mimeMessage.Body = bodyBuilder.ToMessageBody();
             try

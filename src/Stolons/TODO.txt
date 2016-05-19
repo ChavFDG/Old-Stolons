@@ -1,7 +1,5 @@
 ﻿A faire :
 Damien
-- (1) Ajouter l'envoie de mail après génération des factures (En cours, problème de blocage par google, Nico need)
-- (1) Lors de la validation ou non d'un panier envoyer un mail récapitulatif (En cours, problème de blocage par google, Nico need)
 - (1) Bloquer les pages en fonctions du mode du site et des utilisateurs
 Nico
 - (1) Ne pas afficher direct le panier en modifier, mais devoir appuyer sur un bouton ( ou au pire le + et - ) pour le faire apparaitre. Si bouton inactiver le + et - des produits
@@ -23,6 +21,8 @@ Plus tard
 Fait :
 - (1) Faire la page "mes factures" => Ok c'est bon
 - (1) Faire la page "Gérer les paniers" => Ok c'est bon
+- (1) Ajouter l'envoie de mail après génération des factures => Ok c'est bon 
+- (1) Lors de la validation ou non d'un panier envoyer un mail récapitulatif => Ok c'est bon 
 - (1) Faire la page "qui sommes-nous" => Fait rapidement mais pour l'instant ça devrait suffir, il faudra à terme faire une vraie présentation
 - (3) Refaire la facture utilisateur en plus beau ( car elle est bien moche !) => Ok c'est bon
 - (2) Dans Le recap de Mon panier validé ou non, faire un lien de retour à la modification du panier ( "Cliquer ici pour modifier le panier")=> Avec moulte correction de bug sur la validation du panier
