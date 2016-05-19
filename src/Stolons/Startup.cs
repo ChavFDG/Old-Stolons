@@ -136,11 +136,10 @@ namespace Stolons
                 Configurations.ApplicationConfig.StolonsPhoneNumber = "06 64 86 66 93";
                 Configurations.ApplicationConfig.StolonsAboutPageText = @"Stolons est une struture visant à favoriser ....blablabla";
                 //Email
-                Configurations.ApplicationConfig.StolonsMailAdress = "asso.stolons@gmail.com";
-                Configurations.ApplicationConfig.MailApiKey = @"api:key-13424ca9c66baa778b313ebeeecff32d";
-                Configurations.ApplicationConfig.MailBaseUri = @"https://api.mailgun.net/v3/";
-                Configurations.ApplicationConfig.MailRequestUri = @"sandboxa6e41e1cd0da41f68488709c985d8a2e.mailgun.org/messages";
-                Configurations.ApplicationConfig.MailApiFrom = @"Association Stolons <postmaster@sandboxa6e41e1cd0da41f68488709c985d8a2e.mailgun.org>";
+                Configurations.ApplicationConfig.MailAddress = "asso.stolons@gmail.com";
+                Configurations.ApplicationConfig.MailPassword = "ProjectStolons2016";
+                Configurations.ApplicationConfig.MailSmtp = "smtp.gmail.com";
+                Configurations.ApplicationConfig.MailPort= 587;
                 //Message
                 Configurations.ApplicationConfig.OrderDeliveryMessage= "Votre panier est disponible jeudi de 16h à 20 au : chemin de Saint Clair 07000 PRIVAS";
                 //Préparation commande

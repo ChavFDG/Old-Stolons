@@ -8,8 +8,8 @@ using Stolons.Models;
 namespace Stolons.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20160510113709_MigrationMoulte")]
-    partial class MigrationMoulte
+    [Migration("20160519140207_Migration20")]
+    partial class Migration20
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -105,13 +105,13 @@ namespace Stolons.Migrations
 
                     b.Property<bool>("IsModeSimulated");
 
-                    b.Property<string>("MailApiFrom");
+                    b.Property<string>("MailAddress");
 
-                    b.Property<string>("MailApiKey");
+                    b.Property<string>("MailPassword");
 
-                    b.Property<string>("MailBaseUri");
+                    b.Property<int>("MailPort");
 
-                    b.Property<string>("MailRequestUri");
+                    b.Property<string>("MailSmtp");
 
                     b.Property<int>("OrderDayStartDate");
 
@@ -140,8 +140,6 @@ namespace Stolons.Migrations
                     b.Property<string>("StolonsAddress");
 
                     b.Property<string>("StolonsLabel");
-
-                    b.Property<string>("StolonsMailAdress");
 
                     b.Property<string>("StolonsPhoneNumber");
 

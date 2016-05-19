@@ -13,33 +13,46 @@ namespace Stolons.Services
 {
     public static class AuthMessageSender 
     {
+
         /// <summary>
-        /// Info : http://www.elanderson.net/2016/02/emails-using-mailgun-in-asp-net-core/
+        /// MAIL KIT
+        /// Info : http://dotnetthoughts.net/how-to-send-emails-from-aspnet-core/
         /// </summary>
         public static async Task SendEmailAsync(string email, string name, string subject, string message)
         {
-            using (var client = new HttpClient { BaseAddress = new Uri(Configurations.ApplicationConfig.MailBaseUri) })
+            var mimeMessage = new MimeMessage();
+            mimeMessage.From.Add(new MailboxAddress(Configurations.ApplicationConfig.StolonsLabel, Configurations.ApplicationConfig.MailAddress));
+            mimeMessage.To.Add(new MailboxAddress(name, email));
+            mimeMessage.Subject = subject;
+            var bodyBuilder = new BodyBuilder();
+            bodyBuilder.HtmlBody = message;
+            mimeMessage.Body = bodyBuilder.ToMessageBody();
+            try
             {
-                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic",
-                    Convert.ToBase64String(Encoding.Unicode.GetBytes(Configurations.ApplicationConfig.MailApiKey)));
-
-                var content = new FormUrlEncodedContent(new[]
+                using (var client = new SmtpClient())
                 {
-                    new KeyValuePair<string, string>("from", Configurations.ApplicationConfig.MailApiFrom),
-                    new KeyValuePair<string, string>("to", name+"<"+email+">"),
-                    new KeyValuePair<string, string>("subject", subject),
-                    new KeyValuePair<string, string>("text", message)
-                });
+                    client.Connect(Configurations.ApplicationConfig.MailSmtp, Configurations.ApplicationConfig.MailPort, false);
+                    client.AuthenticationMechanisms.Remove("XOAUTH2");
+                    // Note: since we don't have an OAuth2 token, disable 	
+                    // the XOAUTH2 authentication mechanism.     
+                    client.Authenticate(Configurations.ApplicationConfig.MailAddress, Configurations.ApplicationConfig.MailPassword);
+                    client.Send(mimeMessage);
+                    client.Disconnect(true);
+                }
 
-                await client.PostAsync(Configurations.ApplicationConfig.MailRequestUri, content).ConfigureAwait(false);
+            }
+            catch(Exception except)
+            {
+
             }
         }
 
         public static Task SendSmsAsync(string number, string message)
         {
+
+
             // Plug in your SMS service here to send a text message.
             return Task.FromResult(0);
         }
-    }
-   
+    }   
 }

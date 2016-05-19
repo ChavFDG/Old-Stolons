@@ -20,20 +20,15 @@ namespace Stolons.Models
         
         [Display(Name = "Texte de la page qui somme nous du site")]
         public string StolonsAboutPageText { get; set; }
-        //
+        //Mails
         [Display(Name = "Courriel d'envoie des mails")]
-        public string StolonsMailAdress { get; set; }
-
-        [Display(Name = "Api Key, API Key, exemple : key-*")]
-        public string MailApiKey{ get; set; }
-
-        [Display(Name = "BaseUri, API Base URL, exemple : https://api.mailgun.net/v3/")]
-        public string MailBaseUri { get; set; }
-
-        [Display(Name = "RequestUri, API Base URL, exemple : sandbox*.mailgun.org")]
-        public string MailRequestUri { get; set; }
-        [Display(Name = "From, Default SMTP Login; exemple : postmaster@sandbox*.mailgun.org")]
-        public string MailApiFrom { get; set; }
+        public string MailAddress { get; set; }
+        [Display(Name = "Mot de passe du courriel")]
+        public string MailPassword{ get; set; }
+        [Display(Name = "Smtp")]
+        public string MailSmtp { get; set; }
+        [Display(Name = "Port")]
+        public int MailPort{ get; set; }
 
 
         //

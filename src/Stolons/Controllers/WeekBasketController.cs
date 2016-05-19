@@ -9,10 +9,12 @@ using Microsoft.Data.Entity;
 using System.Security.Claims;
 using System.Collections.Generic;
 using System.Text;
+using MimeKit;
+using System.IO;
 
 namespace Stolons.Controllers
 {
-    public class WeekBasketController : Controller
+    public class WeekBasketController : BaseController
     {
         private ApplicationDbContext _context;
         private readonly UserManager<ApplicationUser> _userManager;
@@ -156,38 +158,25 @@ namespace Stolons.Controllers
                 //END LOCK
                 //Send email to user
                 string subject;
-                StringBuilder message = new StringBuilder();
                 if (unValidBillEntry.Count == 0)
                 {
                     subject = "Validation total de votre panier de la semaine";
-                    message.Append("Votre panier vient d'être validé avec succés.");
-                    message.AppendLine(Configurations.ApplicationConfig.OrderDeliveryMessage);
-                    message.AppendLine();
-                    message.AppendLine("Résumé de votre panier");
-                    message.AppendLine("PRODUIT\t\tQuantité\tPrix\tTotal");
-                    float total = 0;
-                    foreach (BillEntry entry in validatedWeekBasket.Products)
-                    {
-                        message.AppendLine(entry.Product.Name + "\t\t" + entry.Quantity + "t" + entry.Product.Price + "€\t" + entry.Quantity * entry.Product.Price + "€");
-                        total = total + (entry.Quantity * entry.Product.Price);
-                    }
-                    message.AppendLine("\t\t\t\t TOTAL : " + total + "€");
 
                 }
                 else
                 {
                     subject = "Validation partielle de votre panier de la semaine";
-                    //TODO
                 }
-                await Services.AuthMessageSender.SendEmailAsync(validatedWeekBasket.Consumer.Email, validatedWeekBasket.Consumer.Name, subject, message.ToString());
+                ValidationSummaryViewModel validationSummaryViewModel = new ValidationSummaryViewModel(validatedWeekBasket, unValidBillEntry) { Total = totalPrice };
+                await Services.AuthMessageSender.SendEmailAsync(validatedWeekBasket.Consumer.Email, validatedWeekBasket.Consumer.Name, subject, base.RenderPartialViewToString("ValidateBasket", validationSummaryViewModel));
                 //Return view
-                return View(new ValidationSummaryViewModel(validatedWeekBasket, unValidBillEntry) { Total = totalPrice });
+                return View(validationSummaryViewModel);
             }
             else
             {
                 //Il ne commande rien du tout
                 //On lui signale
-                await Services.AuthMessageSender.SendEmailAsync(validatedWeekBasket.Consumer.Email, validatedWeekBasket.Consumer.Name, "Panier de la semaine annulé","Votre panier de la semaine a été annulé.");
+                await Services.AuthMessageSender.SendEmailAsync(validatedWeekBasket.Consumer.Email, validatedWeekBasket.Consumer.Name, "Panier de la semaine annule", base.RenderPartialViewToString("ValidateBasket", null));
                 _context.Remove(tempWeekBasket);
                 _context.Remove(validatedWeekBasket);
                 _context.SaveChanges();

@@ -442,7 +442,7 @@ namespace Stolons.Tools
                 int row = 1;
                 worksheet.Cells[row, 1].Value = Configurations.ApplicationConfig.StolonsLabel;
                 row++;
-                worksheet.Cells[row, 1].Value = Configurations.ApplicationConfig.StolonsMailAdress;
+                worksheet.Cells[row, 1].Value = Configurations.ApplicationConfig.MailAddress;
                 row++;
                 worksheet.Cells[row, 1].Value = Configurations.ApplicationConfig.StolonsPhoneNumber;
                 row++;

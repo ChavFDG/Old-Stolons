@@ -43,38 +43,31 @@
 
         <h4>Courriel de Stolons pour envoie des messages aux utilisateurs :</h4>
         <div class="form-group">
-            <label asp-for="StolonsMailAdress" class="col-md-2 control-label"></label>
+            <label asp-for="MailAddress" class="col-md-2 control-label"></label>
             <div class="col-md-10">
-                <input asp-for="StolonsMailAdress" class="form-control" />
-                <span asp-validation-for="StolonsMailAdress" class="text-danger" />
+                <input asp-for="MailAddress" class="form-control" />
+                <span asp-validation-for="MailAddress" class="text-danger" />
             </div>
         </div>
         <div class="form-group">
-            <label asp-for="MailApiKey" class="col-md-2 control-label"></label>
+            <label asp-for="MailPassword" class="col-md-2 control-label"></label>
             <div class="col-md-10">
-                <input asp-for="MailApiKey" class="form-control" />
-                <span asp-validation-for="MailApiKey" class="text-danger" />
+                <input asp-for="MailPassword" class="form-control" />
+                <span asp-validation-for="MailPassword" class="text-danger" />
             </div>
         </div>
         <div class="form-group">
-            <label asp-for="MailApiFrom" class="col-md-2 control-label"></label>
+            <label asp-for="MailSmtp" class="col-md-2 control-label"></label>
             <div class="col-md-10">
-                <input asp-for="MailApiFrom" class="form-control" />
-                <span asp-validation-for="MailApiFrom" class="text-danger" />
+                <input asp-for="MailSmtp" class="form-control" />
+                <span asp-validation-for="MailSmtp" class="text-danger" />
             </div>
         </div>
         <div class="form-group">
-            <label asp-for="MailBaseUri" class="col-md-2 control-label"></label>
+            <label asp-for="MailPort" class="col-md-2 control-label"></label>
             <div class="col-md-10">
-                <input asp-for="MailBaseUri" class="form-control" />
-                <span asp-validation-for="MailBaseUri" class="text-danger" />
-            </div>
-        </div>
-        <div class="form-group">
-            <label asp-for="MailRequestUri" class="col-md-2 control-label"></label>
-            <div class="col-md-10">
-                <input asp-for="MailRequestUri" class="form-control" />
-                <span asp-validation-for="MailRequestUri" class="text-danger" />
+                <input asp-for="MailPort" class="form-control" />
+                <span asp-validation-for="MailPort" class="text-danger" />
             </div>
         </div>
 

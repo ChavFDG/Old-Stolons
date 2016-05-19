@@ -77,7 +77,7 @@
             @(EnumHelper<Product.SellType>.GetDisplayValue(@item.Type))
         </th>
         <th>
-            @if (Configurations.Mode == ApplicationConfig.Modes.StockUpdate)
+            @if (Configurations.Mode != ApplicationConfig.Modes.Order)
             {
                 <input id="@("WeekStockEdition" + item.Id)" asp-for="@item.WeekStock" class="form-control" min="0" />
                 <script>
@@ -118,15 +118,15 @@
                 break;
         }
         <td>
-            @if (Configurations.Mode == ApplicationConfig.Modes.StockUpdate)
+            @if (Configurations.Mode != ApplicationConfig.Modes.Order)
             {
                 if (@item.State == Product.ProductState.Enabled)
                 {
-                    <a asp-action="Disable" asp-route-id="@item.Id">Désactiver |</a>
+                    <a asp-action="Disable" asp-route-id="@item.Id">Rendre indisponible |</a>
                 }
                 else
                 {
-                    <a asp-action="Enable" asp-route-id="@item.Id">Activer |</a>
+                    <a asp-action="Enable" asp-route-id="@item.Id">Rendre disponible |</a>
                 }
             }
             <a asp-action="Manage" asp-route-id="@item.Id">Editer</a> |
