@@ -83,6 +83,11 @@ namespace Stolons
 
 
         #region UserManagement
+
+        public const string Role_User = "User";
+        public const string Role_Volunteer = "Volunteer";
+        public const string Role_Administrator = "Administrator";
+
         public enum Role
         {
             [Display(Name = "Adhérent")]
@@ -92,6 +97,10 @@ namespace Stolons
             [Display(Name = "Administrateur")]
             Administrator = 3
         }
+
+        public const string UserType_SimpleUser = "SimpleUser";
+        public const string UserType_Consumer = "Consumer";
+        public const string UserType_Producer  = "Producer";
 
         public enum UserType
         {

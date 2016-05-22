@@ -13,6 +13,7 @@ using System.Collections.Generic;
 using System.IO;
 using Microsoft.Net.Http.Headers;
 using Stolons.ViewModels.ProductsManagement;
+using Microsoft.AspNet.Authorization;
 
 namespace Stolons.Controllers
 {
@@ -30,6 +31,7 @@ namespace Stolons.Controllers
         }
 
         // GET: ProductsManagement
+        [Authorize(Roles = Configurations.UserType_Producer)]
         public async Task<IActionResult> Index()
         {
             var appUser = await GetCurrentUserAsync();
@@ -38,6 +40,7 @@ namespace Stolons.Controllers
         }
 
         // GET: ProductsManagement/Details/5
+        [Authorize(Roles = Configurations.UserType_Producer)]
         public IActionResult Details(Guid? id)
         {
             if (id == null)
@@ -55,6 +58,7 @@ namespace Stolons.Controllers
         }
 
         // GET: ProductsManagement/Create
+        [Authorize(Roles = Configurations.UserType_Producer)]
         public IActionResult Manage(Guid? id)
         {
             Product product = id == null ? new Product() : _context.Products.Include(x=>x.Familly).First(x => x.Id == id);
@@ -65,6 +69,7 @@ namespace Stolons.Controllers
         // POST: ProductsManagement/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = Configurations.UserType_Producer)]
         public async Task<IActionResult> Manage(ProductEditionViewModel vmProduct)
         {
             if (ModelState.IsValid)
@@ -115,6 +120,7 @@ namespace Stolons.Controllers
         
         // GET: ProductsManagement/Delete/5
         [ActionName("Delete")]
+        [Authorize(Roles = Configurations.UserType_Producer)]
         public IActionResult Delete(Guid? id)
         {
             if (id == null)
@@ -134,6 +140,7 @@ namespace Stolons.Controllers
         // POST: ProductsManagement/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = Configurations.UserType_Producer)]
         public IActionResult DeleteConfirmed(Guid id)
         {
             Product product = _context.Products.Single(m => m.Id == id);
@@ -143,6 +150,7 @@ namespace Stolons.Controllers
         }
 
 
+        [Authorize(Roles = Configurations.UserType_Producer)]
         public IActionResult Enable(Guid? id)
         {
             _context.Products.First(x => x.Id == id).State = Product.ProductState.Enabled;
@@ -150,6 +158,7 @@ namespace Stolons.Controllers
             return RedirectToAction("Index");
 
         }
+        [Authorize(Roles = Configurations.UserType_Producer)]
         public IActionResult Disable(Guid? id)
         {
             _context.Products.First(x => x.Id == id).State = Product.ProductState.Disabled;
@@ -159,6 +168,7 @@ namespace Stolons.Controllers
         }
 
 
+        [Authorize(Roles = Configurations.UserType_Producer)]
         [HttpPost, ActionName("ChangeStock")]
         public IActionResult ChangeStock(Guid id, int newStock)
         {
@@ -167,6 +177,7 @@ namespace Stolons.Controllers
             return RedirectToAction("Index");
         }
 
+        [Authorize(Roles = Configurations.UserType_Producer)]
         private async Task<ApplicationUser> GetCurrentUserAsync()
         {
             return await _userManager.FindByIdAsync(HttpContext.User.GetUserId());

@@ -16,14 +16,14 @@ using Stolons.ViewModels.Account;
 namespace Stolons.Controllers
 {
     [Authorize]
-    public class AccountsController : Controller
+    public class AccountController : Controller
     {
         private ApplicationDbContext _context;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly ILogger _logger;
 
-        public AccountsController(ApplicationDbContext context,
+        public AccountController(ApplicationDbContext context,
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
             ILoggerFactory loggerFactory)
@@ -31,11 +31,11 @@ namespace Stolons.Controllers
             _context = context;
             _userManager = userManager;
             _signInManager = signInManager;
-            _logger = loggerFactory.CreateLogger<AccountsController>();
+            _logger = loggerFactory.CreateLogger<AccountController>();
         }
 
         //
-        // GET: /Accounts/Login
+        // GET: /Account/Login
         [HttpGet]
         [AllowAnonymous]
         public IActionResult Login(string returnUrl = null)
@@ -45,7 +45,7 @@ namespace Stolons.Controllers
         }
 
         //
-        // POST: /Accounts/Login
+        // POST: /Account/Login
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
@@ -124,6 +124,14 @@ namespace Stolons.Controllers
             var result = await _userManager.ConfirmEmailAsync(user, code);
             return View(result.Succeeded ? "ConfirmEmail" : "Error");
         }
+
+        [HttpGet]
+        [AllowAnonymous]
+        public IActionResult AccessDenied(string userId, string code)
+        {
+            return View();
+        }
+        
 
         #region Helpers
 

@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Hosting;
 using System.Security.Claims;
+using Microsoft.AspNet.Authorization;
 
 namespace Stolons.Controllers
 {
@@ -24,6 +25,7 @@ namespace Stolons.Controllers
         }
 
         // GET: Bills
+        [Authorize()]
         public async Task<IActionResult> Index()
         {
             var appUser = await GetCurrentUserAsync();
@@ -39,6 +41,7 @@ namespace Stolons.Controllers
             return View();//ERROR
         }
 
+        [Authorize()]
         private async Task<ApplicationUser> GetCurrentUserAsync()
         {
             return await _userManager.FindByIdAsync(HttpContext.User.GetUserId());

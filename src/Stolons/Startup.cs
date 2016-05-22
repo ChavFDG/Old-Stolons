@@ -15,6 +15,8 @@ using Microsoft.AspNet.Identity;
 using System.IO;
 using System.Threading;
 using Stolons.Tools;
+using Microsoft.AspNet.Authentication.Cookies;
+using Microsoft.AspNet.Http;
 
 namespace Stolons
 {
@@ -293,8 +295,7 @@ namespace Stolons
             //
             context.SaveChanges();
         }
-
-
+        
         private async Task CreateRoles(IServiceProvider serviceProvider)
         {
             var RoleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
@@ -350,6 +351,7 @@ namespace Stolons
                     Configurations.Role.User,
                     Configurations.UserType.Producer);
         }
+
         private async Task CreateAcount(ApplicationDbContext context, UserManager<ApplicationUser> userManager, string name, string surname, string email, string password, Configurations.Role role, Configurations.UserType userType)
         {
 
@@ -411,7 +413,6 @@ namespace Stolons
 
         // Entry point for the application.
         public static void Main(string[] args) => WebApplication.Run<Startup>(args);
-
 
     }
 }

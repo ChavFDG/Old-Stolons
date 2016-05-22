@@ -4,6 +4,8 @@ using Microsoft.AspNet.Mvc.Rendering;
 using Microsoft.Data.Entity;
 using Stolons.Models;
 using System;
+using Microsoft.AspNet.Authorization;
+using static Stolons.Configurations;
 
 namespace Stolons.Controllers
 {
@@ -16,11 +18,14 @@ namespace Stolons.Controllers
             _context = context;    
         }
 
+        [Authorize(Roles = Role_Administrator)]
         // GET: ApplicationConfig
         public IActionResult Index()
         {
             return View(_context.ApplicationConfig.First());
         }
+
+        [Authorize(Roles = Role_Administrator)]
         // GET: ApplicationConfig/Edit/5
         public IActionResult Edit()
         {
@@ -30,6 +35,7 @@ namespace Stolons.Controllers
         // POST: ApplicationConfig/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = Role_Administrator)]
         public IActionResult Edit(ApplicationConfig applicationConfig)
         {
             if (ModelState.IsValid)

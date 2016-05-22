@@ -13,6 +13,7 @@ using Microsoft.AspNet.Identity;
 using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
 using Stolons.ViewModels.Users;
+using Microsoft.AspNet.Authorization;
 
 namespace Stolons.Controllers
 {
@@ -34,12 +35,14 @@ namespace Stolons.Controllers
         }
 
         // GET: Consumers
+        [Authorize(Roles = Configurations.Role_Volunteer)]
         public IActionResult Index()
         {
             return View(_context.Consumers.ToList());
         }
 
         // GET: Consumers/Details/5
+        [Authorize(Roles = Configurations.Role_Volunteer)]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -59,6 +62,7 @@ namespace Stolons.Controllers
         }
 
         // GET: Consumers/Create
+        [Authorize(Roles = Configurations.Role_Volunteer)]
         public IActionResult Create()
         {
             return View(new UserStolonViewModel(new Consumer(),Configurations.Role.User));
@@ -67,6 +71,7 @@ namespace Stolons.Controllers
         // POST: Consumers/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = Configurations.Role_Volunteer)]
         public async Task<IActionResult> Create(UserStolonViewModel vmConsumer, IFormFile uploadFile)
         {
             if (ModelState.IsValid)
@@ -107,6 +112,7 @@ namespace Stolons.Controllers
         }
 
         // GET: Consumers/Edit/5
+        [Authorize(Roles = Configurations.Role_Volunteer)]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -128,6 +134,7 @@ namespace Stolons.Controllers
         // POST: Consumers/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = Configurations.Role_Volunteer)]
         public async Task<IActionResult> Edit(UserStolonViewModel consumerVm, IFormFile uploadFile, Configurations.Role UserRole)
         {
             if (ModelState.IsValid)
@@ -166,6 +173,7 @@ namespace Stolons.Controllers
 
         // GET: Consumers/Delete/5
         [ActionName("Delete")]
+        [Authorize(Roles = Configurations.Role_Volunteer)]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -187,6 +195,7 @@ namespace Stolons.Controllers
         // POST: Consumers/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = Configurations.Role_Volunteer)]
         public IActionResult DeleteConfirmed(int id)
         {
             Consumer consumer = _context.Consumers.Single(m => m.Id == id);

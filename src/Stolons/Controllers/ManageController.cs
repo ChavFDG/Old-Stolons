@@ -44,6 +44,7 @@ namespace Stolons.Controllers
         //
         // GET: /Manage/Index
         [HttpGet]
+        [Authorize()]
         public async Task<IActionResult> Index(ManageMessageId? message = null)
         {
             ViewData["StatusMessage"] =
@@ -78,6 +79,7 @@ namespace Stolons.Controllers
         //
         // GET: /Manage/ChangePassword
         [HttpGet]
+        [Authorize()]
         public IActionResult ChangePassword()
         {
             return View();
@@ -87,6 +89,7 @@ namespace Stolons.Controllers
         // POST: /Manage/ChangePassword
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize()]
         public async Task<IActionResult> ChangePassword(ChangePasswordViewModel model)
         {
             if (!ModelState.IsValid)
@@ -109,6 +112,7 @@ namespace Stolons.Controllers
             return RedirectToAction(nameof(Index), new { Message = ManageMessageId.Error });
         }
 
+        [Authorize()]
         public async Task<IActionResult> ChangeUserInformations()
         {
             var user = await GetCurrentUserAsync();
@@ -125,6 +129,7 @@ namespace Stolons.Controllers
         // POST: Consumers/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize()]
         public async Task<IActionResult> ChangeUserInformations(UserStolonViewModel userStolonVm, IFormFile uploadFile, Configurations.Role UserRole)
         {
             if (ModelState.IsValid)
@@ -159,6 +164,7 @@ namespace Stolons.Controllers
             return View(userStolonVm);
         }
 
+        [Authorize()]
         public async Task<IActionResult> ChangeProducerInformations()
         {
             var user = await GetCurrentUserAsync();
@@ -175,6 +181,7 @@ namespace Stolons.Controllers
         // POST: Consumers/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize()]
         public async Task<IActionResult> ChangeProducerInformations(ProducerViewModel producerVm, IFormFile uploadFile, Configurations.Role UserRole)
         {
             if (ModelState.IsValid)
