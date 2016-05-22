@@ -1,6 +1,6 @@
 ﻿A faire :
 Damien
-- (1) Bloquer les pages en fonctions du mode du site et des utilisateurs (presque finis, reste week basket)
+- (1) Bloquer les pages en fonctions du mode du site et des utilisateurs (presque finis, reste week basket et mise en place de la page en fonction de Commande /PRrparation / Stock ...)
 Nico
 - (1) Ne pas afficher direct le panier en modifier, mais devoir appuyer sur un bouton ( ou au pire le + et - ) pour le faire apparaitre. Si bouton inactiver le + et - des produits
 - (1) Bug sur la disparition du bouton de Stock lors d'un panier déjà valider. Exemple 5 unité de pain validé , 5 en stock = possibilité d'aller jusqu'à 10 en tout.
