@@ -10,34 +10,37 @@
         <title>@ViewData["Title"] - Stolons</title>
 
 	<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-        <link rel="stylesheet" href="~/css/site.min.css" />
+        <link rel="stylesheet" href="~/css/site.css" />
+
+	<link rel="stylesheet" href="~/css/select2.min.css" />
 
         <script src="~/lib/jquery/dist/jquery.min.js"></script>
         <script src="~/lib/bootstrap/dist/js/bootstrap.min.js"></script>
 
+	<script src="~/lib/underscore-min.js"></script>
+	<script src="~/lib/backbone.js"></script>
+
 	<!-- nothing inside it for now... -->
 	<!-- <script src="~/js/site.min.js" asp-append-version="true"></script> -->
 
-	<script type="text/javascript" src="http://code.jquery.com/ui/1.10.2/jquery-ui.js"></script>
-        <script src="~/lib/jquery.livequery.min.js"></script>
+	<!-- <script type="text/javascript" src="http://code.jquery.com/ui/1.10.2/jquery-ui.js"></script> -->
 
 	<!-- <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.2/themes/smoothness/jquery-ui.css" /> -->
 
-        <script src="~/lib/jquery.livequery.min.js"></script>
-	<script src="~/lib/backbone.js"></script>
+	<script src="~/lib/select2.full.min.js"></script>
 
     </head>
     <body>
         @await Component.InvokeAsync("Banner")
 
         <div class="container body-content">
-            @RenderBody()
-            <hr />
-            <footer>
-                <p>&copy; 2015 - Stolons</p>
-            </footer>
+          @RenderBody()
+          <hr />
+          <footer>
+            <p>&copy; 2015 - Stolons</p>
+          </footer>
         </div>
-
+	
         @RenderSection("scripts", required: false)
     </body>
 </html>

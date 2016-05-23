@@ -34,7 +34,7 @@ namespace Stolons
                 // For more details on using the user secret store see http://go.microsoft.com/fwlink/?LinkID=532709
                 builder.AddUserSecrets();
             }
-
+	    
             builder.AddEnvironmentVariables();
             Configuration = builder.Build();
         }
@@ -169,24 +169,24 @@ namespace Stolons
         private void CreateProductCategories(ApplicationDbContext context)
         {
             ProductType fresh = CreateProductType(context, "Produits frais");
-            CreateProductFamily(context, fresh, "Fruits");
-            CreateProductFamily(context, fresh, "Légumes");
-            CreateProductFamily(context, fresh, "Produits laitiers");
-            CreateProductFamily(context, fresh, "Oeufs");
+            CreateProductFamily(context, fresh, "Fruits", "fruits.jpg");
+            CreateProductFamily(context, fresh, "Légumes", "legumes.jpg");
+            CreateProductFamily(context, fresh, "Produits laitiers", "produits_laitiers.jpg");
+            CreateProductFamily(context, fresh, "Oeufs", "oeufs.jpg");
 
-            ProductType bakery = CreateProductType(context, "Boulangerie", "boulangerie_118.png");
-            CreateProductFamily(context, bakery, "Farines");
-            CreateProductFamily(context, bakery, "Pains");
+            ProductType bakery = CreateProductType(context, "Boulangerie", "boulangerie.jpg");
+            CreateProductFamily(context, bakery, "Farines", "farines.jpg");
+            CreateProductFamily(context, bakery, "Pains", "pain.jpg");
 
-            ProductType grocery = CreateProductType(context, "Epicerie");
-            CreateProductFamily(context, grocery, "Conserves");
+            ProductType grocery = CreateProductType(context, "Epicerie", "epicerie.jpg");
+            CreateProductFamily(context, grocery, "Conserves", "conserves.jpg");
 
-            ProductType bevarages = CreateProductType(context, "Boissons");
-            CreateProductFamily(context, bevarages, "Alcools");
-            CreateProductFamily(context, bevarages, "Sans alcool");
+            ProductType bevarages = CreateProductType(context, "Boissons", "boissons.jpg");
+            CreateProductFamily(context, bevarages, "Alcools", "alcool.jpg");
+            CreateProductFamily(context, bevarages, "Sans alcool", "sans_alcool.jpg");
 
-            ProductType other = CreateProductType(context, "Autres");
-            CreateProductFamily(context, other, "Savons");
+            ProductType other = CreateProductType(context, "Autres", "autres.jpg");
+            CreateProductFamily(context, other, "Savons", "savon.jpg");
 
             context.SaveChanges();
         }
@@ -206,12 +206,16 @@ namespace Stolons
             return type;
         }
 
-        private ProductFamilly CreateProductFamily(ApplicationDbContext context, ProductType type, string name)
+        private ProductFamilly CreateProductFamily(ApplicationDbContext context, ProductType type, string name, string imageName = null)
         {
             ProductFamilly family = context.ProductFamillys.FirstOrDefault(x=> x.FamillyName == name);
             if (family == null)
             {
                 family = new ProductFamilly(type, name);
+		if(imageName != null)
+                {
+                    family.Image = Path.Combine(Configurations.ProductsTypeAndFamillyIconsStockagesPath, imageName);
+                }
                 context.ProductFamillys.Add(family);
             }
             return family;

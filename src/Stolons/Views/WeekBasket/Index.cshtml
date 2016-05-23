@@ -3,469 +3,387 @@
 @model WeekBasketViewModel
 
 @{
-    ViewData["Title"] = "Mon panier";
+	ViewData["Title"] = "Mon panier";
 }
 
 <h2>@ViewData["Title"]</h2>
 
-<script>
-    function openProductModal(productId) {
-        $("#productModal-" + productId).modal("show");
-    }
+<div class="weekBasketContainer">
 
-    function TrAdded(jqueryTr) {
-        console.log("Row added for " + jqueryTr.attr('data-productId'));
-        //Row added
-        var productId = jqueryTr.attr('data-productId');
-        //Hide add
-        $('div.addProduct[data-productId=' + productId + ']').css("display", "none");
-        //Show Quantity
-        $('div.productQuantityChanger[data-productId=' + productId + ']').css("display", "inline");
-    }
+  <div class="row">
 
-    $("tr.billEntry").livequery(function () {
-        TrAdded($(this));
-    }, function () {
-    });
-
-    $(document).ready(function () {
-        $('button.addProductBtn').click(function () {
-            var productId = $(this).attr('data-productId');
-            var basketId = '@(Model.TempWeekBasket.Id.ToString())';
-            $.ajax({
-                url: '@Url.Action("AddToBasket", "WeekBasket")',
-                data: {
-                    productId: productId,
-                    weekBasketId: '@(Model.TempWeekBasket.Id.ToString())'
-                },
-                type: 'post',
-                success: function (response) {
-                    $('span#quantity[data-productId=' + productId + ']').html(response.Quantity);
-                    //Add line to week basket
-                    var table = document.getElementById("weekBasket");
-
-                    // Create an empty <tr> element and add it to the 1st position of the table:
-                    var row = table.insertRow(-1);
-                    console.log(row);
-                    $(row).addClass("billEntry");
-                    $(row).attr("data-productId", response.Product.Id);
-                    // Insert new cells (<td> elements) at the 1st and 2nd position of the "new" <tr> element:
-                    var cellProductName = row.insertCell(0);
-                    var cellQuantity = row.insertCell(1);
-                    var cellPrice = row.insertCell(2);
-                    var cellDelete = row.insertCell(3);
-
-                    // Add some text to the new cells:
-                    cellProductName.innerHTML = "<a href=\"#\" onclick=\"openProductModal('" + response.Product.Id + "');return false;\">" + response.Product.Name + "</a>";
-                    cellQuantity.innerHTML = "<span class=\"quantity\" data-productId='" + response.Product.Id + "'>" + response.Quantity + "</span>";
-                    cellPrice.innerHTML = "<span class=\"subTotalPrice\" data-productId='" + response.Product.Id + "'>" + response.Product.Price * response.Quantity + "€" + "</span>";
-                    cellDelete.innerHTML = "Del";
-                    //Mise à jour boutons
-                    TrAdded($(row));
-                }
-            });
-        });
-
-        $('a.plus').click(function () {
-            var productId = $(this).attr('data-productId');
-            var loadingDiv = $('div.productQuantityLoading[data-productId=' + productId + ']');
-            var qtyChangerDiv = $('div.productQuantityChanger[data-productId=' + productId + ']');
-
-            loadingDiv.css("display", "inline");
-            qtyChangerDiv.css("display", "none");
-
-            $.ajax({
-                url: '@Url.Action("PlusProduct", "WeekBasket")',
-                data: {
-                    productId: productId,
-                    weekBasketId: '@(Model.TempWeekBasket.Id.ToString())'
-                },
-                type: 'post',
-		success: function (response) {
-		    if (!response) {
-		       return;
-		    }
-	            var productId = response.Product.Id;
-                    loadingDiv.css("display", "none");
-                    qtyChangerDiv.css("display", "inline");
-
-                    if (response.Quantity === response.Product.RemainingStock) {
-			//Maximum atteint, desactivaton du '+'.
-			console.log("jquery elem: ", $('a.plus[data-productId=' + productId + ']'));
-			console.log("productId = ", productId);
-			$('a.plus[data-productId=' + productId + ']').css("display", "none");
-                    }
-                    var spans = $('span.quantity[data-productId=' + productId + ']');
-                    for (i = 0; i < spans.length; i++) {
-                        spans[i].textContent = response.Quantity;
-                    }
-                    var spans = $('span.subTotalPrice[data-productId=' + productId + ']');
-                    for (i = 0; i < spans.length; i++) {
-                        spans[i].textContent = response.Product.Price * response.Quantity + "€";
-                    }
-                }
-            });
-            return false;
-        });
-
-        $('a.minus').click(function () {
-            var productId = $(this).attr('data-productId');
-            var loadingDiv = $('div.productQuantityLoading[data-productId=' + productId + ']');
-            var qtyChangerDiv = $('div.productQuantityChanger[data-productId=' + productId + ']');
-
-            loadingDiv.css("display", "inline");
-            qtyChangerDiv.css("display", "none");
-
-            $.ajax({
-                url: '@Url.Action("MinusProduct", "WeekBasket")',
-                data: {
-                    productId: productId,
-                    weekBasketId: '@(Model.TempWeekBasket.Id.ToString())'
-                },
-                type: 'post',
-                success: function (response) {
-                    loadingDiv.css("display", "none");
-                    qtyChangerDiv.css("display", "inline");
-
-                    var productId = response.Product.Id;
-                    if (response.Quantity != 0) {
-                        //Affichage du bouton '+'
-                        $('a.plus[data-productId=' + productId + ']').css("display", "inline");
-
-                        var spans = $('span[data-productId=' + productId + ']');
-                        for (i = 0; i < spans.length; i++) {
-                            spans[i].textContent = response.Quantity;
-                        }
-                        var spans = $('span.subTotalPrice[data-productId=' + productId + ']');
-                        for (i = 0; i < spans.length; i++) {
-                            spans[i].textContent = response.Product.Price * response.Quantity + "€";
-                        }
-                    }
-                    else {
-                        //On est arrivé à 0, on supprime le produit du panier
-                        $('tr.billEntry[data-productId=' + productId + ']')[0].remove();
-                        //We remove the row
-                        //Show Add
-                        $('div.addProduct[data-productId=' + productId + ']').css("display", "inline");
-                        //Hide Quantity
-                        qtyChangerDiv.css("display", "none");
-                    }
-                }
-            });
-            return false;
-        });
-
-    });
-</script>
-
-<div class="weekbasket">
-    <div class="row">        
-        <!-- Mon panier -->
-        <div class="myBasket col-lg-3" id="basketContent">
-            @if (Model.ValidatedWeekBasket != null)
-            {
-                <h3>Panier validé</h3>
-                <p>@Configurations.ApplicationConfig.OrderDeliveryMessage</p>
-                <table class="table">
-                        <tr>
-                            <th>
-                                <!-- Nom / Detail-->
-                                Produit
-                            </th>
-                            <th>
-                                <!-- Quantité-->
-                            </th>
-                            <th>
-                                <!-- Prix-->
-                                €
-                            </th>
-                        </tr>
-
-                        @foreach (BillEntry entry in Model.ValidatedWeekBasket.Products)
-                        {
-                            <tr class="billEntry">
-                                <th>
-                                    @entry.Product.Name
-                                </th>
-                                <th>
-                                    <span >@entry.Quantity</span>
-                                </th>
-                                <th>
-                                    <span >@(entry.Quantity * entry.Product.Price)€</span>
-                                </th>
-                            </tr>
-                        }
-                    </table>
-                    <p>Total : </p>
-                <h3>Modification non validé</h3>
-            }
-            else
-            {
-                <h3>Mon panier de la semaine</h3>
-            }
-            <table class="table" id="weekBasket">
-                <tr>
-                    <th>                        
-                        <!-- Nom / Detail-->
-                        Produit
-                    </th>
-                    <th>
-                        <!-- Quantité-->
-                    </th>
-                    <th>
-                        <!-- Prix-->
-                        €
-                    </th>
-                    <th>
-                        <!-- Suppression-->
-                    </th>
-                </tr>
-
-                @foreach (BillEntry entry in Model.TempWeekBasket.Products)
-                {
-                    <tr class="billEntry" data-productId="@entry.Product.Id">
-                        <th>
-                            <a href="#" onclick="openProductModal('@entry.Product.Id');return false;">
-                                @entry.Product.Name
-                            </a>
-                        </th>
-                        <th>
-                            <span class="quantity" data-productId="@entry.ProductId">@entry.Quantity</span>
-                        </th>
-                        <th>
-                            <span class="subTotalPrice" data-productId="@entry.ProductId">@(entry.Quantity * entry.Product.Price)€</span>
-                        </th>
-                        <th>
-                            x
-                        </th>
-                    </tr>
-                }
-            </table>
-            <div class="basketValidation">
-                <form asp-action="ValidateBasket" method="post">
-                    <div hidden="hidden">
-                        <input value="@Model.TempWeekBasket.Id" name="basketId" class="form-control" />
-                    </div>                  
-                    <input type="submit" value="Valider mon panier" class="btn btn-default" />
-                </form>
-            </div>
-        </div>
-        <!-- Les produits-->
-        <div class="products col-lg-9">
-            <!-- Les filtres-->
-            <div class="filters">
-                <label class="control-label" for="productFamilly">Famille : </label>
-                <select id="Familly" name="productFamilly">
-                    <optgroup label="Tous">
-                        <option value="Tous">Tous</option>
-                    </optgroup>
-                    @foreach (var productType in Model.ProductTypes)
-                    {
-                        <optgroup label="@productType.Name" > 
-                            @foreach (var productFamily in productType.ProductFamilly)
-                            {
-                                <option value="@productFamily.FamillyName">@productFamily.FamillyName</option>
-                            }
-                        </optgroup>
-                    }
-                </select>
-                <label>Recherche :</label>
-                <input id="Search" type="text">
-
-                <script>
-                    $('#Familly').change(function () {
-                        filterproducts();
-                    });
-                    $("#Search").keyup(function () {
-                        filterproducts();
-                    });
-
-                    function filterproducts() {
-                        var $searchVal = $.trim($("#Search").val())
-                        var elements = document.getElementsByClassName('product')
-                        for (var i = 0; i < elements.length; i++) {
-                            if ((elements[i].dataset.familly == $('#Familly').val().toString() //Si la famille selectionné
-                                || $('#Familly').val().toString() == "Tous") // ou si on affiche tous
-                                && (elements[i].dataset.productname.toLowerCase().contains($searchVal.toLowerCase()) // Si c'est le contenue de la boite de recherche
-                                || $searchVal === "")) { // Ou si la boite de recherche est vide
-                                elements[i].style.display = "inline-block"
-                            }
-                            else {
-                                elements[i].style.display = "none"
-                            }
-                        }
-                    }
-                </script>
-
-            </div>
-            @foreach (Product product in Model.Products)
-            {
-	    
-	    var TmpBillQuantity = Model.TempWeekBasket.Products.Any(x => x.Product.Id == product.Id) ? Model.TempWeekBasket.Products.First(x => x.Product.Id == product.Id).Quantity : 1;
-
-                <div class="product" data-familly="@product.Familly.FamillyName" data-productname="@product.Name" data-productId="@product.Id">
-                    <div class="product-top">
-                        <div class="pr_img product-top">
-                            <a href="#" onclick="openProductModal('@product.Id');return false;">
-                                <img src="@Configurations.GetUrl(product.GetFirstImage())" />
-                            </a>
-                        </div>
-                        <div class="pr_avatar">
-                            <img class="avatar" src="@Configurations.GetUrl(product.Producer.Avatar)" />
-                        </div>
-                        <div class="pr_labels">
-                            @foreach (Product.Label label in product.Labels)
-                            {
-                                <div class="pr_label">
-                                    <img src="@Configurations.GetUrl(label.GetImage())" />
-                                </div>
-                            }
-                        </div>
-                    </div>
-                    <div class="product-bottom">
-                        <div class="pr_text">
-                            <div class="pr_name">
-                                @product.Name
-                            </div>
-                            <div class="pr_qtystock">
-                                <span class="pr_stock">
-                                    Stock: <b>@product.RemainingStock</b>
-                                </span>
-                                <span class="pr_priceQuantity">
-                                 <b>
-                                   @(product.Price + "€")
-                                 </b>
-                                 @if (product.Type == Product.SellType.Piece)
-                                 {
-				 @(" la pièce")
-                                 }
-                                 else
-                                 {
-                                 @(" / " + product.ProductUnit.ToString())
-                                 }
-                                </span>
-                            </div>
-                        </div>
-                        <div class="pr_actions">
-                            <div class="addProduct" data-productId="@product.Id">
-                                <button type="button" class="btn btn-default addProductBtn" data-productId="@product.Id">Ajouter au panier</button>
-                            </div>
-                            <div class="productQuantityChanger" data-productId="@product.Id">
-                                <a href="" class="minus" data-productId="@product.Id">
-                                    <img src="@Configurations.GetUrl("/images/basket-remove.png")" />
-                                </a>
-                                <span class="quantity" data-productId="@product.Id"> @TmpBillQuantity </span>
-				    @if (TmpBillQuantity < product.RemainingStock && product.RemainingStock > 0)
-				    {
-					<a href="" class="plus" data-productId="@product.Id">
-					  <img src="@Configurations.GetUrl("/images/basket-add.png")" />
-					</a>
-				    }
-                            </div>
-                            <div class="productQuantityLoading" data-productId="@product.Id" style="display: none;">
-                                <span class="glyphicon glyphicon-refresh glyphicon-refresh-animate">
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            }
-        </div>
+    <div class="col-lg-3">
+      <div id="baskets">
+	<div id="validatedBasket">
+	</div>
+	<div id="tmpBasket">
+	</div>
+      </div>
     </div>
 
-    @foreach (Product product in Model.Products)
-    {
+    <div class="products col-lg-9">
+     
+      <div id="filters">
+      </div>
 
-	var TmpBillQuantity = Model.TempWeekBasket.Products.Any(x => x.Product.Id == product.Id) ? Model.TempWeekBasket.Products.First(x => x.Product.Id == product.Id).Quantity : 1;
+      <div id="products">
+      </div>
 
-        <div id="productModal-@product.Id" class="productModal modal fade">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                    </div>
-                    <div class="modal-body">
-                        <div class="row">
-                            <div id="productModal-info" class="col-md-8">
-                                <h3>@product.Name</h3>
-                                <ul>
-                                    @if (product.Type == Product.SellType.Weigh)
-                                    {
-                                        <li>Type de vente: <b>au poids</b></li>
-                                    }
-                                    @if (product.Type == Product.SellType.Piece)
-                                    {
-                                        <li>Type de vente: <b>à la pièce</b></li>
-                                    }
-                                    @if (product.Type == Product.SellType.Wrapped)
-                                    {
-                                        <li><b>Type de vente: <b>emballé</b></li>
-                                    }
-                                    <li>
-                                        Stock:
-                                        <b>
-                                            @product.RemainingStock
-                                            @if (product.Type == Product.SellType.Piece)
-                                            {
-                                                @(" pièces")
-                                            }
-                                            else
-                                            {
-                                                @(product.ProductUnit.ToString())
-                                            }
-                                        </b>
-                                    </li>
-                                </ul>
-                            </div>
-                            <div id="productModal-img" class="col-md-4 pr_img">
-                                <img src="@Configurations.GetUrl(product.GetFirstImage())" />
-                            </div>
-                        </div>
-                        <div id="productModal-pricing" class="row">
-                            <div>
-                                <span>
-                                    Prix:
-                                    <b>
-                                        @(product.Price + "€")
-                                        @if (product.Type == Product.SellType.Piece)
-                                        {
-                                            @(" la pièce")
-                                        }
-                                        else
-                                        {
-                                            @(" / " + product.ProductUnit.ToString())
-                                        }
-                                    </b>
-                                </span>
-                            </div>
-                        </div>
-                        <div id="productModal-desc" class="row">
-                            <span><b>Description: </b><pre> @product.Description</pre></span>
-                        </div>
-                        <div id="productModal-actions" class="row pr_actions">
-                            <div class="addProduct" data-productId="@product.Id">
-                                <button type="button" class="btn btn-default addProductBtn" data-productId="@product.Id">Ajouter au panier</button>
-                            </div>
-                            <div class="productQuantityChanger" data-productId="@product.Id">
-                                <a href="" class="minus" data-productId="@product.Id">
-                                    <img src="@Configurations.GetUrl("/images/basket-remove.png")" />
-                                </a>
-                                <span class="quantity" data-productId="@product.Id">@TmpBillQuantity</span>
-                                <a href="#" class="plus" data-productId="@product.Id">
-                                    <img src="@Configurations.GetUrl("/images/basket-add.png")" />
-                                </a>
-                            </div>
-                            <div class="productQuantityLoading" data-productId="@product.Id" style="display: none;">
-                                <span class="glyphicon glyphicon-refresh glyphicon-refresh-animate">
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+    </div>
+  </div>
+</div>
+
+<div id="productModal" class="modal fade"></div>
+<div id="producerModal" class="modal fade"></div>
+
+<!-- below are templates definitions to be rendered under placeholders defined above -->
+
+<script id="filtersTemplate" type="text/template">
+
+  <fieldset>
+
+    <label class="control-label" for="familiesDropDown">Famille : </label>
+    <select id="familiesDropDown" name="familiesDropDown">
+
+      <option value="Tous">Tous</option>
+
+      <% _.forEach(productTypes, function(productType) { %>
+
+      <optgroup label="<%= productType.Name %>">
+
+	<% _.forEach(productType.ProductFamilly, function (productFamily) { %>
+
+	<option id="<%= productFamily.FamillyName %>" value="<%= productFamily.FamillyName %>" data-image="<%= productFamily.Image %>"> <%= productFamily.FamillyName %> </option>
+
+	<% }); %>
+
+      </optgroup>
+	
+      <% }); %>
+    </select>
+
+    <div class="searchFilter">
+      <label>Recherche :</label>
+      <input id="search" type="text">
+    </div>
+
+  </fieldset>
+
+</script>
+
+<script id="productTemplate" type="text/template">
+  <div class="product">
+    <div class="product-top">
+      <div class="pr_img product-top">
+        <a href="#" onclick="WeekBasket.ProductModalView.open('<%= product.Id %>');return false;">
+          <img src="<%= product.Pictures[0] %>" />
+        </a>
+      </div>
+      <div class="pr_avatar">
+	<a href="#" onclick="WeekBasket.ProducerModalView.open('<%= product.Id %>');return false;">
+	  <img class="avatar" src="<%= product.Producer.Avatar %>" />
+	</a>
+      </div>
+      <div class="pr_labels">
+	<% _.forEach(product.LabelsSerialized.split(';'), function(label) { %>
+	<div class="pr_label">
+          <img src="/images/labels/<%= label %>.jpg" />
         </div>
+        <% }); %>
+      </div>
+    </div>
+    <div class="product-bottom">
+      <div class="pr_text">
+        <div class="pr_name">
+          <%= product.Name %>
+        </div>
+        <div class="pr_qtystock">
+          <span class="pr_stock">
+            Stock: <b> <%= product.RemainingStock %></b>
+          </span>
+          <span class="pr_priceQuantity">
+            <b>
+              <%= product.Price %> €
+            </b>
+          </span>
+        </div>
+	<div class="pr_actions">
+	</div>
+      </div>
+    </div>
+  </div>
+</script>
 
-    }
 
-</div>
-</div>
+<script id="productActionTemplate" type="text/template">
+
+  <% if (!billEntry) { %>
+  <div class="addProduct">
+    <button type="button" class="btn btn-default addProductBtn">Ajouter au panier</button>
+  </div>
+  <% } else { %>
+  <div class="productQuantityChanger">
+    <a href="#" class="minus">
+      <img src="/images/basket-remove.png" />
+    </a>
+    <span class="quantity">
+      <%= billEntry.Quantity %>
+    </span>
+
+    <% if (canIncrement()) { %>
+    <a href="#" class="plus">
+      <img src="/images/basket-add.png" />
+    </a>
+    <% } %>
+  </div>
+  <% } %>
+
+  <div class="productQuantityLoading hidden">
+    <span class="glyphicon glyphicon-refresh glyphicon-refresh-animate">
+    </span>
+  </div>
+
+</script>
+
+<script id="productsTemplate" type="text/template">
+
+  <% _.forEach(products, function(productModel) { %>
+  <div id="product-<%= productModel.get('Id') %>">
+  </div>
+  <% }); %>
+
+</script>
+
+<script id="productModalTemplate" type="text/template">
+  <div id="productModal-<%= product.Id %>" class="productModal">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        </div>
+        <div class="modal-body">
+          <div class="row">
+            <div id="productModal-info" class="col-md-8">
+              <h3><%= product.Name %></h3>
+              <ul>
+		Type de vente:
+		<li><b>
+		    <%= productModel.getSellTypeString() %>
+		</b></li>
+                <li>
+                  Stock:
+                  <b>
+                    <%= product.RemainingStock %>
+		    <%= productModel.getStockUnitString() %>
+                  </b>
+                </li>
+              </ul>
+            </div>
+	    <div class="col-md-4">
+              <div id="productModal-img" class="pr_img">
+		<img src="<%= product.Pictures[0] %>" />
+              </div>
+	      <div>
+		<% _.forEach(product.LabelsSerialized.split(';'), function(label) { %>
+		<div class="pr_label">
+		  <img src="/images/labels/<%= label %>.jpg" />
+		</div>
+		<% }); %>
+	      </div>
+	    </div>
+          </div>
+          <div id="productModal-pricing" class="row">
+            <div>
+              <span>
+                Prix:
+                <b>
+                  <%= product.Price %> €
+		  <%= productModel.getPriceUnitString() %>
+                </b>
+              </span>
+            </div>
+          </div>
+          <div id="productModal-desc" class="row">
+            <span><b>Description: </b><pre> <%= product.Description %> </pre></span>
+          </div>
+          <div id="productModal-actions" class="row pr_actions">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</script>
+
+<script id="producerModalTemplate" type="text/template">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+      </div>
+      <div class="modal-body">
+	Hello je suis '<%= producer.CompanyName %>'
+      </div>
+    </div>
+  </div>
+</script>
+
+<script id="validatedWeekBasketTemplate" type="text/template">
+
+  <div>
+    <a class="validatedBasketCollapse" href="#">
+      <span class="glyphicon glyphicon-collapse-up">
+      </span>
+      <span class="glyphicon glyphicon-collapse-down hidden">
+      </span>
+      <b>Produits validés</b>
+    </a>
+  </div>
+
+  <div id="collapsible" class="collapse in">
+    <table class="table basketTable">
+      <tr class="basketHeader">
+	<th>
+          Produit
+	</th>
+	<th>
+          Quantité
+	</th>
+	<th>
+	  <span class="glyphicon glyphicon-euro">
+          </span>
+	</th>
+	<th>
+	  <span class="glyphicon glyphicon-eye-open">
+	  </span>
+	</th>
+      </tr>
+
+      <% if (validatedBasketModel.exists()) { %>
+      <% _.forEach(validatedBasket.Products, function(entry) { %>
+      <tr class="billEntry">
+	<td>
+          <%= entry.Name %>
+	</td>
+	<td>
+          <span> <%= entry.Quantity %> </span>
+	</td>
+	<td>
+          <span> <%= entry.Quantity * entry.Product.Price %> </span>
+	</td>
+	<td>
+	  <a href="#" onclick="WeekBasket.ProductModalView.open('<%= entry.Product.Id %>');return false;">
+            <span class="glyphicon glyphicon-eye-open">
+	    </span>
+	  </a>
+	</td>
+      </tr>
+      <% });
+	 } else { %>
+      <tr>
+	<td colspan="4">
+	  <b>Aucun produit validé</b>
+	</td>
+      </tr>
+      <% } %>
+      <tr>
+	<td colspan="2">
+	  <b>Total : </b>
+	</td>
+	<td>
+	  <%= validatedBasketModel.getTotal() %>
+	</td>
+	<td></td>
+      </tr>
+    </table>
+  </div>
+</script>
+
+<script id="tmpWeekBasketTemplate" type="text/template">
+
+  <% if (!tmpBasket.Validated && !tmpBasketModel.isEmpty()) { %>
+
+  <h3>Panier non validé</h3>
+
+  <table class="table basketTable">
+    <tr class="basketHeader">
+      <th>
+        Produit
+      </th>
+      <th>
+        Quantité
+      </th>
+      <th>
+	<span class="glyphicon glyphicon-euro">
+        </span>
+      </th>
+      <th>
+	<span class="glyphicon glyphicon-eye-open">
+	</span>
+      </th>
+      <th>
+	<span class="glyphicon glyphicon-trash">
+	</span>
+      </th>
+    </tr>
+
+    <% _.forEach(tmpBasket.Products, function(entry) { %>
+
+    <tr class="billEntry">
+      <td>
+        <%= entry.Product.Name %>
+      </td>
+      <td>
+        <span> <%= entry.Quantity %></span>
+      </td>
+      <td>
+        <span> <%= entry.Quantity * entry.Product.Price %> </span>
+      </td>
+      <td>
+	<a href="#" onclick="WeekBasket.ProductModalView.open('<%= entry.ProductId %>');return false;">
+          <span class="glyphicon glyphicon-eye-open">
+	  </span>
+	</a>
+      </td>
+      <td>
+	<a href="#" class="deleteEntry" onclick="WeekBasket.TmpWeekBasketModel.removeBillEntry('<%= entry.ProductId %>');return false;">
+          <span class="glyphicon glyphicon-trash">
+	  </span>
+	</a>
+      </td>
+    </tr>
+    <% }); %>
+    <% if (tmpBasket.Products.length === 0) { %>
+    <tr>
+      <td colspan="5">
+	<b>Aucun produit dans le panier</b>
+      </td>
+    </tr>
+    <% } %>
+    <tr>
+      <td colspan="2">
+	<b>Total : </b>
+      </td>
+      <td>
+	<%= tmpBasketModel.getTotal() %>
+      </td>
+      <td>
+      </td>
+      <td>
+      </td>
+    </tr>
+  </table>
+
+  <div class="basketValidation">
+    <form asp-action="ValidateBasket" method="post">
+      <div hidden="hidden">
+        <input name="basketId" value="<%= tmpBasket.Id %>" class="form-control" />
+      </div>
+      <input type="submit" value="Valider mon panier" class="btn btn-default" />
+    </form>
+  </div>
+
+  <% } %>
+
+</script>
+
+<script src="/js/weekbasket.js"></script>

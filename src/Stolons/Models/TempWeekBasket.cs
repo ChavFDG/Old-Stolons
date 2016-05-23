@@ -11,10 +11,13 @@ namespace Stolons.Models
     {
         [Key]
         public Guid Id { get; set; }
+
         [Display(Name = "Consomateur")]
         public Consumer Consumer { get; set; }
-        [Display(Name = "Produits")]
 
+        [Display(Name = "Produits")]
         public List<BillEntry> Products { get; set; }
+
+	public bool Validated { get; set; }
     }
 }

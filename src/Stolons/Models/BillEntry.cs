@@ -13,9 +13,11 @@ namespace Stolons.Models
         [Key]
         public Guid Id { get; set; }
         public Guid ProductId { get; set; }
+
         [Display(Name = "Fiche produit")]
         [ForeignKey("ProductId")]
         public Product Product { get; set; }
+
         [Display(Name = "Quantité")]
         public int Quantity { get; set; }
 

@@ -26,5 +26,12 @@ namespace Stolons.Models
             Type = type;
             FamillyName = famillyName;
         }
+
+	public ProductFamilly(ProductType type, string famillyName, string image)
+        {
+            Type = type;
+            FamillyName = famillyName;
+	    Image = image;
+        }
     }
 }
