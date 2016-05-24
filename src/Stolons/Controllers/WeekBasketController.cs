@@ -17,7 +17,7 @@ using Stolons.ViewModels.WeekBasket;
 namespace Stolons.Controllers
 {
     [Authorize]
-    public class WeekBasketController : Controller
+    public class WeekBasketController : BaseController
     {
         private ApplicationDbContext _context;
         private readonly UserManager<ApplicationUser> _userManager;
@@ -43,7 +43,7 @@ namespace Stolons.Controllers
             ValidatedWeekBasket validatedWeekBasket = _context.ValidatedWeekBaskets.Include(x => x.Consumer).Include(x => x.Products).FirstOrDefault(x => x.Consumer.Id == consumer.Id);
             if (tempWeekBasket == null)
             {
-                //Il n'a pas encore de panier de la semaine, on lui en crée un
+                //Il n'a pas encore de panier de la semaine, on lui en crÃ©e un
                 tempWeekBasket = new TempWeekBasket();
                 tempWeekBasket.Consumer = consumer;
                 tempWeekBasket.Products = new System.Collections.Generic.List<BillEntry>();
@@ -74,17 +74,17 @@ namespace Stolons.Controllers
 	/**
 	 * Get or creates the temp week basket and explicitely load associated data
 	 */
-	private void loadBasketProducts(IWeekBasket basket)
-	{
-	    if (basket != null)
-	    {
-		foreach (BillEntry entry in basket.Products)
-		{
-		    //Ugly hack, fucking stupid lazy (and eager) loading
-		    entry.Product = _context.Products.First(x => x.Id == entry.ProductId);
-		}
-	    }
-	}	
+	// private void loadBasketProducts(IWeekBasket basket)
+	// {
+	//     if (basket != null)
+	//     {
+	// 	foreach (BillEntry entry in basket.Products)
+	// 	{
+	// 	    //Ugly hack, fucking stupid lazy (and eager) loading
+	// 	    entry.Product = _context.Products.First(x => x.Id == entry.ProductId);
+	// 	}
+	//     }
+	// }	
 
 	[HttpGet, ActionName("TmpWeekBasket"), Route("api/tmpWeekBasket")]
 	public async Task<string> JsonTmpWeekBasket() {
@@ -106,7 +106,7 @@ namespace Stolons.Controllers
 	    }
 	    else
 	    {
-		loadBasketProducts(tempWeekBasket);
+		tempWeekBasket.RetrieveProducts(_context);
 	    }
 	    return JsonConvert.SerializeObject(tempWeekBasket, Formatting.Indented, new JsonSerializerSettings() {
 		    ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
@@ -122,7 +122,10 @@ namespace Stolons.Controllers
                 return null;
             }
 	    ValidatedWeekBasket validatedWeekBasket = _context.ValidatedWeekBaskets.Include(x => x.Consumer).Include(x => x.Products).FirstOrDefault(x => x.Consumer.Id == consumer.Id);
-	    loadBasketProducts(validatedWeekBasket);
+	    if (validatedWeekBasket != null)
+	    {
+		validatedWeekBasket.RetrieveProducts(_context);
+	    }
 	    return JsonConvert.SerializeObject(validatedWeekBasket, Formatting.Indented, new JsonSerializerSettings() {
 		    ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
 			});
@@ -132,7 +135,7 @@ namespace Stolons.Controllers
         public string AddToBasket(string weekBasketId, string productId)
         {
             TempWeekBasket tempWeekBasket = _context.TempsWeekBaskets.Include(x=>x.Consumer).Include(x => x.Products).First(x => x.Id.ToString() == weekBasketId);
-	    loadBasketProducts(tempWeekBasket);
+	    tempWeekBasket.RetrieveProducts(_context);
             BillEntry billEntry = new BillEntry();
             billEntry.Product = _context.Products.First(x => x.Id.ToString() == productId);
             billEntry.Quantity = 1;
@@ -163,7 +166,7 @@ namespace Stolons.Controllers
         private TempWeekBasket AddProductQuantity(string weekBasketId, string productId, int quantity)
         {
             TempWeekBasket tempWeekBasket = _context.TempsWeekBaskets.Include(x=>x.Consumer).Include(x => x.Products).First(x => x.Id.ToString() == weekBasketId);
-	    loadBasketProducts(tempWeekBasket);
+	    tempWeekBasket.RetrieveProducts(_context);
             BillEntry billEntry = tempWeekBasket.Products.First(x => x.ProductId.ToString() == productId);
             billEntry.Product = _context.Products.First(x => x.Id.ToString() == productId);
 
@@ -176,7 +179,7 @@ namespace Stolons.Controllers
 
             if (billEntry.Quantity <= 0)
             {
-                //La quantité est 0 on supprime le produit
+                //La quantitÃ© est 0 on supprime le produit
                 _context.Remove(billEntry);
             }
 	    tempWeekBasket.Validated = isBasketValidated(tempWeekBasket);
@@ -188,7 +191,7 @@ namespace Stolons.Controllers
         public string RemoveBillEntry(string weekBasketId, string productId)
         {
 	    TempWeekBasket tempWeekBasket = _context.TempsWeekBaskets.Include(x=>x.Consumer).Include(x => x.Products).First(x => x.Id.ToString() == weekBasketId);
-	    loadBasketProducts(tempWeekBasket);
+	    tempWeekBasket.RetrieveProducts(_context);
             BillEntry billEntry = tempWeekBasket.Products.First(x => x.ProductId.ToString() == productId);
 	    _context.Remove(billEntry);
 	    tempWeekBasket.Validated = isBasketValidated(tempWeekBasket);
@@ -198,6 +201,7 @@ namespace Stolons.Controllers
 			});
         }
 
+	//Unused for now
         [HttpPost, ActionName("ResetBasket"), Route("api/resetBasket")]
         public string ResetBasket(string basketId)
         {
@@ -218,99 +222,145 @@ namespace Stolons.Controllers
 	    }
 	    tempWeekBasket.Validated = true;
 	    _context.SaveChanges();
-	    loadBasketProducts(tempWeekBasket);
+	    tempWeekBasket.RetrieveProducts(_context);
 	    return JsonConvert.SerializeObject(tempWeekBasket, Formatting.Indented, new JsonSerializerSettings() {
 		    ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
 			});
 	}
-
+	
         [HttpPost, ActionName("ValidateBasket")]
-        public async Task<IActionResult> ValidateBasket(string basketId)
+        public IActionResult ValidateBasket(string basketId)
         {
             TempWeekBasket tempWeekBasket = _context.TempsWeekBaskets.Include(x => x.Products).Include(x=>x.Consumer).First(x => x.Id.ToString() == basketId);
-            tempWeekBasket.RetrieveProducts(_context);
             ValidatedWeekBasket validatedWeekBasket = _context.ValidatedWeekBaskets.Include(x => x.Consumer).Include(x => x.Products).FirstOrDefault(x => x.Consumer.Id == tempWeekBasket.Consumer.Id);
-            bool newBasket = false;
-            if (validatedWeekBasket == null)
+
+	    if (validatedWeekBasket == null)
             {
-                newBasket = true;
                 //First validation of the week
                 validatedWeekBasket = new ValidatedWeekBasket();
                 validatedWeekBasket.Products = new List<BillEntry>();
                 validatedWeekBasket.Consumer = tempWeekBasket.Consumer;
                 _context.Add(validatedWeekBasket);
             }
-            else
-            {
-                validatedWeekBasket.RetrieveProducts(_context);
-            }
-            List<BillEntry> unValidBillEntry = new List<BillEntry>();
-            float totalPrice = 0;
+
             //LOCK to prevent multi insert at this momment
-            if(tempWeekBasket.Products.Any())
+            if (tempWeekBasket.Products.Any())
             {
-                foreach (BillEntry billEntry in tempWeekBasket.Products.ToList())
-                {
-                    BillEntry validatedBillEntry = validatedWeekBasket.Products.FirstOrDefault(x => x.ProductId == billEntry.ProductId);
-                    int realQuantity = billEntry.Quantity;
-                    int alreadyTakenQuantity = 0;
-                    if (validatedBillEntry != null)
-                    {
-                        realQuantity = billEntry.Quantity - validatedBillEntry.Quantity;
-                        alreadyTakenQuantity = validatedBillEntry.Quantity;
-                    }
-                    //There is enouth stock
-                    if (billEntry.Quantity <= billEntry.Product.RemainingStock + alreadyTakenQuantity)
-                    {
-                        //On met � jour le panier valide
-                        if (validatedBillEntry == null)
-                        {
-                            //C'est un nouveau panier, il n'existe pas donc on l'ajoute, sinon c'est que le produit a �t� supprim� !
-                            if (newBasket)
-                                validatedWeekBasket.Products.Add(billEntry.Clone());
-                        }
-                        else
-                        {
-                            validatedBillEntry.Quantity = billEntry.Quantity;
-                        }
-                        billEntry.Product.RemainingStock = billEntry.Product.RemainingStock - realQuantity;
-                        totalPrice += billEntry.Quantity * billEntry.Product.Price;
-                    }
-                    //Not enouth stock, we don't valid this product
-                    else
-                    {
-                        unValidBillEntry.Add(billEntry);
-                    }
-                }
+		List<BillEntry> rejectedEntries = new List<BillEntry>();
+		//Sauvegarde des produits déja validés
+		List<BillEntry> previousBillEntries = validatedWeekBasket.Products;
+		//On met le panier validé dans le même état que le temporaire
+		validatedWeekBasket.Products = new List<BillEntry>();
+		foreach (BillEntry billEntry in tempWeekBasket.Products.ToList())
+		{
+		    validatedWeekBasket.Products.Add(billEntry.Clone());
+		}
+
+		//Gestion de la suppression et du changement de quantité sur des billEntry existantes
+		foreach (BillEntry prevEntry in previousBillEntries)
+		{
+		    BillEntry newEntry = validatedWeekBasket.Products.FirstOrDefault(x => x.ProductId == prevEntry.ProductId);
+		    Product product = _context.Products.First(x => x.Id == prevEntry.ProductId);
+
+		    if (newEntry == null)
+		    {
+			//produit supprimé du panier
+			product.RemainingStock += prevEntry.Quantity;
+		    }
+		    else
+		    {
+			int qtyDiff = newEntry.Quantity - prevEntry.Quantity;
+			if (product.RemainingStock < qtyDiff)
+			{
+			    //Stock insuffisant, on supprime la nouvelle ligne et on garde l'ancienne
+			    validatedWeekBasket.Products.Remove(newEntry);
+			    validatedWeekBasket.Products.Add(prevEntry);
+			    rejectedEntries.Add(newEntry);
+			}
+			else
+			{
+			    product.RemainingStock -= qtyDiff;
+			}
+		    }
+		}
+
+		//Gestion de ĺ'ajout de produits
+		foreach (BillEntry newEntry in validatedWeekBasket.Products)
+		{
+		    BillEntry prevEntry = previousBillEntries.FirstOrDefault(x => x.ProductId == newEntry.ProductId);
+
+		    if (prevEntry == null)
+		    {
+			//Nouveau produit
+			Product product = _context.Products.First(x => x.Id == newEntry.ProductId);
+			if (newEntry.Quantity <= product.RemainingStock)
+			{
+			    product.RemainingStock -= newEntry.Quantity;
+			}
+			else
+			{
+			    validatedWeekBasket.Products.Remove(newEntry);
+			    rejectedEntries.Add(newEntry);
+			}
+		    }
+		}
+
+		tempWeekBasket.Products = new List<BillEntry>();
+		//On met le panier temporaire dans le même état que le validé
+		foreach (BillEntry entry in validatedWeekBasket.Products)
+		{
+		    tempWeekBasket.Products.Add(entry.Clone());
+		}
+		tempWeekBasket.Validated = true;
+
                 _context.SaveChanges();
-                //END LOCK
+                //END LOCK TODO
+
+		//Recuperation du detail produit pour utilisation dans la Vue
+		validatedWeekBasket.RetrieveProducts(_context);
+
                 //Send email to user
                 string subject;
-                if (unValidBillEntry.Count == 0)
+                if (rejectedEntries.Count == 0)
                 {
-                    subject = "Validation total de votre panier de la semaine";
-
+                    subject = "Validation de votre panier de la semaine";
                 }
                 else
                 {
                     subject = "Validation partielle de votre panier de la semaine";
                 }
-                ValidationSummaryViewModel validationSummaryViewModel = new ValidationSummaryViewModel(validatedWeekBasket, unValidBillEntry) { Total = totalPrice };
+                ValidationSummaryViewModel validationSummaryViewModel = new ValidationSummaryViewModel(validatedWeekBasket, rejectedEntries) { Total = getBasketPrice(validatedWeekBasket) };
                 Services.AuthMessageSender.SendEmail(validatedWeekBasket.Consumer.Email, validatedWeekBasket.Consumer.Name, subject, base.RenderPartialViewToString("ValidateBasket", validationSummaryViewModel));
                 //Return view
-                return View(validationSummaryViewModel);
+                return View("ValidateBasket", validationSummaryViewModel);
             }
             else
             {
                 //Il ne commande rien du tout
                 //On lui signale
-                Services.AuthMessageSender.SendEmail(validatedWeekBasket.Consumer.Email, validatedWeekBasket.Consumer.Name, "Panier de la semaine annul�", base.RenderPartialViewToString("ValidateBasket", null));
+                Services.AuthMessageSender.SendEmail(validatedWeekBasket.Consumer.Email, validatedWeekBasket.Consumer.Name, "Panier de la semaine annulé", base.RenderPartialViewToString("ValidateBasket", null));
                 _context.Remove(tempWeekBasket);
                 _context.Remove(validatedWeekBasket);
                 _context.SaveChanges();
-                return View();
             }
+	    return View("ValidateBasket");
         }
+
+	//Calcul du prix total d'un panier
+	private float getBasketPrice(IWeekBasket basket)
+	{
+	    if (basket == null)
+	    {
+		return 0;
+	    }
+	    float price = 0;
+	    foreach (BillEntry entry in basket.Products)
+	    {
+		Product product = _context.Products.First(x => x.Id == entry.ProductId);
+		price += (product.Price * entry.Quantity);
+	    }
+	    return price;
+	}
 
 	private bool isBasketValidated(TempWeekBasket tmpBasket)
 	{

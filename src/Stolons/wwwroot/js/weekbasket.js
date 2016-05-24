@@ -307,8 +307,8 @@ ProductModalView = Backbone.View.extend({
 
     render: function() {
 	this.$el.html(this.template({product: this.currentProduct.toJSON(), productModel: this.currentProduct}));
-	var productActionView = new ProductActionView({el: this.el + " .pr_actions"});
-	productActionView.render();
+	//var productActionView = new ProductActionView({el: this.el + " .pr_actions"});
+	//productActionView.render();
     },
 
     renderModal: function() {
@@ -469,8 +469,7 @@ TmpWeekBasketView = Backbone.View.extend(
 	},
 
 	render: function () {
-	    console.log("tmpWeekBasket render()");
-	    this.$el.html(this.template({tmpBasketModel: this.model, tmpBasket: this.model.toJSON()}));
+	    this.$el.html(this.template({tmpBasketModel: this.model, tmpBasket: this.model.toJSON(), validatedBasketModel: this.validatedBasketModel}));
 	}
     }
 );
@@ -513,7 +512,7 @@ ValidatedWeekBasketView = Backbone.View.extend(
 	},
 
 	renderCollapse: function() {
-	    if (this.tmpBasketModel.isEmpty()) {
+	    if (this.tmpBasketModel.isEmpty() || this.tmpBasketModel.get("Validated") === true) {
 		this.collapse(false);
 	    } else if (this.$("#collapsible").hasClass("in")) {
 		//Hide only if it is visible

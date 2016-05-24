@@ -74,12 +74,12 @@
 <script id="productTemplate" type="text/template">
   <div class="product">
     <div class="product-top">
-      <div class="pr_img product-top">
+      <div class="pr_img product-top" data-toggle="tooltip" title="Voir détails produit">
         <a href="#" onclick="WeekBasket.ProductModalView.open('<%= product.Id %>');return false;">
           <img src="<%= product.Pictures[0] %>" />
         </a>
       </div>
-      <div class="pr_avatar">
+      <div class="pr_avatar" data-toggle="tooltip" title="Voir détails producteur">
 	<a href="#" onclick="WeekBasket.ProducerModalView.open('<%= product.Id %>');return false;">
 	  <img class="avatar" src="<%= product.Producer.Avatar %>" />
 	</a>
@@ -229,7 +229,7 @@
 
 <script id="validatedWeekBasketTemplate" type="text/template">
 
-  <div>
+  <div class="basketTitle">
     <a class="validatedBasketCollapse" href="#">
       <span class="glyphicon glyphicon-collapse-up">
       </span>
@@ -246,14 +246,15 @@
           Produit
 	</th>
 	<th>
-          Quantité
+          <span class="glyphicon glyphicon-th" data-toggle="tooltip" title="Quantité">
+	  </span>
 	</th>
 	<th>
-	  <span class="glyphicon glyphicon-euro">
+	  <span class="glyphicon glyphicon-euro" data-toggle="tooltip" title="Prix en euros">
           </span>
 	</th>
 	<th>
-	  <span class="glyphicon glyphicon-eye-open">
+	  <span class="glyphicon glyphicon-eye-open" data-toggle="tooltip" title="Cliquer pour voir le détail produit">
 	  </span>
 	</th>
       </tr>
@@ -262,7 +263,7 @@
       <% _.forEach(validatedBasket.Products, function(entry) { %>
       <tr class="billEntry">
 	<td>
-          <%= entry.Name %>
+          <%= entry.Product.Name %>
 	</td>
 	<td>
           <span> <%= entry.Quantity %> </span>
@@ -290,19 +291,24 @@
 	  <b>Total : </b>
 	</td>
 	<td>
-	  <%= validatedBasketModel.getTotal() %>
+	  <b>
+	    <%= validatedBasketModel.getTotal() %>
+	  </b>
 	</td>
 	<td></td>
       </tr>
     </table>
   </div>
+
+  <hr />
+  
 </script>
 
 <script id="tmpWeekBasketTemplate" type="text/template">
 
-  <% if (!tmpBasket.Validated && !tmpBasketModel.isEmpty()) { %>
+  <% if ((!tmpBasket.Validated && !tmpBasketModel.isEmpty()) || (validatedBasketModel.exists() && tmpBasketModel.isEmpty())) { %>
 
-  <h3>Panier non validé</h3>
+  <p class="basketTitle"><b>Panier non validé</b></p>
 
   <table class="table basketTable">
     <tr class="basketHeader">
@@ -310,18 +316,15 @@
         Produit
       </th>
       <th>
-        Quantité
-      </th>
-      <th>
-	<span class="glyphicon glyphicon-euro">
-        </span>
-      </th>
-      <th>
-	<span class="glyphicon glyphicon-eye-open">
+        <span class="glyphicon glyphicon-th" data-toggle="tooltip" title="Quantité">
 	</span>
       </th>
       <th>
-	<span class="glyphicon glyphicon-trash">
+	<span class="glyphicon glyphicon-euro" data-toggle="tooltip" title="Prix en euros">
+          </span>
+      </th>
+      <th>
+	<span class="glyphicon glyphicon-trash" data-toggle="tooltip" title="Cliquer pour supprimer le produit du panier">
 	</span>
       </th>
     </tr>
@@ -330,7 +333,9 @@
 
     <tr class="billEntry">
       <td>
-        <%= entry.Product.Name %>
+	<a href="#" onclick="WeekBasket.ProductModalView.open('<%= entry.ProductId %>');return false;">
+	  <%= entry.Product.Name %>
+	</a>
       </td>
       <td>
         <span> <%= entry.Quantity %></span>
@@ -338,13 +343,7 @@
       <td>
         <span> <%= entry.Quantity * entry.Product.Price %> </span>
       </td>
-      <td>
-	<a href="#" onclick="WeekBasket.ProductModalView.open('<%= entry.ProductId %>');return false;">
-          <span class="glyphicon glyphicon-eye-open">
-	  </span>
-	</a>
-      </td>
-      <td>
+      <td data-toggle="tooltip" title="Cliquer pour supprimer le produit du panier">
 	<a href="#" class="deleteEntry" onclick="WeekBasket.TmpWeekBasketModel.removeBillEntry('<%= entry.ProductId %>');return false;">
           <span class="glyphicon glyphicon-trash">
 	  </span>
@@ -364,7 +363,9 @@
 	<b>Total : </b>
       </td>
       <td>
-	<%= tmpBasketModel.getTotal() %>
+	<b>
+	  <%= tmpBasketModel.getTotal() %>
+	</b>
       </td>
       <td>
       </td>
@@ -374,11 +375,16 @@
   </table>
 
   <div class="basketValidation">
-    <form asp-action="ValidateBasket" method="post">
-      <div hidden="hidden">
+    <form action="WeekBasket/ValidateBasket" method="post">
+      <div class="hidden">
         <input name="basketId" value="<%= tmpBasket.Id %>" class="form-control" />
       </div>
+
+      <% if (tmpBasketModel.isEmpty() && validatedBasketModel.exists()) { %>
+      <input type="submit" value="Annuler mon panier" class="btn btn-default" />
+      <%  } else { %>
       <input type="submit" value="Valider mon panier" class="btn btn-default" />
+      <% }%>
     </form>
   </div>
 

@@ -7,22 +7,29 @@
 <h2>@ViewData["Title"]</h2>
 
 
-<table class="table">
-    @foreach (var producer in Model.OrderBy(x => x.CompanyName))
-    {
-        <tr>
-            <td >
-                <div class="public_Prod_avatar">
-                    <img src="@Configurations.GetUrl(producer.Avatar)" class="avatar" />
-                </div>
-            </td>
-            <td>
-                <h3>@Html.DisplayFor(modelItem => producer.CompanyName)</h3>
-                <p>
-                    @Html.DisplayFor(modelItem => producer.Production)
-                </p>
-            </td>
-        </tr>
-    }
-</table>
+<div class="publicProducersContainer row">
 
+  <div class="col-lg-5 producersList">
+    <table class="table publicProducersTable">
+      @foreach (var producer in Model.OrderBy(x => x.CompanyName))
+      {
+      <tr>
+        <td >
+          <div class="public_Prod_avatar">
+            <img src="@Configurations.GetUrl(producer.Avatar)" class="avatar" />
+          </div>
+        </td>
+        <td>
+          <h3>@Html.DisplayFor(modelItem => producer.CompanyName)</h3>
+          <p>
+            @Html.DisplayFor(modelItem => producer.Production)
+          </p>
+        </td>
+      </tr>
+      }
+    </table>
+  </div>
+  <div class="col-lg-7 producersMapContainer">
+  </div>
+</div>
+  

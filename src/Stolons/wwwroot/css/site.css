@@ -205,7 +205,8 @@ textarea {
 /* Product modal in week basket view */
 
 .productModal .modal-header .close {
-    margin-top: -10px;
+    margin-top: -18px;
+    font-size: 30px;
 }
 
 #productModal-info ul {
@@ -287,6 +288,16 @@ textarea {
 
 .basketTable > th {
     border: 1px solid #ddd;
+}
+
+.basketTitle {
+    font-size: 15px;
+    width: 100%;
+    text-align: center;
+}
+
+.basketValidation {
+    text-align: center;
 }
 
 .deleteEntry {
