@@ -18,7 +18,7 @@ namespace Stolons.Models
         [Display(Name = "Numéro de téléphone de la structure")]
         public string StolonsPhoneNumber { get; set; }
         
-        [Display(Name = "Texte de la page qui somme nous du site")]
+        [Display(Name = "Texte de la page \"qui somme nous\"")]
         public string StolonsAboutPageText { get; set; }
         //Mails
         [Display(Name = "Courriel d'envoie des mails")]

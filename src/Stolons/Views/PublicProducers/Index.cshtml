@@ -1,7 +1,10 @@
+
 @model IEnumerable<Stolons.Models.Producer>
 
+  <link rel="stylesheet" href="~/css/leaflet.css" />
+
 @{
-    ViewData["Title"] = "Nos producteurs";
+  ViewData["Title"] = "Nos producteurs";
 }
 
 <h2>@ViewData["Title"]</h2>
@@ -20,7 +23,9 @@
           </div>
         </td>
         <td>
-          <h3>@Html.DisplayFor(modelItem => producer.CompanyName)</h3>
+	  <a href="#" onclick="PublicProducers.selectProducer('@producer.Id')">
+            <h3>@Html.DisplayFor(modelItem => producer.CompanyName)</h3>
+	  </a>
           <p>
             @Html.DisplayFor(modelItem => producer.Production)
           </p>
@@ -30,6 +35,36 @@
     </table>
   </div>
   <div class="col-lg-7 producersMapContainer">
+    <div id="map" style="height: 400px">
+    </div>
+  </div>
+  <div id="producerModal">
   </div>
 </div>
-  
+
+@section Scripts {
+
+<script id="producerModalTemplate" type="text/template">
+
+  <div id="producerModal-<%= producer.Id %>" class="modals">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        </div>
+        <div class="modal-body">
+          <div class="row">
+	    Producteur <b> <%= producer.CompanyName %> </b>
+
+	    TODO
+          </div>
+	</div>
+      </div>
+    </div>
+  </div>
+</script>
+
+<script src="/lib/leaflet.js"></script>
+<script src="/js/publicProducers.js"></script>
+
+}

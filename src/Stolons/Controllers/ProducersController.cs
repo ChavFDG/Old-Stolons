@@ -34,14 +34,14 @@ namespace Stolons.Controllers
             _signInManager = signInManager;
         }
 
-        [Authorize(Roles = Configurations.Role_Volunteer)]
+        [Authorize(Roles = Configurations.Role_Volunteer + "," + Configurations.Role_Administrator)]
         // GET: Producer
         public IActionResult Index()
         {
             return View(_context.Producers.ToList());
         }
 
-        [Authorize(Roles = Configurations.Role_Volunteer)]
+        [Authorize(Roles = Configurations.Role_Volunteer + "," + Configurations.Role_Administrator)]
         // GET: Producer/Details/5
         public async Task<IActionResult> Details(int? id)
         {
@@ -62,7 +62,7 @@ namespace Stolons.Controllers
         }
 
 
-        [Authorize(Roles = Configurations.Role_Volunteer)]
+        [Authorize(Roles = Configurations.Role_Volunteer + "," + Configurations.Role_Administrator)]
         // GET: Producer/PartialDetails/5
         public async Task<IActionResult> PartialDetails(int? id)
         {
@@ -82,7 +82,7 @@ namespace Stolons.Controllers
             return PartialView(new ProducerViewModel(producer, (Configurations.Role)Enum.Parse(typeof(Configurations.Role), role)));
         }
 
-        [Authorize(Roles = Configurations.Role_Volunteer)]
+        [Authorize(Roles = Configurations.Role_Volunteer + "," + Configurations.Role_Administrator)]
         // GET: Producer/Create
         public IActionResult Create()
         {
@@ -92,7 +92,7 @@ namespace Stolons.Controllers
         // POST: Producer/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = Configurations.Role_Volunteer)]
+        [Authorize(Roles = Configurations.Role_Volunteer + "," + Configurations.Role_Administrator)]
         public async Task<IActionResult> Create(ProducerViewModel vmProducer, IFormFile uploadFile)
         {
 
@@ -134,7 +134,7 @@ namespace Stolons.Controllers
         }
 
         // GET: Producer/Edit/5
-        [Authorize(Roles = Configurations.Role_Volunteer)]
+        [Authorize(Roles = Configurations.Role_Volunteer + "," + Configurations.Role_Administrator)]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -156,7 +156,7 @@ namespace Stolons.Controllers
         // POST: Producer/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = Configurations.Role_Volunteer)]
+        [Authorize(Roles = Configurations.Role_Volunteer + "," + Configurations.Role_Administrator)]
         public async Task<IActionResult> Edit(ProducerViewModel vmProducer, IFormFile uploadFile, Configurations.Role UserRole)
         {
             if (ModelState.IsValid)
@@ -195,7 +195,7 @@ namespace Stolons.Controllers
 
         // GET: Producer/Delete/5
         [ActionName("Delete")]
-        [Authorize(Roles = Configurations.Role_Volunteer)]
+        [Authorize(Roles = Configurations.Role_Volunteer + "," + Configurations.Role_Administrator)]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -217,7 +217,7 @@ namespace Stolons.Controllers
         // POST: Producer/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = Configurations.Role_Volunteer)]
+        [Authorize(Roles = Configurations.Role_Volunteer + "," + Configurations.Role_Administrator)]
         public IActionResult DeleteConfirmed(int id)
         {
             Producer producer = _context.Producers.Single(m => m.Id == id);

@@ -204,12 +204,12 @@ textarea {
 
 /* Product modal in week basket view */
 
-.productModal .modal-header .close {
+.modals .modal-header .close {
     margin-top: -18px;
     font-size: 30px;
 }
 
-#productModal-info ul {
+.modals ul {
     list-style-type: none;
     margin: 0;
     padding: 0;
@@ -304,6 +304,12 @@ textarea {
     color: #f00;
 }
 
+.dl-horizontal > dt {
+    white-space: normal !important;
+    text-align: left !important;
+}
+
 .hidden {
     display: none;
 }
+

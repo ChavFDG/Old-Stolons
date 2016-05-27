@@ -241,7 +241,7 @@ namespace Stolons
             context.Add(pain);
             Product tomate = new Product();
             tomate.Name = "Tomates grappe";
-            tomate.Description = "";
+            tomate.Description = "Avec ces tomates, c'est nous qui rougissons même si elles ne sont pas toutes nues!";
             tomate.Labels.Add(Product.Label.Ab);
             tomate.PicturesSerialized = Path.Combine(Configurations.ProductsStockagePath, "tomate.jpg");
             tomate.Price = 2;
@@ -255,7 +255,7 @@ namespace Stolons
             context.Add(tomate);
             Product pommedeterre = new Product();
             pommedeterre.Name = "Pomme de terre";
-            pommedeterre.Description = "";
+            pommedeterre.Description = "Pataaaaaaaaaaaaaaaates!!";
             pommedeterre.Labels.Add(Product.Label.Ab);
             pommedeterre.PicturesSerialized = Path.Combine(Configurations.ProductsStockagePath, "pommedeterre.jpg");
             pommedeterre.Price = 2;
@@ -269,7 +269,7 @@ namespace Stolons
             context.Add(pommedeterre);
             Product radis = new Product();
             radis.Name = "Radis";
-            radis.Description = "Pain farine complete T80";
+            radis.Description = "Des supers radis pas trop amers";
             radis.Labels.Add(Product.Label.Ab);
             radis.PicturesSerialized = Path.Combine(Configurations.ProductsStockagePath, "radis.jpg");
             radis.Price = 4;
@@ -283,7 +283,7 @@ namespace Stolons
             context.Add(radis);
             Product salade = new Product();
             salade.Name = "Salade";
-            salade.Description = "Pain farine complete T80";
+            salade.Description = "Une bonne salade pour aller avec les bonnes tomates!";
             salade.Labels.Add(Product.Label.Ab);
             salade.PicturesSerialized = Path.Combine(Configurations.ProductsStockagePath, "salade.jpg");
             salade.Price = 1;
@@ -386,6 +386,8 @@ namespace Stolons
                 case Configurations.UserType.Producer:
                     Producer producer = user as Producer;
                     producer.CompanyName = "La ferme de " + producer.Name;
+		    producer.Latitude = 44.7354673;
+		    producer.Longitude = 4.601407399999971;
                     context.Producers.Add(producer);
                     break;
                 case Configurations.UserType.Consumer:

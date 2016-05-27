@@ -289,7 +289,6 @@ ProductModalView = Backbone.View.extend({
     template: _.template($("#productModalTemplate").html()),
 
     initialize: function () {
-	
     },
 
     open: function(productId) {
@@ -307,8 +306,6 @@ ProductModalView = Backbone.View.extend({
 
     render: function() {
 	this.$el.html(this.template({product: this.currentProduct.toJSON(), productModel: this.currentProduct}));
-	//var productActionView = new ProductActionView({el: this.el + " .pr_actions"});
-	//productActionView.render();
     },
 
     renderModal: function() {
