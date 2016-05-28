@@ -136,7 +136,7 @@ namespace Stolons
 
         #region FileManagement
 
-        public static string ServerUrl = "http://localhost:5000";//TOdo
+        //public static string ServerUrl = "http://localhost:5000";//TOdo
 
 
         public static string StolonsBillsStockagePath = Path.Combine("bills", "stolons");
@@ -156,7 +156,7 @@ namespace Stolons
 
         public static string GetUrl(string localPath)
         {
-            return Path.Combine(ServerUrl,localPath).Replace("\\", "/");
+            return localPath.Replace("\\", "/");
         }
 
         public static async Task<string> UploadFile(IHostingEnvironment environment, IFormFile uploadFile, string path)

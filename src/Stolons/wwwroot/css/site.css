@@ -209,6 +209,10 @@ textarea {
     font-size: 30px;
 }
 
+.modals {
+    display: block !important;
+}
+
 .modals ul {
     list-style-type: none;
     margin: 0;
@@ -312,4 +316,3 @@ textarea {
 .hidden {
     display: none;
 }
-

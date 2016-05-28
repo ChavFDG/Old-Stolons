@@ -33,7 +33,7 @@ ProducerModalView = Backbone.View.extend({
     },
 
     open: function(producerId) {
-	this.currentProducer = PublicProducers.ProducersModel.get("" + producerId);
+	this.currentProducer = PublicProducers.ProducersModel.get(producerId);
 	this.renderModal();
     },
 
