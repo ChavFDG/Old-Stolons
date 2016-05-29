@@ -58,8 +58,28 @@ textarea {
 }
 
 .userNewsAvatar {
-    width: 50px;
-    height: 50px;
+    width: 40px;
+    height: 40px;
+}
+
+.newsIcon {
+    font-size: 15px;
+    padding-right: 10px;
+}
+
+.newContent {
+    padding-top: 10px;
+}
+
+.newsInfos {
+    position: relative;
+}
+
+.newsAuthor {
+    /* parent element needs to be 'position: relative'! */
+    position: absolute;
+    bottom: 10px;
+    font-size: 12px;
 }
 
 .tdImageNews {

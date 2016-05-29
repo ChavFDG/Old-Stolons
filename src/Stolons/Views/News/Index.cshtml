@@ -26,33 +26,38 @@
         @foreach (var item in Model.OrderByDescending(x => x.DateOfPublication))
         {
             <tr>
-                <td  class="tdImageNews">
-                    <img src="@Configurations.GetUrl(item.ImageLink)" class="newsThumnail responsiveImage" >
-                </td>
-                <td>
-                    <h3>@Html.DisplayFor(modelItem => item.Title)</h3>
-                    <p>
-                        <div class="userNewsAvatar">
-                            <img src="@Configurations.GetUrl(item.User.Avatar)" class="responsiveImage avatar" />
-                        </div>
-                        @if (User.IsInRole(Configurations.UserType.Producer.ToString()))
-                        {
-                             <a asp-action="PartialDetail" asp-controller="Producers" asp-route-id="@item.User.Id">@Configurations.GetAlias(item.User)</a>
-                        }
-                        else
-                        {
-                            @Configurations.GetAlias(item.User)
-                        }
-                        le @Html.DisplayFor(modelItem => item.DateOfPublication)
-                        @if (User.IsInRole(Configurations.Role.Administrator.ToString())
-                        || User.IsInRole(Configurations.Role.Volunteer.ToString())
-                        || User.GetUserId() == item.User.Email)
-                        {
-                            <a asp-action="Edit" asp-route-id="@item.Id">Editer </a><a asp-action = "Delete" asp-route-id = "@item.Id">| Supprimer</a>
-                        }
-                    </p>
-                    @Html.DisplayFor(modelItem => item.Message)
-                </td>
+              <td class="tdImageNews">
+                <img src="@Configurations.GetUrl(item.ImageLink)" class="newsThumnail responsiveImage" >
+              </td>
+              <td class="newsInfos">
+                <h3><span class="newsIcon glyphicon glyphicon-chevron-right"></span>@Html.DisplayFor(modelItem => item.Title)</h3>
+
+		<div class="newsContent">
+		  @Html.DisplayFor(modelItem => item.Message)
+		</div>
+
+                <div class="newsAuthor">
+                  <!-- <div class="userNewsAvatar"> -->
+                  <!--   <img src="@Configurations.GetUrl(item.User.Avatar)" class="responsiveImage avatar" /> -->
+                  <!-- </div> -->
+		  
+                  @if (User.IsInRole(Configurations.UserType.Producer.ToString()))
+                  {
+                  <a asp-action="PartialDetail" asp-controller="Producers" asp-route-id="@item.User.Id">@Configurations.GetAlias(item.User)</a>
+                  }
+                  else
+                  {
+                  @Configurations.GetAlias(item.User)
+                  }
+                  le @Html.DisplayFor(modelItem => item.DateOfPublication)
+                  @if (User.IsInRole(Configurations.Role.Administrator.ToString())
+                  || User.IsInRole(Configurations.Role.Volunteer.ToString())
+                  || User.GetUserId() == item.User.Email)
+                  {
+                  <a asp-action="Edit" asp-route-id="@item.Id">Editer </a><a asp-action = "Delete" asp-route-id = "@item.Id">| Supprimer</a>
+                  }
+                  </div>
+              </td>
             </tr>
-        }
+            }
 </table>
