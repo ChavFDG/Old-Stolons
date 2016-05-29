@@ -389,8 +389,8 @@ ProductActionView = Backbone.View.extend(
 	    this.$(".productQuantityChanger").addClass("hidden");
 	    this.$(".productQuantityLoading").removeClass("hidden");
 	    WeekBasket.TmpWeekBasketModel.addProductToBasket(this.productId).then(_.bind(function() {
-		this.$(".productQuantityLoading").addClass("hidden");
 		this.$(".productQuantityChanger").removeClass("hidden");
+		this.$(".productQuantityLoading").addClass("hidden");
 	    }, this));
 	},
 

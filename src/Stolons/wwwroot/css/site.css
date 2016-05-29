@@ -180,10 +180,16 @@ textarea {
     padding: 10px;
 }
 
+.pr_qtystock ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
 .pr_priceQuantity {
-    text-align: right;
-    font-size: medium;
-    float: right;
+    /* text-align: right; */
+    /* font-size: medium; */
+    /* float: right; */
 }
 
 .pr_actions {
@@ -220,18 +226,12 @@ textarea {
 }
 
 #productModal-desc {
-    padding-top: 10px;
-}
-
-#productModal-desc * {
-    margin: 5px
+    margin-right: 10px;
+    padding-top: 20px;
 }
 
 #productModal-pricing {
-}
-
-#productModal-pricing * {
-    margin: 5px
+    padding-left: 15px;
 }
 
 #productModal-img img {

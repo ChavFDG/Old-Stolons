@@ -98,13 +98,11 @@
           <%= product.Name %>
         </div>
         <div class="pr_qtystock">
-          <span class="pr_stock">
-            Stock: <b> <%= product.RemainingStock %></b>
-          </span>
           <span class="pr_priceQuantity">
-            <b>
-              <%= product.Price %> €
-            </b>
+	    Prix:
+	    <b>
+	      <%= product.Price %> € <%= productModel.getPriceUnitString() %>
+	    </b>
           </span>
         </div>
 	<div class="pr_actions">
@@ -166,16 +164,23 @@
               <h3><%= product.Name %></h3>
               <ul>
 		Type de vente:
-		<li><b>
-		    <%= productModel.getSellTypeString() %>
-		</b></li>
+		<b>
+		  <%= productModel.getSellTypeString() %>
+		</b>
                 <li>
-                  Stock:
+                  Stock restant:
                   <b>
                     <%= product.RemainingStock %>
 		    <%= productModel.getStockUnitString() %>
                   </b>
                 </li>
+		<li class="productModal-pricing">
+                  Prix:
+                  <b>
+                    <%= product.Price %> €
+		    <%= productModel.getPriceUnitString() %>
+                  </b>
+		</li>
               </ul>
             </div>
 	    <div class="col-md-4">
@@ -191,21 +196,8 @@
 	      </div>
 	    </div>
           </div>
-          <div id="productModal-pricing" class="row">
-            <div>
-              <span>
-                Prix:
-                <b>
-                  <%= product.Price %> €
-		  <%= productModel.getPriceUnitString() %>
-                </b>
-              </span>
-            </div>
-          </div>
-          <div id="productModal-desc" class="row">
-            <span><b>Description: </b><pre> <%= product.Description %> </pre></span>
-          </div>
-          <div id="productModal-actions" class="row pr_actions">
+          <div id="productModal-desc">
+            <b>Description: </b><%= product.Description %>
           </div>
         </div>
       </div>
