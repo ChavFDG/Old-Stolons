@@ -1,13 +1,31 @@
 ﻿
 body {
-    padding-top: 50px;
+    padding-top: 5px;
     padding-bottom: 20px;
 }
 
-/* Wrapping element */
-/* Set some basic padding to keep content from hitting the edges */
-.body-content {
-    padding: 25px;
+.nav-container {
+    width: 70%;
+    margin-right: auto;
+    margin-left: auto;
+    padding: 0;
+}
+
+.navbar {
+    margin-bottom: 0 !important;
+}
+
+#navbar {
+    width: 80%;
+}
+
+.navbar-right {
+    display: block !important;
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 20%;
+    height: 100%;
 }
 
 /* Set widths on the form inputs since otherwise they're 100% wide */
@@ -17,10 +35,12 @@ textarea {
     max-width: 280px;
 }
 
+input[type="file"] {
+    height: auto;
+}
+
 /* Banner */
 .bannerAccount {
-    padding-top: 5px;
-    padding-bottom: 5px;
 }
 
 .bannerAccount form {
@@ -35,7 +55,6 @@ textarea {
     max-height: 40px;
     max-width: 40px;
 }
-
 
 /* Image */
 .responsiveImage {
@@ -111,6 +130,7 @@ textarea {
     -moz-box-shadow: 0 0 0 3px #fff, 0 0 0 4px #999, 0 2px 5px 4px rgba(0,0,0,.2);
     box-shadow: 0 0 0 3px #fff, 0 0 0 4px #999, 0 2px 5px 4px rgba(0,0,0,.2);
 }
+
 /*-- PUBLIC PRODUCER --*/
 
 .public_Prod_avatar >img {
@@ -123,6 +143,36 @@ textarea {
     padding-top: 35px;
 }
 
+#tmpBasket {
+    padding-top: 5px;
+}
+
+.isa_success {
+    color: #4F8A10;
+    background-color: #DFF2BF;
+    line-height: 2;
+    margin: 5px;
+}
+
+.isa_warning {
+    color: #9F6000;
+    background-color: #FEEFB3;
+    line-height: 2;
+    margin: 5px;
+}
+
+.warning-text {
+    padding-left: 5px;
+}
+
+.quantity-icon {
+    background: url("/images/basketQuantity.png") no-repeat;
+    background-size: 20px 20px;
+    display: block;
+    width: 22px;
+    height: 22px;
+}
+
 .product {
     display: inline-block;
     float: left;
@@ -130,10 +180,6 @@ textarea {
     height: 220px;
     border: 1px solid #222;
     margin: 5px;
-}
-
-.filters{
-    
 }
 
 #filters .searchFilter {
@@ -219,6 +265,11 @@ textarea {
 .pr_actionDetail {
     display: inline;
 }
+
+.outOfStock {
+    color: #f00;
+}
+
 .addProduct{
     display: inline;
 }
@@ -308,6 +359,7 @@ textarea {
 .basketTable {
     border-collapse: collapse;
     border: 1px solid #ddd;
+    margin-bottom: 5px !important;
 }
 
 .basketTable > th {
@@ -336,3 +388,4 @@ textarea {
 .hidden {
     display: none;
 }
+

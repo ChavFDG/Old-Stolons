@@ -167,10 +167,16 @@ namespace Stolons.Controllers
         {
             TempWeekBasket tempWeekBasket = _context.TempsWeekBaskets.Include(x=>x.Consumer).Include(x => x.Products).First(x => x.Id.ToString() == weekBasketId);
 	    tempWeekBasket.RetrieveProducts(_context);
-            BillEntry billEntry = tempWeekBasket.Products.First(x => x.ProductId.ToString() == productId);
-            billEntry.Product = _context.Products.First(x => x.Id.ToString() == productId);
+	    ValidatedWeekBasket validatedWeekBasket = _context.ValidatedWeekBaskets.Include(x => x.Consumer).Include(x => x.Products).FirstOrDefault(x => x.Consumer.Id == tempWeekBasket.Consumer.Id);
+	    int validatedQuantity = 0;
+	    if (validatedWeekBasket != null) {
+		BillEntry validatedEntry = validatedWeekBasket.Products.First(x => x.ProductId.ToString() == productId);
+		validatedQuantity = validatedEntry.Quantity;
+	    }
+	    BillEntry billEntry = tempWeekBasket.Products.First(x => x.ProductId.ToString() == productId);
+	    Product product = _context.Products.First(x => x.Id.ToString() == productId);
 
-            if (quantity > 0 && billEntry.Product.RemainingStock < billEntry.Quantity + quantity)
+	    if (quantity > 0 && product.RemainingStock < (billEntry.Quantity - validatedQuantity) + quantity)
 	    {
                 return tempWeekBasket;
             }
@@ -179,7 +185,7 @@ namespace Stolons.Controllers
 
             if (billEntry.Quantity <= 0)
             {
-                //La quantitÃ© est 0 on supprime le produit
+                //La quantite est 0 on supprime le produit
                 _context.Remove(billEntry);
             }
 	    tempWeekBasket.Validated = isBasketValidated(tempWeekBasket);
@@ -193,6 +199,7 @@ namespace Stolons.Controllers
 	    TempWeekBasket tempWeekBasket = _context.TempsWeekBaskets.Include(x=>x.Consumer).Include(x => x.Products).First(x => x.Id.ToString() == weekBasketId);
 	    tempWeekBasket.RetrieveProducts(_context);
             BillEntry billEntry = tempWeekBasket.Products.First(x => x.ProductId.ToString() == productId);
+	    billEntry.Product.RemainingStock += billEntry.Quantity;
 	    _context.Remove(billEntry);
 	    tempWeekBasket.Validated = isBasketValidated(tempWeekBasket);
 	    _context.SaveChanges();
@@ -336,12 +343,19 @@ namespace Stolons.Controllers
             }
             else
             {
+		//On annule tout le contenu du panier
+		foreach (BillEntry entry in validatedWeekBasket.Products)
+		{
+		    Product product = _context.Products.First(x => x.Id == entry.ProductId);
+		    entry.Product.RemainingStock += entry.Quantity;
+		}
+		_context.Remove(tempWeekBasket);
+                _context.Remove(validatedWeekBasket);
+		_context.SaveChanges();
+
                 //Il ne commande rien du tout
                 //On lui signale
                 Services.AuthMessageSender.SendEmail(validatedWeekBasket.Consumer.Email, validatedWeekBasket.Consumer.Name, "Panier de la semaine annulé", base.RenderPartialViewToString("ValidateBasket", null));
-                _context.Remove(tempWeekBasket);
-                _context.Remove(validatedWeekBasket);
-                _context.SaveChanges();
             }
 	    return View("ValidateBasket");
         }
@@ -374,25 +388,19 @@ namespace Stolons.Controllers
 	    {
 		return false;
 	    }
-	    int nbChecked = tmpBasket.Products.Count;
 	    foreach (BillEntry billEntry in tmpBasket.Products.ToList())
 	    {
-		foreach (BillEntry validatedEntry in validatedBasket.Products.ToList())
+		BillEntry validatedEntry = validatedBasket.Products.FirstOrDefault(x => x.Product.Id == billEntry.Product.Id);
+
+		if (validatedEntry == null) {
+		    return false;
+		}
+		if (billEntry.Quantity != validatedEntry.Quantity)
 		{
-		    if (billEntry.ProductId == validatedEntry.ProductId)
-		    {
-			if (billEntry.Quantity != validatedEntry.Quantity)
-			{
-			    return false;
-			}
-			else
-			{
-			    nbChecked--;
-			}
-		    }
+		    return false;
 		}
 	    }
-	    return nbChecked == 0;
+	    return true;
 	}
 
         private async Task<ApplicationUser> GetCurrentUserAsync()

@@ -1,7 +1,7 @@
 ﻿@model Stolons.Models.News
 
 @{
-    ViewData["Title"] = "Edition de la nouvelle de " + Model.User.Email + " du " + Model.DateOfPublication;
+    ViewData["Title"] = "Edition de la nouvelle de " + Model.User.Surname + " " + Model.User.Name + " du " + Model.DateOfPublication;
 }
 
 <h2>@ViewData["Title"]</h2>
@@ -34,15 +34,15 @@
         <input asp-for="ImageLink" hidden="hidden" />
         <input asp-for="DateOfPublication" hidden="hidden" />
         <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Sauvegarder" class="btn btn-default" />
-            </div>
+          <div class="col-md-offset-2 col-md-10">
+            <input type="submit" value="Sauvegarder" class="btn btn-default" />
+          </div>
         </div>
     </div>
 </form>
 
 <div>
-    <a asp-action="Index">Retourner aux nouvelles</a>
+  <a asp-action="Index">Retourner aux nouvelles</a>
 </div>
 
 @section Scripts {

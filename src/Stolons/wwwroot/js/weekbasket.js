@@ -5,7 +5,7 @@ WeekBasket = window.WeekBasket;
 
 ProductTypesModel = Backbone.Collection.extend({
     url: "/api/ProductTypes",
-    
+
     initialize: function() {
 	this.fetch();
     }
@@ -210,6 +210,17 @@ ValidatedWeekBasketModel = Backbone.Model.extend({
 
     isEmpty: function() {
 	return _.isEmpty(this.get("Products"));
+    },
+
+    getProductEntry: function(productId) {
+	var productEntry;
+	_.forEach(this.get("Products"), function(billEntry) {
+	    if (billEntry.ProductId == productId) {
+		productEntry = billEntry;
+		return false;
+	    }
+	});
+	return productEntry;
     }
 });
 
@@ -382,7 +393,24 @@ ProductActionView = Backbone.View.extend(
 	    if (!this.billEntry) {
 		return false;
 	    }
-	    return this.billEntry.Quantity < this.billEntry.Product.RemainingStock;
+	    var validatedBillEntry = WeekBasket.ValidatedWeekBasketModel.getProductEntry(this.productId);
+	    var validatedQty = (validatedBillEntry && validatedBillEntry.Quantity) || 0;
+	    var diffQty = this.billEntry.Quantity - validatedQty;
+	    return diffQty < this.billEntry.Product.RemainingStock;
+	},
+
+	canAddToBasket: function() {
+	    var validatedBillEntry = WeekBasket.ValidatedWeekBasketModel.getProductEntry(this.productId);
+	    var validatedQty = (validatedBillEntry && validatedBillEntry.Quantity) || 0;
+	    var productModel = WeekBasket.ProductsModel.get(this.productId);
+	    if (!this.billEntry) {
+		if (productModel.get("RemainingStock") + validatedQty> 0) {
+		    return true;
+		} else {
+		    return false;
+		}
+	    }
+	    return false;
 	},
 
 	addToBasket: function() {
@@ -413,7 +441,7 @@ ProductActionView = Backbone.View.extend(
 	},
 
 	render: function() {
-	    this.$el.html(this.template({billEntry: this.billEntry, canIncrement: this.canIncrement}));
+	    this.$el.html(this.template({billEntry: this.billEntry, canAddToBasket: _.bind(this.canAddToBasket, this), canIncrement: _.bind(this.canIncrement, this)}));
 	}
     }
 );
@@ -485,7 +513,7 @@ ValidatedWeekBasketView = Backbone.View.extend(
 	    this.model = args.model;
 	    this.model.on("sync", this.render, this);
 	    this.tmpBasketModel = args.tmpBasketModel;
-	    this.tmpBasketModel.on("sync change", this.renderCollapse, this);
+	    this.tmpBasketModel.on("sync change", this.render, this);
 	},
 
 	toggleCollapse: function() {
@@ -508,42 +536,32 @@ ValidatedWeekBasketView = Backbone.View.extend(
 	    }
 	},
 
-	renderCollapse: function() {
-	    if (this.tmpBasketModel.isEmpty() || this.tmpBasketModel.get("Validated") === true) {
-		this.collapse(false);
-	    } else if (this.$("#collapsible").hasClass("in")) {
-		//Hide only if it is visible
-		this.collapse(true);
-	    }
-	},
-
 	render: function () {
-	    this.$el.html(this.template({validatedBasketModel: this.model, validatedBasket: this.model.toJSON()}));
-	    this.renderCollapse();
+	    this.$el.html(this.template({tmpBasket: this.tmpBasketModel.toJSON(), validatedBasketModel: this.model, validatedBasket: this.model.toJSON()}));
 	}
     }
 );
 
 var initViews = function() {
 
-    WeekBasket.ProductModalView = new ProductModalView();
+    window.ProductModalView = new ProductModalView();
 
     WeekBasket.ProducerModalView = new ProducerModalView();
 
     WeekBasket.FiltersView = new FiltersView({ model: WeekBasket.ProductTypesModel, productsModel: WeekBasket.ProductsModel });
 
     WeekBasket.ValidatedWeekBasketView = new ValidatedWeekBasketView(
-	{
-	    model: WeekBasket.ValidatedWeekBasketModel,
-	    tmpBasketModel: WeekBasket.TmpWeekBasketModel
-	});
+    	{
+    	    model: WeekBasket.ValidatedWeekBasketModel,
+    	    tmpBasketModel: WeekBasket.TmpWeekBasketModel
+    	});
 
     WeekBasket.ProductsView = new ProductsView({ model: WeekBasket.ProductsModel, tmpBasketModel: WeekBasket.TmpWeekBasketModel });
 
     WeekBasket.TmpWeekBasketView = new TmpWeekBasketView({
-	model: WeekBasket.TmpWeekBasketModel,
-	validatedBasketModel: WeekBasket.ValidatedWeekBasketModel,
-	validatedBasketView: WeekBasket.ValidatedWeekBasketView
+    	model: WeekBasket.TmpWeekBasketModel,
+    	validatedBasketModel: WeekBasket.ValidatedWeekBasketModel,
+    	validatedBasketView: WeekBasket.ValidatedWeekBasketView
     });
 };
 

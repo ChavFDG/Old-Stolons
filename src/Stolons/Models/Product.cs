@@ -22,8 +22,6 @@ namespace Stolons.Models
         [Display(Name = "Description")]
         public string Description { get; set; }
 
-
-
         private IList<Label> _Labels = new List<Label>();
         [Display(Name = "Labels")]
         [NotMapped]

@@ -32,7 +32,7 @@
                 <span asp-validation-for="Product.Description" class="text-danger" />
             </div>
         </div>
-        <div class="form-group" >
+        <div class="form-group">
             <label asp-for="Product.Labels" class="col-md-2 control-label"></label>
             <div class="col-md-10">
                 @foreach (Product.Label label in Enum.GetValues(typeof(Product.Label)))
@@ -77,22 +77,18 @@
                 <span asp-validation-for="Product.DLC" class="text-danger" />
             </div>
         </div>
-        <div class="form-group">
-            <label asp-for="Product.Familly" class="col-md-2 control-label"></label>
-            <div class="col-md-10">
-                <select asp-for="FamillyName" class="form-control">
-                    @foreach (var productType in Model.ProductTypes)
-                    {
-                        <optgroup label="@productType.Name">
-                            @foreach (var productFamily in productType.ProductFamilly)
-                            {
-                                <option value="@productFamily.FamillyName">@productFamily.FamillyName</option>
-                            }
-                        </optgroup>
-                    }
-                </select>
-            </div>
-        </div>
+	<!-- just to make the current product familly accessible by js -->
+	<span id="productFamilly" class="hidden">
+	  @if (Model.Product.Familly != null) {
+		@(Model.Product.Familly.FamillyName)
+	  }
+	  else {
+		@("Tous")
+	  }
+	</span>
+	<div id="famillySelect">
+	  <!-- placeholder for backbone view -->
+	</div>
         <script>
             $('#SellType').change(function () {
                 if ($("#SellType").val() == 1)
@@ -199,7 +195,37 @@
 </div>
 
 @section Scripts {
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <!-- <script src="~/lib/jquery/dist/jquery.min.js"></script> -->
     <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
     <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+
+    <script id="familiesTemplate" type="text/template">
+      <div class="form-group">
+        <label asp-for="Product.Familly" class="col-md-2 control-label">Famille</label>
+        <div class="col-md-10">
+	  <select id="familiesDropDown" name="FamillyName">
+
+	    <option value="Tous" <% if (!currentFamilly || currentFamilly == "Tous") { %> selected="selected" <% }%> >
+	      Tous
+	    </option>
+
+	    <% _.forEach(productTypes, function(productType) { %>
+
+	    <optgroup label="<%= productType.Name %>">
+
+	      <% _.forEach(productType.ProductFamilly, function (productFamily) { %>
+
+	      <option id="<%= productFamily.FamillyName %>" value="<%= productFamily.FamillyName %>" data-image="<%= productFamily.Image %>"
+		      <% if (productFamily.FamillyName == currentFamilly) { %> selected="selected"  <% } %> >
+		<%= productFamily.FamillyName %>
+	      </option>
+	      
+	      <% }); %>
+	    </optgroup>
+	    <% }); %>
+	  </select>
+	</div>
+      </div>
+    </script>
+    <script src="/js/manageProduct.js"></script>
 }

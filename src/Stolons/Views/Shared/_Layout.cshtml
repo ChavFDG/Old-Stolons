@@ -4,43 +4,33 @@
 @using Stolons.ViewModels;
 
 <html>
-    <head >
+    <head>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 	<title>@ViewData["Title"] - Stolons</title>
 
 	<link rel="stylesheet" href="~/css/site.css" />
 	<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-
 	<link rel="stylesheet" href="~/css/select2.min.css" />
 
         <script src="~/lib/jquery/dist/jquery.min.js"></script>
         <script src="~/lib/bootstrap/dist/js/bootstrap.min.js"></script>
-
 	<script src="~/lib/underscore-min.js"></script>
 	<script src="~/lib/backbone.js"></script>
-
-	<!-- nothing inside it for now... -->
-	<!-- <script src="~/js/site.min.js" asp-append-version="true"></script> -->
-
-	<!-- <script type="text/javascript" src="http://code.jquery.com/ui/1.10.2/jquery-ui.js"></script> -->
-
-	<!-- <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.2/themes/smoothness/jquery-ui.css" /> -->
-
 	<script src="~/lib/select2.full.min.js"></script>
-	
+
     </head>
     <body>
-        @await Component.InvokeAsync("Banner")
+      @await Component.InvokeAsync("Banner")
 
-        <div class="container body-content">
-          @RenderBody()
-          <hr />
+      <div class="container body-content">
+        @RenderBody()
+        <hr />
           <footer>
             <p>&copy; 2015 - Stolons</p>
           </footer>
-        </div>
-	
-        @RenderSection("scripts", required: false)
+      </div>
+      
+      @RenderSection("scripts", required: false)
     </body>
 </html>

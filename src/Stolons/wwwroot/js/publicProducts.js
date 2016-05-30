@@ -203,7 +203,9 @@ ProductsView = Backbone.View.extend(
 );
 
 function initViews() {
-    PublicProducts.ProductModalView = new ProductModalView();
+
+    //make the modal view global
+    window.ProductModalView = new ProductModalView();
     PublicProducts.FiltersView = new FiltersView({model: PublicProducts.ProductTypesModel, productsModel: PublicProducts.ProductsModel});
     PublicProducts.ProductsView = new ProductsView({model: PublicProducts.ProductsModel});
 }

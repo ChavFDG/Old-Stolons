@@ -134,6 +134,14 @@ namespace Stolons.Controllers
                     //Setting new value, saving
                     news.ImageLink = Path.Combine(Configurations.NewsImageStockagePath, fileName);
                 }
+                var appUser = await GetCurrentUserAsync();
+                User user;
+                user = _context.Consumers.FirstOrDefault(x => x.Email == appUser.Email);
+		if (user == null)
+                {
+                    user = _context.Producers.FirstOrDefault(x => x.Email == appUser.Email);
+                }
+                news.User = user;
                 _context.Update(news);
                 _context.SaveChanges();
                 return RedirectToAction("Index");

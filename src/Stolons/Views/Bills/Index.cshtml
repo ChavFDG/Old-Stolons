@@ -3,12 +3,13 @@
 @using Stolons.Models
 
 @{
-    ViewData["Title"] = "Mes Factures";
+ViewData["Title"] = "Mes Factures";
 }
+
+<h2>@ViewData["Title"]</h2>
 
 @if (Model.Any())
 {
-    <h2>@ViewData["Title"]</h2>
 
     <table class="table">
         <tr>
@@ -58,6 +59,5 @@
 }
 else
 {
-    <p>Aucune factures</p>
+    <p>Aucune facture</p>
 }
-
