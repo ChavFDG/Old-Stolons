@@ -197,7 +197,8 @@ ValidatedWeekBasketModel = Backbone.Model.extend({
     getTotal: function() {
 	var total = 0;
 	_.forEach(this.get("Products"), function(billEntry) {
-		var productModel = WeekBasket.ProductsModel.get(billEntry.ProductId);
+	    var productModel = WeekBasket.ProductsModel.get(billEntry.ProductId);
+	    console.log("Bill ProductId  = " + billEntry.ProductId);
 	    total += (billEntry.Quantity * productModel.get("Price"));
 	});
 	return total;

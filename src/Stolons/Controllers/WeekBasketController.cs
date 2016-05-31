@@ -71,21 +71,6 @@ namespace Stolons.Controllers
 			});
 	}
 
-	/**
-	 * Get or creates the temp week basket and explicitely load associated data
-	 */
-	// private void loadBasketProducts(IWeekBasket basket)
-	// {
-	//     if (basket != null)
-	//     {
-	// 	foreach (BillEntry entry in basket.Products)
-	// 	{
-	// 	    //Ugly hack, fucking stupid lazy (and eager) loading
-	// 	    entry.Product = _context.Products.First(x => x.Id == entry.ProductId);
-	// 	}
-	//     }
-	// }	
-
 	[HttpGet, ActionName("TmpWeekBasket"), Route("api/tmpWeekBasket")]
 	public async Task<string> JsonTmpWeekBasket() {
 	    var appUser = await GetCurrentUserAsync();
@@ -138,6 +123,7 @@ namespace Stolons.Controllers
 	    tempWeekBasket.RetrieveProducts(_context);
             BillEntry billEntry = new BillEntry();
             billEntry.Product = _context.Products.First(x => x.Id.ToString() == productId);
+	    billEntry.ProductId = billEntry.Product.Id;
             billEntry.Quantity = 1;
             tempWeekBasket.Products.Add(billEntry);
 	    tempWeekBasket.Validated = isBasketValidated(tempWeekBasket);
@@ -168,28 +154,32 @@ namespace Stolons.Controllers
             TempWeekBasket tempWeekBasket = _context.TempsWeekBaskets.Include(x=>x.Consumer).Include(x => x.Products).First(x => x.Id.ToString() == weekBasketId);
 	    tempWeekBasket.RetrieveProducts(_context);
 	    ValidatedWeekBasket validatedWeekBasket = _context.ValidatedWeekBaskets.Include(x => x.Consumer).Include(x => x.Products).FirstOrDefault(x => x.Consumer.Id == tempWeekBasket.Consumer.Id);
+
 	    int validatedQuantity = 0;
 	    if (validatedWeekBasket != null) {
-		BillEntry validatedEntry = validatedWeekBasket.Products.First(x => x.ProductId.ToString() == productId);
-		validatedQuantity = validatedEntry.Quantity;
+		BillEntry validatedEntry = validatedWeekBasket.Products.FirstOrDefault(x => x.ProductId.ToString() == productId);
+
+		if (validatedEntry != null)
+		{
+		    validatedQuantity = validatedEntry.Quantity;
+		}
 	    }
-	    BillEntry billEntry = tempWeekBasket.Products.First(x => x.ProductId.ToString() == productId);
-	    Product product = _context.Products.First(x => x.Id.ToString() == productId);
+	    BillEntry billEntry = tempWeekBasket.Products.FirstOrDefault(x => x.ProductId.ToString() == productId);
+	    Product product = _context.Products.FirstOrDefault(x => x.Id.ToString() == productId);
 
-	    if (quantity > 0 && product.RemainingStock < (billEntry.Quantity - validatedQuantity) + quantity)
+	    if (!(quantity > 0 && product.RemainingStock < (billEntry.Quantity - validatedQuantity) + quantity))
 	    {
-                return tempWeekBasket;
-            }
+		billEntry.Quantity = billEntry.Quantity + quantity;
 
-            billEntry.Quantity = billEntry.Quantity + quantity;
-
-            if (billEntry.Quantity <= 0)
-            {
-                //La quantite est 0 on supprime le produit
-                _context.Remove(billEntry);
+		if (billEntry.Quantity <= 0)
+		{
+		    //La quantite est 0 on supprime le produit
+		    tempWeekBasket.Products.Remove(billEntry);
+		    _context.Remove(billEntry);
+		}
+		tempWeekBasket.Validated = isBasketValidated(tempWeekBasket);
+		_context.SaveChanges();
             }
-	    tempWeekBasket.Validated = isBasketValidated(tempWeekBasket);
-            _context.SaveChanges();
             return tempWeekBasket;
         }
 
