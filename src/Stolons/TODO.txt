@@ -1,10 +1,15 @@
 ﻿A faire :
-Damien
+
+Damien ou Nico (car Damien il arrive plus à avoir de temps)
 - (1) Bloquer les pages en fonctions du mode du site et des utilisateurs (presque finis, reste week basket et mise en place de la page en fonction de Commande /PRrparation / Stock ...)
+- (1) Page contact 
+- (1) Ajouter % du producteur
+- (1) Passer les suppressions de news, d'utilisateur, de producteur ... en admin et ajouter un message de confirmation
+- (1) Lors de l'envoie des mails de validation de panier, enlever ce qui n'a pas besoin d'être dans le mail (message disant qu'un mail a été envoyé ainsi que le "cliquer ici pour modifier votre panier")
 
 Nico
 - (1) Ne pas afficher direct le panier en modifier, mais devoir appuyer sur un bouton ( ou au pire le + et - ) pour le faire apparaitre. Si bouton inactiver le + et - des produits
-
+- (1) BUG dans la fonction de recherche, quand on tape "tomates" on a la salade qui apparait aussi
 - (1) Vérifier le fonctionnement sur les navigateurs des scripts => BUG (bug avec chrome) => Production pas production le javascript
 - (1) Quand le stock d'un produit est à 0, je peux quand même l'ajouter
 

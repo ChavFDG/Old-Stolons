@@ -390,7 +390,7 @@ namespace Stolons.Controllers
 	    }
 	    foreach (BillEntry billEntry in tmpBasket.Products.ToList())
 	    {
-		BillEntry validatedEntry = validatedBasket.Products.FirstOrDefault(x => x.Product.Id == billEntry.Product.Id);
+		BillEntry validatedEntry = validatedBasket.Products.FirstOrDefault(x => x.ProductId == billEntry.ProductId);
 
 		if (validatedEntry == null) {
 		    return false;
