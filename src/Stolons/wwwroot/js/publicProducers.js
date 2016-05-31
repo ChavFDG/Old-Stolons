@@ -23,7 +23,7 @@ ProducersModel = Backbone.Collection.extend(
     }
 );
 
-ProducerModalView = Backbone.View.extend({
+ProducerViewModal = Backbone.View.extend({
 
     el: "#producerModal",
 
@@ -82,7 +82,7 @@ function initMap(producersModel) {
 	var marker = L.marker([producer.get("Latitude"), producer.get("Longitude")], {icon: producerIcon});
 	marker.bindPopup(popup);
 	marker.on("click", function() {
-	    PublicProducers.ProducerModalView.open(producer.get("Id"));
+	    ProducerModalView.open(producer.get("Id"));
 	    return false;
 	});
 	marker.addTo(map);
@@ -104,7 +104,7 @@ function initMap(producersModel) {
 
 $(function() {
 
-    PublicProducers.ProducerModalView = new ProducerModalView();
+    window.ProducerModalView = new ProducerViewModal();
 
     PublicProducers.ProducersModel = new ProducersModel();
 

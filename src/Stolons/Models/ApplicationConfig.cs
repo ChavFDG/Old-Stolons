@@ -17,7 +17,7 @@ namespace Stolons.Models
         public string StolonsAddress { get; set; }
         [Display(Name = "Numéro de téléphone de la structure")]
         public string StolonsPhoneNumber { get; set; }
-        
+
         [Display(Name = "Texte de la page \"qui somme nous\"")]
         public string StolonsAboutPageText { get; set; }
         //Mails
@@ -41,14 +41,14 @@ namespace Stolons.Models
         public int PreparationHourStartDate { get; set; }
         [Display(Name = "Minute")]
         public int PreparationMinuteStartDate { get; set; }
-        
+
         [Display(Name = "Jour")]
         public DayOfWeek StockUpdateDayStartDate { get; set; }
         [Display(Name = "Heure")]
         public int StockUpdateHourStartDate { get; set; }
         [Display(Name = "Minute")]
         public int StockUpdateMinuteStartDate { get; set; }
-        
+
         [Display(Name = "Jour")]
         public DayOfWeek OrderDayStartDate { get; set; }
         [Display(Name = "Heure")]

@@ -164,9 +164,7 @@ namespace Stolons.Controllers
             _context.Products.First(x => x.Id == id).State = Product.ProductState.Disabled;
             _context.SaveChanges();
             return RedirectToAction("Index");
-
         }
-
 
         [Authorize(Roles = Configurations.UserType_Producer)]
         [HttpPost, ActionName("ChangeStock")]

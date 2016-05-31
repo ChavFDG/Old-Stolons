@@ -12,8 +12,7 @@ namespace Stolons.Controllers
         [AllowAnonymous]
         public IActionResult Index()
         {
-
-            return View();
+            return RedirectToAction("HowItsWork");
         }
 
         [AllowAnonymous]

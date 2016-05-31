@@ -133,7 +133,13 @@ input[type="file"] {
 
 /*-- PUBLIC PRODUCER --*/
 
-.public_Prod_avatar >img {
+.producerOpenText {
+    padding-top: 10px;
+    font-weigh: 50;
+    font-size: 17px
+}
+
+.public_Prod_avatar > img {
     width: 75px;
     height: 75px;
 }
@@ -176,7 +182,7 @@ input[type="file"] {
 .product {
     display: inline-block;
     float: left;
-    width: 250px;
+    width: 240px;
     height: 220px;
     border: 1px solid #222;
     margin: 5px;
@@ -200,6 +206,7 @@ input[type="file"] {
     display: block;
     margin-left: auto;
     margin-right: auto;
+    padding-top: 5px;
 }
 .pr_avatar {
     position: absolute;
@@ -232,9 +239,6 @@ input[type="file"] {
 
 .product-bottom {
     height: 100px;
-}
-
-.pr_text {
 }
 
 .pr_name {
@@ -280,6 +284,31 @@ input[type="file"] {
 }
 
 /* Product modal in week basket view */
+
+.producerModalTitle {
+    padding-bottom: 15px;
+}
+
+.producerModalName {
+    font-size: 20px;
+    display: inline-block;
+    padding-left: 10px;
+}
+
+.producerModalAvatar {
+    margin-right: auto;
+    display: inline-block;
+}
+
+.producerModalAvatar img {
+    width: 35px;
+    height: 35px;
+}
+
+.producerInfoList > li {
+    padding: 5px;
+    
+}
 
 .modals .modal-header .close {
     margin-top: -18px;

@@ -45,25 +45,8 @@
 
 @section Scripts {
 
-<script id="producerModalTemplate" type="text/template">
-
-  <div id="producerModal-<%= producer.Id %>" class="modals modal in">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-        </div>
-        <div class="modal-body">
-          <div class="row">
-	    Producteur <b> <%= producer.CompanyName %> </b>
-
-	    TODO
-          </div>
-	</div>
-      </div>
-    </div>
-  </div>
-</script>
+<!-- Include the producer modal template -->
+@{ await Html.RenderPartialAsync("Templates/ProducerModalTemplate"); }
 
 <script src="/lib/leaflet.js"></script>
 <script src="/js/publicProducers.js"></script>

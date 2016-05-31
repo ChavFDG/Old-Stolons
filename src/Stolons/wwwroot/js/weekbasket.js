@@ -18,6 +18,8 @@ ProductModel = Backbone.Model.extend({
 
     defaults: {},
 
+    unitsEnum: ["Kg", "Gr", "ml", "L"],
+
     /*
       return the html string according to this product's sell type
      */
@@ -38,8 +40,7 @@ ProductModel = Backbone.Model.extend({
 	    return "Pièces";
 	}
 	var productUnit = this.get("ProductUnit");
-	var unitsEnum = ["Kg", "Gr", "ml", "L"];
-	return unitsEnum[productUnit];
+	return this.unitsEnum[productUnit];
     },
 
     getPriceUnitString: function() {
@@ -47,8 +48,23 @@ ProductModel = Backbone.Model.extend({
 	    return " / Pièce";
 	}
 	var productUnit = this.get("ProductUnit");
-	var unitsEnum = ["Kg", "Gr", "ml", "L"];
-	return " / " + unitsEnum[productUnit];
+	return " / " + this.unitsEnum[productUnit];
+    },
+
+    getSellStepString: function() {
+	if (this.get("Type") == 1) {
+	    return " Pièce(s)";
+	}
+	var productUnit = this.get("ProductUnit"); 
+    },
+
+    //retourne la string correctement formattee pour le poids donne en grammes
+    prettyPrintQuantity: function(weight) {
+	
+	if (weight >= 1000) {
+	    return (weight / 1000) + " " + largeunit;
+	}
+	return weight + " " + productUnit;
     }
 });
 
@@ -547,7 +563,7 @@ var initViews = function() {
 
     window.ProductModalView = new ProductModalView();
 
-    WeekBasket.ProducerModalView = new ProducerModalView();
+    window.ProducerModalView = new ProducerModalView();
 
     WeekBasket.FiltersView = new FiltersView({ model: WeekBasket.ProductTypesModel, productsModel: WeekBasket.ProductsModel });
 

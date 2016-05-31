@@ -74,6 +74,37 @@ function initModels() {
 
 /* ---------------------------  Bellow Views definitions -------------------- */
 
+ProducerViewModal = Backbone.View.extend({
+
+    el: "#producerModal",
+
+    template: _.template($("#producerModalTemplate").html()),
+
+    initialize: function() {
+    },
+
+    open: function(productId) {
+	this.currentProducer = PublicProducts.ProductsModel.get(productId).get("Producer");
+	this.renderModal();
+    },
+
+    onClose: function() {
+	this.currentProducer = null;
+	this.$el.off('hide.bs.modal');
+	this.$el.empty();
+    },
+
+    render: function() {
+	this.$el.html(this.template({producer: this.currentProducer}));
+    },
+
+    renderModal: function() {
+	this.render();
+	this.$el.modal({keyboard: true, show: true});
+	this.$el.on('hide.bs.modal', _.bind(this.onClose, this));
+    }
+});
+
 ProductModalView = Backbone.View.extend({
 
     el: "#productModal",
@@ -206,6 +237,8 @@ function initViews() {
 
     //make the modal view global
     window.ProductModalView = new ProductModalView();
+    window.ProducerModalView = new ProducerViewModal();
+
     PublicProducts.FiltersView = new FiltersView({model: PublicProducts.ProductTypesModel, productsModel: PublicProducts.ProductsModel});
     PublicProducts.ProductsView = new ProductsView({model: PublicProducts.ProductsModel});
 }

@@ -7,6 +7,37 @@ ProductTypesModel = Backbone.Collection.extend({
     }
 });
 
+//Juste pour la gestion de quelques evenements sur la vue globale
+ManageProductView = Backbone.View.extend(
+    {
+
+	el: "body",
+
+	events: {
+	    "change #SellType": "sellTypeChanged"
+	},
+
+	initialize: function() {
+	    this.sellTypeChanged();
+	},
+
+	sellTypeChanged: function(event) {
+	    var sellType = $("#SellType").val();
+
+	    if (sellType == 1) {
+		//Vente à la pièce, on desactive tout ce qui concerne le poids
+		$("#productWeightUnit").addClass("hidden");
+		$("#productQtyStep").addClass("hidden");
+		$("#productAvgWeight").addClass("hidden");
+	    } else {
+		$("#productWeightUnit").removeClass("hidden");
+		$("#productQtyStep").removeClass("hidden");
+		$("#productAvgWeight").removeClass("hidden");
+	    }
+	}
+    }
+);
+
 ProductTypesView = Backbone.View.extend({
 
     el: "#famillySelect",
@@ -53,5 +84,7 @@ $(function() {
     var productTypesModel = new ProductTypesModel();
 
     var view = new ProductTypesView({model: productTypesModel});
+
+    var manageProductView = new ManageProductView({});
 
 });
