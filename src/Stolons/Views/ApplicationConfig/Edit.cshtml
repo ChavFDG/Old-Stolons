@@ -48,6 +48,15 @@
             </div>
         </div>
 
+        <h4>Courriel de Stolons pour contact :</h4>
+        <div class="form-group">
+            <label asp-for="ContactMailAddress" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="ContactMailAddress" class="form-control" />
+                <span asp-validation-for="ContactMailAddress" class="text-danger" />
+            </div>
+        </div>
+
         <h4>Courriel de Stolons pour envoie des messages aux utilisateurs :</h4>
         <div class="form-group">
             <label asp-for="MailAddress" class="col-md-2 control-label"></label>

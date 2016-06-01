@@ -4,7 +4,7 @@ Damien ou Nico (car Damien il arrive plus à avoir de temps)
 - (1) Bloquer les pages en fonctions du mode du site et des utilisateurs (presque finis, reste week basket et mise en place de la page en fonction de Commande /PRrparation / Stock ...)
 - (1) mettre à jour les fichier Exel suite au changement de système de calcul du poids / prix
 - (1) Quand on écrit une news faire apparaitre le logo de Stolons à la place de l'avatar de la personne ayant mis la news
-- (1) Pouvoir reseter les mails des adhérent => envoie d'un mail à l'adhérent
+- (1) Pouvoir reseter les mot de passe des adhérents => envoie d'un mail à l'adhérent
 
 Nico
 - (1) Ne pas afficher direct le panier en modifier, mais devoir appuyer sur un bouton ( ou au pire le + et - ) pour le faire apparaitre. Si bouton inactiver le + et - des produits
@@ -32,6 +32,7 @@ Fait :
 - (1) Lors de l'envoie des mails de validation de panier, enlever ce qui n'a pas besoin d'être dans le mail (message disant qu'un mail a été envoyé ainsi que le "cliquer ici pour modifier votre panier")
 - (1) Ajout d'un mode production (RELEASE)
 - (2) Virer le mode Préparation des commandes => Il n'y a plus que Order et DeliveryAndStockUpdate
+- (2) Ajouter une entré Couriel de contact pour la page Contact
 
 
 
@@ -39,7 +40,6 @@ A finir avant Jeudi 16h :
 DAMIEN
 - Factures à mettre à jour
 - Les pages à bloquer
+- Stock restant / Stock de la semaine
 NICO
 - Panier
-- Ajout d'un produits à finir
-- Stock restant / Stock de la semaine

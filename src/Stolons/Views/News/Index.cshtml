@@ -33,7 +33,7 @@
                 <h3><span class="newsIcon glyphicon glyphicon-chevron-right"></span>@Html.DisplayFor(modelItem => item.Title)</h3>
 
 		<div class="newsContent">
-		  @Html.DisplayFor(modelItem => item.Message)
+		  @(new HtmlString(item.Message))
 		</div>
 
                 <div class="newsAuthor">

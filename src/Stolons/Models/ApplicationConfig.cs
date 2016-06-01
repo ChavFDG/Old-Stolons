@@ -25,12 +25,15 @@ namespace Stolons.Models
         [Display(Name = "Texte de la page \"qui somme nous\"")]
         public string StolonsAboutPageText { get; set; } = @"Stolons est une association à visé social, étique et solidaire.";
         //Mails
+        
+        [Display(Name = "Courriel de contact")]
+        public string ContactMailAddress { get; set; } = "contact@stolons.org";
         [Display(Name = "Courriel d'envoie des mails")]
         public string MailAddress { get; set; } = "ne_pas_repondre@stolons.org";
         [Display(Name = "Mot de passe du courriel")]
         public string MailPassword{ get; set; } = "Stolons2016";
         [Display(Name = "Smtp")] 
-        public string MailSmtp { get; set; } = " mail.gandi.net";
+        public string MailSmtp { get; set; } = "mail.gandi.net";
         [Display(Name = "Port")]
         public int MailPort{ get; set; } = 587;
 
