@@ -11,12 +11,16 @@ namespace Stolons.Models
 
         [Key]
         public Guid Id { get; set; }
+        //Configuration de la structure
         [Display(Name = "Libelle de la structure (Stolons)")]
         public string StolonsLabel { get; set; }
         [Display(Name = "Adresse de la structure")]
         public string StolonsAddress { get; set; }
         [Display(Name = "Numéro de téléphone de la structure")]
         public string StolonsPhoneNumber { get; set; }
+
+        [Display(Name = "Comission de la structure en % ")]
+        public int Comission { get; set; } = 5;
 
         [Display(Name = "Texte de la page \"qui somme nous\"")]
         public string StolonsAboutPageText { get; set; }

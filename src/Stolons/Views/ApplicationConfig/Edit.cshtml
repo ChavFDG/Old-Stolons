@@ -31,6 +31,13 @@
                 <span asp-validation-for="StolonsPhoneNumber" class="text-danger" />
             </div>
         </div>
+        <div class="form-group">
+            <label asp-for="Comission" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="Comission" class="form-control" min="0" max="100" />
+                <span asp-validation-for="Comission" class="text-danger" />
+            </div>
+        </div>
 
         <h4>Configuration des pages du site</h4>
         <div class="form-group">
