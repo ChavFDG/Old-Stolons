@@ -4,7 +4,7 @@ using Microsoft.Data.Entity.Migrations;
 
 namespace Stolons.Migrations
 {
-    public partial class Commision : Migration
+    public partial class Migrations : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -27,22 +27,19 @@ namespace Stolons.Migrations
                 {
                     Id = table.Column<Guid>(nullable: false),
                     Comission = table.Column<int>(nullable: false),
+                    DeliveryAndStockUpdateDayStartDate = table.Column<int>(nullable: false),
+                    DeliveryAndStockUpdateDayStartDateHourStartDate = table.Column<int>(nullable: false),
+                    DeliveryAndStockUpdateDayStartDateMinuteStartDate = table.Column<int>(nullable: false),
                     IsModeSimulated = table.Column<bool>(nullable: false),
                     MailAddress = table.Column<string>(nullable: true),
                     MailPassword = table.Column<string>(nullable: true),
                     MailPort = table.Column<int>(nullable: false),
                     MailSmtp = table.Column<string>(nullable: true),
-                    OrderDayStartDate = table.Column<int>(nullable: false),
+                    OrderAndUpdateDayStartDate = table.Column<int>(nullable: false),
+                    OrderAndUpdateHourStartDate = table.Column<int>(nullable: false),
+                    OrderAndUpdateMinuteStartDate = table.Column<int>(nullable: false),
                     OrderDeliveryMessage = table.Column<string>(nullable: true),
-                    OrderHourStartDate = table.Column<int>(nullable: false),
-                    OrderMinuteStartDate = table.Column<int>(nullable: false),
-                    PreparationDayStartDate = table.Column<int>(nullable: false),
-                    PreparationHourStartDate = table.Column<int>(nullable: false),
-                    PreparationMinuteStartDate = table.Column<int>(nullable: false),
                     SimulationMode = table.Column<int>(nullable: false),
-                    StockUpdateDayStartDate = table.Column<int>(nullable: false),
-                    StockUpdateHourStartDate = table.Column<int>(nullable: false),
-                    StockUpdateMinuteStartDate = table.Column<int>(nullable: false),
                     StolonsAboutPageText = table.Column<string>(nullable: true),
                     StolonsAddress = table.Column<string>(nullable: true),
                     StolonsLabel = table.Column<string>(nullable: true),

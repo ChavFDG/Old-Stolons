@@ -8,8 +8,8 @@ using Stolons.Models;
 namespace Stolons.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20160601111311_Commision")]
-    partial class Commision
+    [Migration("20160601210943_Migrations")]
+    partial class Migrations
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -105,6 +105,12 @@ namespace Stolons.Migrations
 
                     b.Property<int>("Comission");
 
+                    b.Property<int>("DeliveryAndStockUpdateDayStartDate");
+
+                    b.Property<int>("DeliveryAndStockUpdateDayStartDateHourStartDate");
+
+                    b.Property<int>("DeliveryAndStockUpdateDayStartDateMinuteStartDate");
+
                     b.Property<bool>("IsModeSimulated");
 
                     b.Property<string>("MailAddress");
@@ -115,27 +121,15 @@ namespace Stolons.Migrations
 
                     b.Property<string>("MailSmtp");
 
-                    b.Property<int>("OrderDayStartDate");
+                    b.Property<int>("OrderAndUpdateDayStartDate");
+
+                    b.Property<int>("OrderAndUpdateHourStartDate");
+
+                    b.Property<int>("OrderAndUpdateMinuteStartDate");
 
                     b.Property<string>("OrderDeliveryMessage");
 
-                    b.Property<int>("OrderHourStartDate");
-
-                    b.Property<int>("OrderMinuteStartDate");
-
-                    b.Property<int>("PreparationDayStartDate");
-
-                    b.Property<int>("PreparationHourStartDate");
-
-                    b.Property<int>("PreparationMinuteStartDate");
-
                     b.Property<int>("SimulationMode");
-
-                    b.Property<int>("StockUpdateDayStartDate");
-
-                    b.Property<int>("StockUpdateHourStartDate");
-
-                    b.Property<int>("StockUpdateMinuteStartDate");
 
                     b.Property<string>("StolonsAboutPageText");
 

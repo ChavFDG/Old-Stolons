@@ -34,7 +34,7 @@ namespace Stolons.Tools
             do
             {
                 ApplicationConfig.Modes currentMode = Configurations.Mode;
-                if (lastMode == ApplicationConfig.Modes.Order && currentMode == ApplicationConfig.Modes.Preparation)
+                if (lastMode == ApplicationConfig.Modes.Order && currentMode == ApplicationConfig.Modes.DeliveryAndStockUpdate)
                 {
                     //We moved form Order to Preparation, create and send bills
                     List<IBill> bills = new List<IBill>();

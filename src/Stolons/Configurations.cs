@@ -49,29 +49,25 @@ namespace Stolons
                 }
 
                 DateTime currentTime = DateTime.Now;
-                
+
+
                 DateTime preparationTime = DateTime.Today;
-                preparationTime = preparationTime.AddDays(GetDaysDiff(currentTime.DayOfWeek, ApplicationConfig.PreparationDayStartDate));
-                preparationTime = preparationTime.AddHours(ApplicationConfig.PreparationHourStartDate).AddMinutes(ApplicationConfig.PreparationMinuteStartDate);
-                
-                DateTime stockUpdateTime = DateTime.Today;
-                stockUpdateTime = stockUpdateTime.AddDays(GetDaysDiff(currentTime.DayOfWeek, ApplicationConfig.StockUpdateDayStartDate));
-                stockUpdateTime = stockUpdateTime.AddHours(ApplicationConfig.StockUpdateHourStartDate).AddMinutes(ApplicationConfig.StockUpdateMinuteStartDate);
-                
+                preparationTime = preparationTime.AddDays(GetDaysDiff(currentTime.DayOfWeek, ApplicationConfig.DeliveryAndStockUpdateDayStartDate ));
+                preparationTime = preparationTime.AddHours(ApplicationConfig.DeliveryAndStockUpdateDayStartDateHourStartDate).AddMinutes(ApplicationConfig.DeliveryAndStockUpdateDayStartDateMinuteStartDate);
+
                 DateTime orderTime = DateTime.Today;
-                orderTime = orderTime.AddDays(GetDaysDiff(currentTime.DayOfWeek, ApplicationConfig.OrderDayStartDate));
-                orderTime = orderTime.AddHours(ApplicationConfig.OrderHourStartDate).AddMinutes(ApplicationConfig.OrderMinuteStartDate);
+                orderTime = orderTime.AddDays(GetDaysDiff(currentTime.DayOfWeek, ApplicationConfig.OrderAndUpdateDayStartDate));
+                orderTime = orderTime.AddHours(ApplicationConfig.OrderAndUpdateHourStartDate).AddMinutes(ApplicationConfig.OrderAndUpdateMinuteStartDate);
 
                
-                if(preparationTime <= currentTime && currentTime <= stockUpdateTime)
+                if(orderTime <= currentTime && currentTime <= preparationTime)
                 {
-                    return ApplicationConfig.Modes.Preparation;
+                    return ApplicationConfig.Modes.DeliveryAndStockUpdate;
                 }
-                if (stockUpdateTime <= currentTime && currentTime <= orderTime)
+                else
                 {
-                    return ApplicationConfig.Modes.StockUpdate;
+                    return ApplicationConfig.Modes.Order;
                 }
-                return ApplicationConfig.Modes.Order;
             }
         }
 

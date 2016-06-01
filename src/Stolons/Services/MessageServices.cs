@@ -45,7 +45,7 @@ namespace Stolons.Services
             }
             catch(Exception except)
             {
-
+                Console.WriteLine("Error on sending mail : " + except.Message);
             }
         }
 

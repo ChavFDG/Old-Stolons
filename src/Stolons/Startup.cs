@@ -17,6 +17,7 @@ using System.Threading;
 using Stolons.Tools;
 using Microsoft.AspNet.Authentication.Cookies;
 using Microsoft.AspNet.Http;
+using System.Diagnostics;
 
 namespace Stolons
 {
@@ -111,18 +112,25 @@ namespace Stolons
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
-
-            SetConfigurations(context);
             await CreateRoles(serviceProvider);
             await CreateAdminAcount(context, userManager);
             CreateProductCategories(context);
-            CreateProductsSamples(context);
+            SetGlobalConfigurations(context);
+            #if DEBUG
+                await InitializeSampleAndTestData(serviceProvider, context, userManager);
+            #endif
             Thread billManager = new Thread(() => BillGenerator.ManageBills(context));
             Configurations.Environment = env;
             billManager.Start();
         }
+        
+        private async Task InitializeSampleAndTestData(IServiceProvider serviceProvider, ApplicationDbContext context,UserManager<ApplicationUser> userManager)
+        {
+            await CreateTestAcount(context, userManager);
+            CreateProductsSamples(context);
+        }
 
-        private void SetConfigurations(ApplicationDbContext context)
+        private void SetGlobalConfigurations(ApplicationDbContext context)
         {
 
             if (context.ApplicationConfig.Any())
@@ -132,34 +140,6 @@ namespace Stolons
             else
             {
                 Configurations.ApplicationConfig = new ApplicationConfig();
-                //General
-                Configurations.ApplicationConfig.StolonsLabel = "Association Stolons";
-                Configurations.ApplicationConfig.StolonsAddress = "Chemin de Saint Clair, 07000 PRIVAS";
-                Configurations.ApplicationConfig.StolonsPhoneNumber = "06 64 86 66 93";
-                Configurations.ApplicationConfig.StolonsAboutPageText = @"Stolons est une struture visant à favoriser ....blablabla";
-                //Email
-                Configurations.ApplicationConfig.MailAddress = "asso.stolons@gmail.com";
-                Configurations.ApplicationConfig.MailPassword = "ProjectStolons2016";
-                Configurations.ApplicationConfig.MailSmtp = "smtp.gmail.com";
-                Configurations.ApplicationConfig.MailPort= 587;
-                //Message
-                Configurations.ApplicationConfig.OrderDeliveryMessage= "Votre panier est disponible jeudi de 16h à 20 au : chemin de Saint Clair 07000 PRIVAS";
-                //Préparation commande
-                Configurations.ApplicationConfig.PreparationDayStartDate = DayOfWeek.Wednesday;
-                Configurations.ApplicationConfig.PreparationHourStartDate = 12;
-                Configurations.ApplicationConfig.PreparationMinuteStartDate = 0;
-                //Mise à jour stock
-                Configurations.ApplicationConfig.StockUpdateDayStartDate = DayOfWeek.Thursday;
-                Configurations.ApplicationConfig.StockUpdateHourStartDate = 12;
-                Configurations.ApplicationConfig.StockUpdateMinuteStartDate= 0;
-                //Commandes
-                Configurations.ApplicationConfig.OrderDayStartDate = DayOfWeek.Sunday;
-                Configurations.ApplicationConfig.OrderHourStartDate = 0;
-                Configurations.ApplicationConfig.OrderMinuteStartDate = 0;
-                //Simulation
-                Configurations.ApplicationConfig.IsModeSimulated = true;
-                Configurations.ApplicationConfig.SimulationMode = ApplicationConfig.Modes.StockUpdate;
-                //
                 context.Add(Configurations.ApplicationConfig);
                 context.SaveChanges();
             }
@@ -323,14 +303,6 @@ namespace Stolons
         private async Task CreateAdminAcount(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
         {
             await CreateAcount(context,
-                                userManager,
-                                "Admin",
-                                "Admin",
-                                "admin@admin.com",
-                                "admin@admin.com",
-                                Configurations.Role.Administrator,
-                                Configurations.UserType.SimpleUser);
-            await CreateAcount(context,
                     userManager,
                     "PARAVEL",
                     "Damien",
@@ -346,6 +318,18 @@ namespace Stolons
                     "nicolas.michon@zoho.com",
                     Configurations.Role.Administrator,
                     Configurations.UserType.Consumer);
+            await CreateAcount(context,
+                    userManager,
+                    "Maurice",
+                    "Robert",
+                    "producer@gmail.com",
+                    "producer@gmail.com",
+                    Configurations.Role.User,
+                    Configurations.UserType.Producer);
+        }
+
+        private async Task CreateTestAcount(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
+        {
             await CreateAcount(context,
                     userManager,
                     "Maurice",

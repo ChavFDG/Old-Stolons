@@ -30,6 +30,16 @@ Fait :
 - (1) Passer les suppressions de news, d'utilisateur, de producteur ... en admin et ajouter un message de confirmation
 - (1) Envoyer un mail lors de la création d'un compte adhérents => Avec le rappel des identifiants de compte ;)
 - (1) Lors de l'envoie des mails de validation de panier, enlever ce qui n'a pas besoin d'être dans le mail (message disant qu'un mail a été envoyé ainsi que le "cliquer ici pour modifier votre panier")
+- (1) Ajout d'un mode production (RELEASE)
+- (2) Virer le mode Préparation des commandes => Il n'y a plus que Order et DeliveryAndStockUpdate
 
 
 
+A finir avant Jeudi 16h :
+DAMIEN
+- Factures à mettre à jour
+- Les pages à bloquer
+NICO
+- Panier
+- Ajout d'un produits à finir
+- Stock restant / Stock de la semaine

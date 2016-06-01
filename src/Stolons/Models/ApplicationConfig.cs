@@ -13,67 +13,60 @@ namespace Stolons.Models
         public Guid Id { get; set; }
         //Configuration de la structure
         [Display(Name = "Libelle de la structure (Stolons)")]
-        public string StolonsLabel { get; set; }
+        public string StolonsLabel { get; set; } = "Association Stolons";
         [Display(Name = "Adresse de la structure")]
-        public string StolonsAddress { get; set; }
+        public string StolonsAddress { get; set; } = "Chemin de Saint Clair, 07000 PRIVAS";
         [Display(Name = "Numéro de téléphone de la structure")]
-        public string StolonsPhoneNumber { get; set; }
+        public string StolonsPhoneNumber { get; set; } = "06 64 86 66 93";
 
         [Display(Name = "Comission de la structure en % ")]
         public int Comission { get; set; } = 5;
 
         [Display(Name = "Texte de la page \"qui somme nous\"")]
-        public string StolonsAboutPageText { get; set; }
+        public string StolonsAboutPageText { get; set; } = @"Stolons est une association à visé social, étique et solidaire.";
         //Mails
         [Display(Name = "Courriel d'envoie des mails")]
-        public string MailAddress { get; set; }
+        public string MailAddress { get; set; } = "ne_pas_repondre@stolons.org";
         [Display(Name = "Mot de passe du courriel")]
-        public string MailPassword{ get; set; }
-        [Display(Name = "Smtp")]
-        public string MailSmtp { get; set; }
+        public string MailPassword{ get; set; } = "Stolons2016";
+        [Display(Name = "Smtp")] 
+        public string MailSmtp { get; set; } = " mail.gandi.net";
         [Display(Name = "Port")]
-        public int MailPort{ get; set; }
+        public int MailPort{ get; set; } = 587;
 
 
-        //
+        //Site page text
         [Display(Name = "Message de récupération du panier (jour, lieu, plage horraire)")]
-        public string OrderDeliveryMessage { get; set; }
+        public string OrderDeliveryMessage { get; set; } = "Votre panier est disponible jeudi de 16h à 20 au : chemin de Saint Clair 07000 PRIVAS";
 
+        //ORDER
         [Display(Name = "Jour")]
-        public DayOfWeek PreparationDayStartDate{ get; set; }
+        public DayOfWeek OrderAndUpdateDayStartDate { get; set; } = DayOfWeek.Wednesday;
         [Display(Name = "Heure")]
-        public int PreparationHourStartDate { get; set; }
+        public int OrderAndUpdateHourStartDate { get; set; } = 12;
         [Display(Name = "Minute")]
-        public int PreparationMinuteStartDate { get; set; }
+        public int OrderAndUpdateMinuteStartDate { get; set; } = 0;
 
+        //DeliveryAndStockUpdate
         [Display(Name = "Jour")]
-        public DayOfWeek StockUpdateDayStartDate { get; set; }
+        public DayOfWeek DeliveryAndStockUpdateDayStartDate { get; set; } = DayOfWeek.Sunday;
         [Display(Name = "Heure")]
-        public int StockUpdateHourStartDate { get; set; }
+        public int DeliveryAndStockUpdateDayStartDateHourStartDate { get; set; } = 0;
         [Display(Name = "Minute")]
-        public int StockUpdateMinuteStartDate { get; set; }
+        public int DeliveryAndStockUpdateDayStartDateMinuteStartDate { get; set; } = 0;
 
-        [Display(Name = "Jour")]
-        public DayOfWeek OrderDayStartDate { get; set; }
-        [Display(Name = "Heure")]
-        public int OrderHourStartDate { get; set; }
-        [Display(Name = "Minute")]
-        public int OrderMinuteStartDate { get; set; }
-        
         [Display(Name = "Mode simulation")]
-        public bool IsModeSimulated { get; set; }
+        public bool IsModeSimulated { get; set; } = false;
 
         [Display(Name = "Choix du mode à simuler")]
-        public Modes SimulationMode { get; set; }
+        public Modes SimulationMode { get; set; } = Modes.Order;
 
         public enum Modes
         {
             [Display(Name = "Commandes")]
             Order = 0,
-            [Display(Name = "Préparation des commandes")]
-            Preparation = 1,
-            [Display(Name = "Mise à jour des stocks")]
-            StockUpdate = 2
+            [Display(Name = "Livraison et mise à jour des stocks")]
+            DeliveryAndStockUpdate = 1
         }
 
     }
