@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Stolons.ViewModels.Users
 {
-    public class UserStolonViewModel
+    public class UserStolonViewModel : IUserViewModel
     {
         public UserStolonViewModel()
         {
@@ -26,5 +26,13 @@ namespace Stolons.ViewModels.Users
 
         [Display(Name = "Droit utilisateur ")]
         public Configurations.Role UserRole { get; set; }
+
+        public User User
+        {
+            get
+            {
+                return Consumer;
+            }
+        }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Stolons.Models;
+using Stolons.ViewModels.Users;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -7,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Stolons.ViewModels.Producers
 {
-    public class ProducerViewModel
+    public class ProducerViewModel : IUserViewModel
     {
         public ProducerViewModel()
         {
@@ -22,6 +23,14 @@ namespace Stolons.ViewModels.Producers
 
         public string OriginalEmail { get; set; }
         public Producer Producer { get; set; }
+
+        public User User
+        {
+            get
+            {
+                return Producer;
+            }
+        }
 
         [Display(Name = "Droit utilisateur ")]
         public Configurations.Role UserRole { get; set; }

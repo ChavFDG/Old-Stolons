@@ -3,7 +3,7 @@
 Damien ou Nico (car Damien il arrive plus à avoir de temps)
 - (1) Bloquer les pages en fonctions du mode du site et des utilisateurs (presque finis, reste week basket et mise en place de la page en fonction de Commande /PRrparation / Stock ...)
 - (1) mettre à jour les fichier Exel suite au changement de système de calcul du poids / prix
-- (1) Quand on écrit une news faire apparaitre le logo de Stolons à la palce de l'avatar de la personne ayant mis la news
+- (1) Quand on écrit une news faire apparaitre le logo de Stolons à la place de l'avatar de la personne ayant mis la news
 - (1) Pouvoir reseter les mails des adhérent => envoie d'un mail à l'adhérent
 
 Nico
