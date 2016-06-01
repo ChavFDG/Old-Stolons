@@ -13,7 +13,7 @@
 
 @if (User.IsSignedIn())
 {
-    if (    User.IsInRole(Configurations.Role.Administrator.ToString())
+    if (User.IsInRole(Configurations.Role.Administrator.ToString())
 ||  User.IsInRole(Configurations.Role.Volunteer.ToString())
 ||  User.IsInRole(Configurations.UserType.Producer.ToString()))
     {
@@ -54,7 +54,11 @@
                   || User.IsInRole(Configurations.Role.Volunteer.ToString())
                   || User.GetUserId() == item.User.Email)
                   {
-                  <a asp-action="Edit" asp-route-id="@item.Id">Editer </a><a asp-action = "Delete" asp-route-id = "@item.Id">| Supprimer</a>
+                  <a asp-action="Edit" asp-route-id="@item.Id">Editer </a>
+                  }
+                  @if (User.IsInRole(Configurations.Role.Administrator.ToString()))
+                  {
+                    <a asp-action="Delete" asp-route-id="@item.Id">| Supprimer</a>
                   }
                   </div>
               </td>

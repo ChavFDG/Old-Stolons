@@ -33,9 +33,9 @@ namespace Stolons.Models
         [Phone]
         public string PhoneNumber { get; set; }
         [Display(Name = "Cotisation réglée")]
-        public bool Cotisation { get; set; }
+        public bool Cotisation { get; set; } = true;
         [Display(Name = "Actif / Inactif")]
-        public bool Enable { get; set; }
+        public bool Enable { get; set; } = true;
         [Display(Name = "Date d'enregistrement")]
         public DateTime RegistrationDate { get; set; }
 

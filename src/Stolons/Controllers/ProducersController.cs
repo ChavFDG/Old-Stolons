@@ -17,7 +17,7 @@ using Microsoft.AspNet.Authorization;
 
 namespace Stolons.Controllers
 {
-    public class ProducersController : Controller
+    public class ProducersController : BaseController
     {
         private ApplicationDbContext _context;
         private IHostingEnvironment _environment;
@@ -128,6 +128,9 @@ namespace Stolons.Controllers
                 #endregion Creating linked application data
 
                 _context.SaveChanges();
+                //Send confirmation mail
+                Services.AuthMessageSender.SendEmail(vmProducer.Producer.Email, vmProducer.Producer.Name, "Creation de votre compte", base.RenderPartialViewToString("ProducerCreatedConfirmationMail", vmProducer));
+                
                 return RedirectToAction("Index");
             }
             return View(vmProducer);
@@ -195,7 +198,7 @@ namespace Stolons.Controllers
 
         // GET: Producer/Delete/5
         [ActionName("Delete")]
-        [Authorize(Roles = Configurations.Role_Volunteer + "," + Configurations.Role_Administrator)]
+        [Authorize(Roles = Configurations.Role_Administrator)]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -217,7 +220,7 @@ namespace Stolons.Controllers
         // POST: Producer/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = Configurations.Role_Volunteer + "," + Configurations.Role_Administrator)]
+        [Authorize(Roles = Configurations.Role_Administrator)]
         public IActionResult DeleteConfirmed(int id)
         {
             Producer producer = _context.Producers.Single(m => m.Id == id);

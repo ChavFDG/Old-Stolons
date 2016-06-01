@@ -7,14 +7,6 @@
     ViewData["Title"] = "Gestion des paniers";
 }
 
-<script>
-    function UpdateBillConfirm(name) {
-        if (confirm("Confirmation de changement d'état de la facture de " + name))
-            return true;
-        else
-            return false;
-    }
-</script>
 
 <h2>@ViewData["Title"]</h2>
 @if (Stolons.Configurations.Mode == ApplicationConfig.Modes.Preparation)
@@ -65,8 +57,8 @@
                     @Html.ActionLink("Valider la payement de la facture",
                       "UpdateProducerBill",
                       new { billNumber = item.BillNumber },
-                      new { onclick = " return UpdateBillConfirm(\"" + item.Producer.CompanyName + "\")" })
-                </td>
+                      new { onclick = " return UpdateBillConfirm(\"" + ("Confirmation de changement d'état de la facture de "  + item.Producer.CompanyName) + "\")" })
+                </td>                
                 <td>
                     @{
                         string downloadPath = "/Bills/";
@@ -130,7 +122,7 @@ else
                 @Html.ActionLink("Valider la livraison",
                       "UpdateProducerBill",
                       new { billNumber = item.BillNumber },
-                      new { onclick = " return UpdateBillConfirm(\"" + item.Producer.CompanyName + "\")" })
+                      new { onclick = " return UpdateBillConfirm(\"" + ("Confirmation de changement d'état de la facture de " + item.Producer.CompanyName) + "\")" })
             </td>
             <td>
                 @{
@@ -199,7 +191,7 @@ else
                     @Html.ActionLink("Valider la récupération et le payement",
                                  "UpdateConsumerBill",
                                  new { billNumber = item.BillNumber },
-                                 new { onclick = " return UpdateBillConfirm(\"" + item.Consumer.Name + "\")" })
+                      new { onclick = " return UpdateBillConfirm(\"" + ("Confirmation de changement d'état de la facture de " + item.Consumer.Name) + "\")" })
                 </td>
                 <td>
                     @{
@@ -226,6 +218,8 @@ else
     <p>Plus de panier cette semaine</p>
 }
 
+
+<script src="/js/confirmationDialog.js"></script>
 
 
 

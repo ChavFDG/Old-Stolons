@@ -151,7 +151,7 @@ namespace Stolons.Controllers
 
         // GET: News/Delete/5
         [ActionName("Delete")]
-        [Authorize(Roles = Configurations.Role_Volunteer + "," + Configurations.UserType_Producer)]
+        [Authorize(Roles = Configurations.Role_Administrator)]
         public IActionResult Delete(Guid? id)
         {
             if (id == null)
@@ -170,7 +170,7 @@ namespace Stolons.Controllers
 
         // POST: News/Delete/5
         [HttpPost, ActionName("Delete")]
-        [Authorize(Roles = Configurations.Role_Administrator + "," + Configurations.Role_Volunteer + "," +Configurations.UserType_Producer)]
+        [Authorize(Roles = Configurations.Role_Administrator)]
         [ValidateAntiForgeryToken]
         public IActionResult DeleteConfirmed(Guid id)
         {

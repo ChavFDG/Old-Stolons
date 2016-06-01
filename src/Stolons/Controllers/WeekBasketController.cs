@@ -46,7 +46,7 @@ namespace Stolons.Controllers
                 //Il n'a pas encore de panier de la semaine, on lui en crÃ©e un
                 tempWeekBasket = new TempWeekBasket();
                 tempWeekBasket.Consumer = consumer;
-                tempWeekBasket.Products = new System.Collections.Generic.List<BillEntry>();
+                tempWeekBasket.Products = new List<BillEntry>();
                 _context.Add(tempWeekBasket);
                 _context.SaveChanges();
             }
@@ -58,7 +58,7 @@ namespace Stolons.Controllers
 	public string JsonProducts() {
 	    var Products = _context.Products.Include(x=>x.Producer).Include(x=>x.Familly).Where(x => x.State == Product.ProductState.Enabled).ToList();
 	    return JsonConvert.SerializeObject(Products, Formatting.Indented, new JsonSerializerSettings() {
-		    ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
+		    ReferenceLoopHandling = ReferenceLoopHandling.Ignore
 			});
 	}
 
@@ -67,7 +67,7 @@ namespace Stolons.Controllers
 	public string JsonProductTypes() {
 	    var ProductTypes = _context.ProductTypes.Include(x => x.ProductFamilly).ToList();
 	    return JsonConvert.SerializeObject(ProductTypes, Formatting.Indented, new JsonSerializerSettings() {
-		    ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
+		    ReferenceLoopHandling = ReferenceLoopHandling.Ignore
 			});
 	}
 
@@ -112,7 +112,7 @@ namespace Stolons.Controllers
 		validatedWeekBasket.RetrieveProducts(_context);
 	    }
 	    return JsonConvert.SerializeObject(validatedWeekBasket, Formatting.Indented, new JsonSerializerSettings() {
-		    ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
+		    ReferenceLoopHandling = ReferenceLoopHandling.Ignore
 			});
 	}
 
@@ -126,10 +126,10 @@ namespace Stolons.Controllers
 	    billEntry.ProductId = billEntry.Product.Id;
             billEntry.Quantity = 1;
             tempWeekBasket.Products.Add(billEntry);
-	    tempWeekBasket.Validated = isBasketValidated(tempWeekBasket);
+	    tempWeekBasket.Validated = IsBasketValidated(tempWeekBasket);
             _context.SaveChanges();
 	    return JsonConvert.SerializeObject(tempWeekBasket, Formatting.Indented, new JsonSerializerSettings() {
-		    ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
+		    ReferenceLoopHandling = ReferenceLoopHandling.Ignore
 			});
         }
 
@@ -137,7 +137,7 @@ namespace Stolons.Controllers
         public string PlusProduct(string weekBasketId, string productId)
         {
 	    return JsonConvert.SerializeObject(AddProductQuantity(weekBasketId, productId, +1), Formatting.Indented, new JsonSerializerSettings() {
-		    ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
+		    ReferenceLoopHandling = ReferenceLoopHandling.Ignore
 			});
         }
 
@@ -145,7 +145,7 @@ namespace Stolons.Controllers
         public string MinusProduct(string weekBasketId, string productId)
         {
 	    return JsonConvert.SerializeObject(AddProductQuantity(weekBasketId, productId, -1), Formatting.Indented, new JsonSerializerSettings() {
-		    ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
+		    ReferenceLoopHandling = ReferenceLoopHandling.Ignore
 			});
         }
 
@@ -177,7 +177,7 @@ namespace Stolons.Controllers
 		    tempWeekBasket.Products.Remove(billEntry);
 		    _context.Remove(billEntry);
 		}
-		tempWeekBasket.Validated = isBasketValidated(tempWeekBasket);
+		tempWeekBasket.Validated = IsBasketValidated(tempWeekBasket);
 		_context.SaveChanges();
             }
             return tempWeekBasket;
@@ -191,10 +191,10 @@ namespace Stolons.Controllers
             BillEntry billEntry = tempWeekBasket.Products.First(x => x.ProductId.ToString() == productId);
 	    billEntry.Product.RemainingStock += billEntry.Quantity;
 	    _context.Remove(billEntry);
-	    tempWeekBasket.Validated = isBasketValidated(tempWeekBasket);
+	    tempWeekBasket.Validated = IsBasketValidated(tempWeekBasket);
 	    _context.SaveChanges();
 	    return JsonConvert.SerializeObject(tempWeekBasket, Formatting.Indented, new JsonSerializerSettings() {
-		    ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
+		    ReferenceLoopHandling = ReferenceLoopHandling.Ignore
 			});
         }
 
@@ -221,7 +221,7 @@ namespace Stolons.Controllers
 	    _context.SaveChanges();
 	    tempWeekBasket.RetrieveProducts(_context);
 	    return JsonConvert.SerializeObject(tempWeekBasket, Formatting.Indented, new JsonSerializerSettings() {
-		    ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
+		    ReferenceLoopHandling = ReferenceLoopHandling.Ignore
 			});
 	}
 	
@@ -281,7 +281,7 @@ namespace Stolons.Controllers
 		    }
 		}
 
-		//Gestion de ĺ'ajout de produits
+		//Gestion de l'ajout de produits
 		foreach (BillEntry newEntry in validatedWeekBasket.Products)
 		{
 		    BillEntry prevEntry = previousBillEntries.FirstOrDefault(x => x.ProductId == newEntry.ProductId);
@@ -326,7 +326,7 @@ namespace Stolons.Controllers
                 {
                     subject = "Validation partielle de votre panier de la semaine";
                 }
-                ValidationSummaryViewModel validationSummaryViewModel = new ValidationSummaryViewModel(validatedWeekBasket, rejectedEntries) { Total = getBasketPrice(validatedWeekBasket) };
+                ValidationSummaryViewModel validationSummaryViewModel = new ValidationSummaryViewModel(validatedWeekBasket, rejectedEntries) { Total = GetBasketPrice(validatedWeekBasket) };
                 Services.AuthMessageSender.SendEmail(validatedWeekBasket.Consumer.Email, validatedWeekBasket.Consumer.Name, subject, base.RenderPartialViewToString("ValidateBasket", validationSummaryViewModel));
                 //Return view
                 return View("ValidateBasket", validationSummaryViewModel);
@@ -351,7 +351,7 @@ namespace Stolons.Controllers
         }
 
 	//Calcul du prix total d'un panier
-	private float getBasketPrice(IWeekBasket basket)
+	private float GetBasketPrice(IWeekBasket basket)
 	{
 	    if (basket == null)
 	    {
@@ -366,7 +366,7 @@ namespace Stolons.Controllers
 	    return price;
 	}
 
-	private bool isBasketValidated(TempWeekBasket tmpBasket)
+	private bool IsBasketValidated(TempWeekBasket tmpBasket)
 	{
 	    ValidatedWeekBasket validatedBasket = _context.ValidatedWeekBaskets.Include(x => x.Consumer).Include(x => x.Products).FirstOrDefault(x => x.Consumer.Id == tmpBasket.Consumer.Id);
 

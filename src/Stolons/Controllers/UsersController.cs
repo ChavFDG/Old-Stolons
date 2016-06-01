@@ -17,7 +17,7 @@ using Microsoft.AspNet.Authorization;
 
 namespace Stolons.Controllers
 {
-    public class UsersController : Controller
+    public class UsersController : BaseController
     {
         private ApplicationDbContext _context;
         private IHostingEnvironment _environment;
@@ -88,6 +88,7 @@ namespace Stolons.Controllers
                 //Setting value for creation
                 vmConsumer.Consumer.Avatar = Path.Combine(Configurations.UserAvatarStockagePath, fileName);
                 vmConsumer.Consumer.RegistrationDate = DateTime.Now;
+                vmConsumer.Consumer.Name = vmConsumer.Consumer.Name.ToUpper();
                 _context.Consumers.Add(vmConsumer.Consumer);
                 #endregion Creating Consumer
 
@@ -106,6 +107,9 @@ namespace Stolons.Controllers
                 #endregion Creating linked application data
 
                 _context.SaveChanges();
+                //Send confirmation mail
+                Services.AuthMessageSender.SendEmail(vmConsumer.Consumer.Email, vmConsumer.Consumer.Name, "Creation de votre compte", base.RenderPartialViewToString("UserCreatedConfirmationMail", vmConsumer));
+
                 return RedirectToAction("Index");
             }
             return View(vmConsumer);
@@ -154,6 +158,7 @@ namespace Stolons.Controllers
                 }
                 ApplicationUser appUser = _context.Users.First(x => x.Email == consumerVm.OriginalEmail);
                 appUser.Email = consumerVm.Consumer.Email;
+                consumerVm.Consumer.Name = consumerVm.Consumer.Name.ToUpper();
                 _context.Update(appUser);
                 //Getting actual roles
                 IList<string> roles = await _userManager.GetRolesAsync(appUser);
@@ -173,7 +178,7 @@ namespace Stolons.Controllers
 
         // GET: Consumers/Delete/5
         [ActionName("Delete")]
-        [Authorize(Roles = Configurations.Role_Volunteer + "," + Configurations.Role_Administrator)]
+        [Authorize(Roles = Configurations.Role_Administrator)]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -195,7 +200,7 @@ namespace Stolons.Controllers
         // POST: Consumers/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = Configurations.Role_Volunteer + "," + Configurations.Role_Administrator)]
+        [Authorize(Roles = Configurations.Role_Administrator)]
         public IActionResult DeleteConfirmed(int id)
         {
             Consumer consumer = _context.Consumers.Single(m => m.Id == id);

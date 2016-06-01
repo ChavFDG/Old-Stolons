@@ -1,4 +1,4 @@
-@model IEnumerable<Stolons.Models.Consumer>
+﻿@model IEnumerable<Stolons.Models.Consumer>
 
 @{
     ViewData["Title"] = "List des adhérents";
@@ -7,7 +7,7 @@
 <h2>@ViewData["Title"]</h2>
 
 <p>
-    <a asp-action="Create" >Ajouter un nouvel adh&eacute;rent</a>
+    <a asp-action="Create" >Ajouter un nouvel adhérent</a>
 </p>
 <table class="table">
     <tr>
@@ -64,8 +64,11 @@
                 <a asp-action="ShowBills" asp-route-id="@item.Id">Factures</a> |
                 <a asp-action="ShowBasketWeek" asp-route-id="@item.Id">Panier de la semaine</a> |
                 <a asp-action="Edit" asp-route-id="@item.Id">Editer</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">D&eacute;tail</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Supprimer</a>
+                <a asp-action="Details" asp-route-id="@item.Id">Détail</a> |
+                @if (User.IsInRole(Configurations.Role.Administrator.ToString()))
+                {
+                    <a asp-action="Delete" asp-route-id="@item.Id">Supprimer</a>
+                }
             </td>
         </tr>
     }

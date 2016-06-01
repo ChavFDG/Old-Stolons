@@ -1,5 +1,7 @@
 ﻿/// <autosync enabled="true" />
 /// <reference path="../gulpfile.js" />
+/// <reference path="js/confirmationdialog.js" />
+/// <reference path="js/confirmationdialog.min.js" />
 /// <reference path="js/manageproduct.js" />
 /// <reference path="js/publicproducers.js" />
 /// <reference path="js/publicproducts.js" />
