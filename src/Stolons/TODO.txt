@@ -3,12 +3,12 @@
 Damien ou Nico (car Damien il arrive plus à avoir de temps)
 - (1) Bloquer les pages en fonctions du mode du site et des utilisateurs (presque finis, reste week basket et mise en place de la page en fonction de Commande /PRrparation / Stock ...)
 - (1) Page contact
-- (1) Ajouter % du producteur
 - (1) Passer les suppressions de news, d'utilisateur, de producteur ... en admin et ajouter un message de confirmation
 - (1) Lors de l'envoie des mails de validation de panier, enlever ce qui n'a pas besoin d'être dans le mail (message disant qu'un mail a été envoyé ainsi que le "cliquer ici pour modifier votre panier")
 - (1) mettre à jour les fichier Exel suite au % et changement de système de calcul du poids / prix
 - (1) Pouvoir reseter les mails des adhérent => envoie d'un mail à l'adhérent
 - (1) Quand on écrit une news faire apparaitre le logo de Stolons à la palce de l'avatar de la personne ayant mis la news
+
 Nico
 - (1) Ne pas afficher direct le panier en modifier, mais devoir appuyer sur un bouton ( ou au pire le + et - ) pour le faire apparaitre. Si bouton inactiver le + et - des produits
 - (1) Vérifier le fonctionnement sur les navigateurs des scripts => BUG (bug avec chrome) => Production pas production le javascript
@@ -28,3 +28,4 @@ Fait :
 - (2) Dans Le recap de Mon panier validé ou non, faire un lien de retour à la modification du panier ( "Cliquer ici pour modifier le panier")=> Avec moulte correction de bug sur la validation du panier
 - (2) Dans gerer les panier, séparer les facture producteur à payer de à livrer
 - (1) BUG dans la fonction de recherche, quand on tape "tomates" on a la salade qui apparait aussi => c'est normal ^^ la description des tomates contient 'salade'!
+- (1) Ajouter % du producteur

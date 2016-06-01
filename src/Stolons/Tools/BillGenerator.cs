@@ -102,6 +102,9 @@ namespace Stolons.Tools
                     dbContext.BillEntrys.Clear();
                     //Move product to, to validate
                     dbContext.Products.ToList().ForEach(x => x.State = Product.ProductState.Stock);
+                    //For test, remove existing consumer bill
+                    dbContext.RemoveRange(dbContext.ConsumerBills.Where(x=> bills.Any(y=>y.BillNumber == x.BillNumber)));
+                    //
                     dbContext.SaveChanges();
                 }
                 lastMode = currentMode;
@@ -385,20 +388,38 @@ namespace Stolons.Tools
                     worksheet.Cells[productStartRow, 2, row, 3].Style.Border.BorderAround(ExcelBorderStyle.Thin);
                     worksheet.Cells[productStartRow, 2, row, 3].Style.Border.BorderAround(ExcelBorderStyle.Thin);
                     rowsTotal.Add(row);
-                    //Total
-                    worksheet.Cells[row, 1].Value = "TOTAL";
-                    worksheet.Cells[row, 1].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
-                    //Quantity
+                    //TOTAL SANS COMISSION
+                    worksheet.Cells[row, 1].Value = "Total sans comission";
                     worksheet.Cells[row, 2].Formula = string.Format("SUBTOTAL(9,{0})", new ExcelAddress(productStartRow, 2, row - 1, 2).Address);
-                    worksheet.Cells[row, 2].Style.Border.BorderAround(ExcelBorderStyle.Thin);
-                    //Prix
                     worksheet.Cells[row, 3].Formula = new ExcelCellAddress(row, 2).Address + "*" + new ExcelCellAddress(unitPriceRow, 3).Address;
                     worksheet.Cells[row, 3].Style.Numberformat.Format = "0.00€";
-                    worksheet.Cells[row, 3].Style.Border.BorderAround(ExcelBorderStyle.Thin);
-                    //
-                    worksheet.Cells[row, 1, row, 3].Style.Font.Bold = true;
-                    worksheet.Cells[row, 1, row, 3].Style.Font.Size = 14;
+                    worksheet.Cells[row, 1, row, 3].Style.Font.Size = 9;
+                    worksheet.Cells[row, 1, row, 3].Style.Font.Italic = true;
                     worksheet.Cells[row, 1, row, 3].Style.Border.BorderAround(ExcelBorderStyle.Thin);
+                    worksheet.Cells[row, 1, row, 3].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
+                    row++;
+                    //COMISSION
+                    worksheet.Cells[row, 1].Value = "Comission";
+                    worksheet.Cells[row, 2].Value = Configurations.ApplicationConfig.Comission + "%";
+                    worksheet.Cells[row, 3].Formula = new ExcelCellAddress(row, 2).Address + "*" + new ExcelCellAddress(row-1, 3).Address;
+                    worksheet.Cells[row, 3].Style.Numberformat.Format = "0.00€";
+                    worksheet.Cells[row, 1, row, 3].Style.Font.Size = 9;
+                    worksheet.Cells[row, 1, row, 3].Style.Font.Italic = true;
+                    worksheet.Cells[row, 1, row, 3].Style.Border.BorderAround(ExcelBorderStyle.Thin);
+                    worksheet.Cells[row, 1, row, 3].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
+                    row++;
+                    //TOTAL AVEC COMISSION
+                    worksheet.Cells[row, 1].Value = "TOTAL";
+                    worksheet.Cells[row, 1].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
+                    worksheet.Cells[row, 2].Formula = new ExcelCellAddress(row -2, 2).Address;
+                    worksheet.Cells[row, 2].Style.Border.BorderAround(ExcelBorderStyle.Thin);
+                    worksheet.Cells[row, 3].Formula = new ExcelCellAddress(row - 2, 3).Address + "-" + new ExcelCellAddress(row - 1, 3).Address;
+                    worksheet.Cells[row, 3].Style.Numberformat.Format = "0.00€";
+                    worksheet.Cells[row, 4].Value = "☐";
+                    worksheet.Cells[row, 1, row, 4].Style.Font.Size = 14;
+                    worksheet.Cells[row, 1, row, 3].Style.Font.Bold = true;
+                    worksheet.Cells[row, 1, row, 3].Style.Border.BorderAround(ExcelBorderStyle.Thin);
+                    //
                     //Next product
                     row++;
                     row++;
