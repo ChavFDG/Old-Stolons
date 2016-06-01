@@ -16,5 +16,19 @@ namespace Stolons.Models
         [Display(Name = "Produits")]
 
         public List<BillEntry> Products { get; set; }
+
+	[NotMapped]
+	float Price
+	{
+	    get
+	    {
+		float price = 0.0F;
+		foreach (BillEntry entry in Products)
+		{
+		    price += entry.Price;
+		}
+		return price;
+	    }
+	}
     }
 }

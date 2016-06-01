@@ -30,7 +30,6 @@ namespace Stolons.Models
             get
             {
                 return _Labels;
-
             }
             set
             {
@@ -68,9 +67,7 @@ namespace Stolons.Models
         {
             get
             {
-
                 return _Pictures;
-
             }
             set
             {
@@ -96,21 +93,60 @@ namespace Stolons.Models
         [Display(Name = "Type de vente")]
         [Required]
         public SellType Type { get; set; }
-        [Display(Name = "Prix")]
+        [Display(Name = "Prix (kg ou l)")]
         [Required]
         public float Price { get; set; }
+	[Display(Name = "Prix unitaire")]
+	[Required]
+	public float UnitPrice { get; set; }
+
         [Display(Name = "Stock de la semaine")]
         public int WeekStock { get; set; }
         [Display(Name = "Stock restant")]
         public int RemainingStock { get; set; }
-        [Display(Name = "Pallier de poids")]
+        [Display(Name = "Pallier de poids (g ou ml)")]
+	[Required]
         public int QuantityStep { get; set; }
+	[NotMapped]
+	public string QuantityStepString
+	{
+	    get
+	    {
+		if (QuantityStep == 0)
+		{
+		    return " rien";
+		}
+		if (ProductUnit == Unit.Kg)
+		{
+		    if (QuantityStep >= 1000)
+		    {
+			return QuantityStep / 1000 + " Kg";
+		    }
+		    else
+		    {
+			return QuantityStep  + " g";
+		    }
+		}
+		else
+		{
+		    if (QuantityStep >= 1000)
+		    {
+			return QuantityStep / 1000 + " L";
+		    }
+		    else
+		    {
+			return QuantityStep  + " mL";
+		    }
+		}
+	    }
+	}
         [Display(Name = "Quantité moyenne")]
         public int AverageQuantity { get; set; }
         [Display(Name = "Unité de mesure")]
         public Unit ProductUnit { get; set; }
         [Display(Name = "Etat")]
         public ProductState State { get; set; }
+	
 
         public string GetFirstImage()
         {
@@ -137,9 +173,7 @@ namespace Stolons.Models
         public enum Unit
         {
             Kg = 0,
-            Gr = 1,
-            Ml = 2,
-            L = 3
+            L = 1
         }
 
         public enum ProductState

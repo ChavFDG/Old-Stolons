@@ -26,9 +26,9 @@
 	</div>
 	<div class="pr_qtystock">
           <span class="pr_priceQuantity">
-	    Prix:
 	    <b>
-	      <%= product.Price %> € <%= productModel.getPriceUnitString() %>
+	      <%= productModel.getUnitPriceString() %>
+	      <%= productModel.getVolumePriceString() %>
 	    </b>
           </span>
 	</div>

@@ -257,9 +257,9 @@ input[type="file"] {
 }
 
 .pr_priceQuantity {
-    /* text-align: right; */
-    /* font-size: medium; */
-    /* float: right; */
+    text-align: left;
+    font-size: medium;
+    display: block;
 }
 
 .pr_actions {

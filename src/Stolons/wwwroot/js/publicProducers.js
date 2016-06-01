@@ -86,7 +86,6 @@ function initMap(producersModel) {
 	    return false;
 	});
 	marker.addTo(map);
-
 	markers[producer.get("Id")] = marker;
     });
 

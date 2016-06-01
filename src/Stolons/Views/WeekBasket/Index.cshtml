@@ -147,7 +147,8 @@
           Produit
 	</th>
 	<th>
-          <span class="quantity-icon" data-toggle="tooltip" title="Quantité">
+          <span data-toggle="tooltip" title="Quantité">
+	    Quantité
 	  </span>
 	</th>
 	<th>
@@ -159,14 +160,13 @@
       <% if (validatedBasketModel.exists()) { %>
       <% _.forEach(validatedBasket.Products, function(entry) { %>
       <tr class="billEntry">
-
 	<td>
 	  <a href="#" onclick="ProductModalView.open('<%= entry.Product.Id %>');return false;">
 	    <%= entry.Product.Name %>
 	  </a>
 	</td>
 	<td>
-          <span> <%= entry.Quantity %> </span>
+          <span> <%= entry.QuantityString %> </span>
 	</td>
 	<td>
           <span> <%= entry.Quantity * entry.Product.Price %> </span>
@@ -175,7 +175,7 @@
       <% });
 	 } else { %>
       <tr>
-	<td colspan="4">
+	<td colspan="3">
 	  <b>Aucun produit validé</b>
 	</td>
       </tr>
@@ -187,9 +187,10 @@
 	<td>
 	  <b>
 	    <%= validatedBasketModel.getTotal() %>
+	    <span class="glyphicon glyphicon-euro" data-toggle="tooltip" title="Prix en euros">
+            </span>
 	  </b>
 	</td>
-	<td></td>
       </tr>
     </table>
   </div>
@@ -209,7 +210,8 @@
         Produit
       </th>
       <th>
-        <span class="quantity-icon" data-toggle="tooltip" title="Quantité">
+        <span data-toggle="tooltip" title="Quantité">
+	  Quantité
 	</span>
       </th>
       <th>
@@ -230,7 +232,7 @@
 	</a>
       </td>
       <td>
-        <span> <%= entry.Quantity %></span>
+        <span> <%= entry.QuantityString %></span>
       </td>
       <td>
         <span> <%= entry.Quantity * entry.Product.Price %> </span>

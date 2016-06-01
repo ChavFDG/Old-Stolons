@@ -19,5 +19,19 @@ namespace Stolons.Models
         public List<BillEntry> Products { get; set; }
 
 	public bool Validated { get; set; }
+
+	[NotMapped]
+	float Price
+	{
+	    get
+	    {
+		float price = 0.0F;
+		foreach (BillEntry entry in Products)
+		{
+		    price += entry.Price;
+		}
+		return price;
+	    }
+	}
     }
 }

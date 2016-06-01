@@ -10,9 +10,8 @@ namespace Stolons.Models
         Guid Id { get; set; }
         Consumer Consumer { get; set; }
         List<BillEntry> Products { get; set; }
-
     }
-    
+
     public static class WeekBasketHelper
     {
         public static void RetrieveProducts(this IWeekBasket weekBasket, ApplicationDbContext context)

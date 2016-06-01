@@ -54,7 +54,7 @@ namespace Stolons
                 DateTime preparationTime = DateTime.Today;
                 preparationTime = preparationTime.AddDays(GetDaysDiff(currentTime.DayOfWeek, ApplicationConfig.DeliveryAndStockUpdateDayStartDate ));
                 preparationTime = preparationTime.AddHours(ApplicationConfig.DeliveryAndStockUpdateDayStartDateHourStartDate).AddMinutes(ApplicationConfig.DeliveryAndStockUpdateDayStartDateMinuteStartDate);
-
+		
                 DateTime orderTime = DateTime.Today;
                 orderTime = orderTime.AddDays(GetDaysDiff(currentTime.DayOfWeek, ApplicationConfig.OrderAndUpdateDayStartDate));
                 orderTime = orderTime.AddHours(ApplicationConfig.OrderAndUpdateHourStartDate).AddMinutes(ApplicationConfig.OrderAndUpdateMinuteStartDate);

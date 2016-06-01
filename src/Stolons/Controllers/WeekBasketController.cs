@@ -190,6 +190,7 @@ namespace Stolons.Controllers
 	    tempWeekBasket.RetrieveProducts(_context);
             BillEntry billEntry = tempWeekBasket.Products.First(x => x.ProductId.ToString() == productId);
 	    billEntry.Product.RemainingStock += billEntry.Quantity;
+	    tempWeekBasket.Products.Remove(billEntry);
 	    _context.Remove(billEntry);
 	    tempWeekBasket.Validated = IsBasketValidated(tempWeekBasket);
 	    _context.SaveChanges();
@@ -229,6 +230,7 @@ namespace Stolons.Controllers
         public IActionResult ValidateBasket(string basketId)
         {
             TempWeekBasket tempWeekBasket = _context.TempsWeekBaskets.Include(x => x.Products).Include(x=>x.Consumer).First(x => x.Id.ToString() == basketId);
+	    tempWeekBasket.RetrieveProducts(_context);
             ValidatedWeekBasket validatedWeekBasket = _context.ValidatedWeekBaskets.Include(x => x.Consumer).Include(x => x.Products).FirstOrDefault(x => x.Consumer.Id == tempWeekBasket.Consumer.Id);
 
 	    if (validatedWeekBasket == null)
@@ -239,7 +241,10 @@ namespace Stolons.Controllers
                 validatedWeekBasket.Consumer = tempWeekBasket.Consumer;
                 _context.Add(validatedWeekBasket);
             }
-
+	    else
+	    {
+		validatedWeekBasket.RetrieveProducts(_context);
+	    }
             //LOCK to prevent multi insert at this momment
             if (tempWeekBasket.Products.Any())
             {

@@ -14,14 +14,17 @@ ManageProductView = Backbone.View.extend(
 	el: "body",
 
 	events: {
-	    "change #SellType": "sellTypeChanged"
+	    "change #SellType": "sellTypeChanged",
+	    "input #Product_QuantityStep": "updatePriceField",
+	    "input #price": "updatePriceField",
+	    "change #hideVolumePrice": "toggleVolumePriceField"
 	},
 
 	initialize: function() {
 	    this.sellTypeChanged();
 	},
 
-	sellTypeChanged: function(event) {
+	sellTypeChanged: function() {
 	    var sellType = $("#SellType").val();
 
 	    if (sellType == 1) {
@@ -29,10 +32,57 @@ ManageProductView = Backbone.View.extend(
 		$("#productWeightUnit").addClass("hidden");
 		$("#productQtyStep").addClass("hidden");
 		$("#productAvgWeight").addClass("hidden");
+		$("#pieceHideVolumePrice").removeClass("hidden");
 	    } else {
 		$("#productWeightUnit").removeClass("hidden");
 		$("#productQtyStep").removeClass("hidden");
 		$("#productAvgWeight").removeClass("hidden");
+		$("#pieceHideVolumePrice").addClass("hidden");
+	    }
+	    this.updatePriceField();
+	    this.updateVolumePriceField();
+	},
+
+	updatePriceField: function() {
+	    var sellType = $("#SellType").val();
+
+	    if (sellType == 1) {
+		$("#unitPrice").removeAttr("disabled");
+	    } else {
+		$("#unitPrice").attr("disabled", true);
+		var price = $("#price").val();
+		var qtyStep = $("#Product_QuantityStep").val();
+		if (price && qtyStep) {
+		    $("#unitPrice").val(price * qtyStep / 1000);
+		}
+	    }
+	},
+
+	updateVolumePriceField: function() {
+	    var selected = $("#hideVolumePrice").is(':checked');
+	    var sellType = $("#SellType").val();
+	    var price = $("#price").val();
+
+	    if (!selected && sellType == 1 && price == 0) {
+		$("#hideVolumePrice").prop("checked", true);
+		$("#price").attr("disabled", true);
+	    } else {
+		$("#hideVolumePrice").prop("checked", false);
+		$("#price").removeAttr("disabled");
+	    }
+	},
+
+	toggleVolumePriceField: function() {
+	    var sellType = $("#SellType").val();
+	    var selected = $("#hideVolumePrice").is(':checked');
+
+	    if (selected) {
+		$("#price").attr("disabled", true);
+		$("#price").val(0);
+	    } else if (sellType != 1) {
+		$("#price").removeAttr("disabled");
+	    } else {
+		$("#price").removeAttr("disabled");
 	    }
 	}
     }

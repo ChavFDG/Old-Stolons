@@ -12,12 +12,15 @@ ProductTypesModel = Backbone.Collection.extend({
     }
 });
 
+
 ProductModel = Backbone.Model.extend({
 
     //Products id key is 'Id'
     idAttribute: "Id",
 
     defaults: {},
+
+    unitsEnum: ["Kg", "L"],
 
     /*
       return the html string according to this product's sell type
@@ -39,17 +42,26 @@ ProductModel = Backbone.Model.extend({
 	    return "Pièces";
 	}
 	var productUnit = this.get("ProductUnit");
-	var unitsEnum = ["Kg", "Gr", "ml", "L"];
-	return unitsEnum[productUnit];
+	return this.unitsEnum[productUnit];
     },
 
-    getPriceUnitString: function() {
+    getUnitPriceString: function() {
 	if (this.get("Type") == 1) {
-	    return " / Pièce";
+	    return this.get("UnitPrice") + " € l'unité";
 	}
+	return this.get("UnitPrice") + " € pour " + this.get("QuantityStepString");
+    },
+
+    getVolumePriceString: function() {
 	var productUnit = this.get("ProductUnit");
-	var unitsEnum = ["Kg", "Gr", "ml", "L"];
-	return " / " + unitsEnum[productUnit];
+	return this.get("Price") + " € / " +  this.unitsEnum[productUnit];
+    },
+
+    getSellStepString: function() {
+	if (this.get("Type") == 1) {
+	    return " Pièce(s)";
+	}
+	var productUnit = this.get("ProductUnit"); 
     }
 });
 

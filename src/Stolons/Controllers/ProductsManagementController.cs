@@ -175,6 +175,15 @@ namespace Stolons.Controllers
             return RedirectToAction("Index");
         }
 
+	[Authorize(Roles = Configurations.UserType_Producer)]
+        [HttpPost, ActionName("ChangeCurrentStock")]
+        public IActionResult ChangeCurrentStock(Guid id, int newStock)
+        {
+            _context.Products.First(x => x.Id == id).RemainingStock = newStock;
+            _context.SaveChanges();
+            return RedirectToAction("Index");
+        }
+
         [Authorize(Roles = Configurations.UserType_Producer)]
         private async Task<ApplicationUser> GetCurrentUserAsync()
         {

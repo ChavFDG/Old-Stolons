@@ -18,7 +18,7 @@ ProductModel = Backbone.Model.extend({
 
     defaults: {},
 
-    unitsEnum: ["Kg", "Gr", "ml", "L"],
+    unitsEnum: ["Kg", "L"],
 
     /*
       return the html string according to this product's sell type
@@ -43,12 +43,19 @@ ProductModel = Backbone.Model.extend({
 	return this.unitsEnum[productUnit];
     },
 
-    getPriceUnitString: function() {
+    getUnitPriceString: function() {
 	if (this.get("Type") == 1) {
-	    return " / Pièce";
+	    return this.get("UnitPrice") + " € l'unité";
 	}
+	return this.get("UnitPrice") + " € pour " + this.get("QuantityStepString");
+    },
+
+    getVolumePriceString: function() {
 	var productUnit = this.get("ProductUnit");
-	return " / " + this.unitsEnum[productUnit];
+	if (this.get("Price") === 0 || this.get("QuantityStep") === 1000) {
+	    return "";
+	}
+	return "(" + this.get("Price") + " € / " +  this.unitsEnum[productUnit] + ")";
     },
 
     getSellStepString: function() {

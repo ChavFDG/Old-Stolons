@@ -99,30 +99,45 @@
         <div id="productWeightUnit" class="form-group">
             <label asp-for="Product.ProductUnit" class="col-md-2 control-label"></label>
             <div class="col-md-10">
-                <select asp-for="Product.ProductUnit" asp-items="Html.GetEnumSelectList<Product.Unit>()" class="form-control"></select>
-                <span asp-validation-for="Product.ProductUnit" class="text-danger" />
+              <select asp-for="Product.ProductUnit" asp-items="Html.GetEnumSelectList<Product.Unit>()" class="form-control"></select>
+              <span asp-validation-for="Product.ProductUnit" class="text-danger" />
             </div>
         </div>
         <div id="productQtyStep" class="form-group">
             <label asp-for="Product.QuantityStep" class="col-md-2 control-label"></label>
             <div class="col-md-10">
-                <input asp-for="Product.QuantityStep" class="form-control" data-val-required="Le pallier de poids doit être un nombre." />
-                <span asp-validation-for="Product.QuantityStep" class="text-danger" />
+              <input asp-for="Product.QuantityStep" class="form-control" min="0" data-val-required="Le pallier de poids doit être un nombre." />
+              <span asp-validation-for="Product.QuantityStep" class="text-danger" />
             </div>
         </div>
-        <div class="form-group" id="productAvgWeight">
-            <label asp-for="Product.AverageQuantity" class="col-md-2 control-label"></label>
-            <div class="col-md-10">
-                <input asp-for="Product.AverageQuantity" class="form-control" data-val-required="Le poids moyen doit être un nombre." />
-                <span asp-validation-for="Product.AverageQuantity" class="text-danger" />
-            </div>
+        <!-- <div class="form-group" id="productAvgWeight"> -->
+        <!--     <label asp-for="Product.AverageQuantity" class="col-md-2 control-label"></label> -->
+        <!--     <div class="col-md-10"> -->
+        <!--         <input asp-for="Product.AverageQuantity" class="form-control" data-val-required="Le poids moyen doit être un nombre." /> -->
+        <!--         <span asp-validation-for="Product.AverageQuantity" class="text-danger" /> -->
+        <!--     </div> -->
+        <!-- </div> -->
+
+	<div id="pieceHideVolumePrice" class="form-group hidden">
+          <label for="hideVolumePrice" class="col-md-2 control-label">Masquer prix au kg</label>
+          <div class="col-md-10">
+            <input id="hideVolumePrice" name="hideVolumePrice" type="checkbox" class="form-control" />
+            <span validation-for="hideVolumePrice" class="text-danger" />
+          </div>
         </div>
         <div class="form-group">
-            <label asp-for="Product.Price" class="col-md-2 control-label"></label>
-            <div class="col-md-10">
-                <input asp-for="Product.Price" class="form-control" data-val-number="Le prix doit être un nombre." />
-                <span asp-validation-for="Product.Price" class="text-danger" />
-            </div>
+          <label id="priceLabel" asp-for="Product.Price" class="col-md-2 control-label"></label>
+          <div class="col-md-10">
+            <input id="price" asp-for="Product.Price" class="form-control" data-val-number="Le prix doit être un nombre." />
+            <span asp-validation-for="Product.Price" class="text-danger" />
+          </div>
+        </div>
+	<div class="form-group">
+          <label asp-for="Product.UnitPrice" class="col-md-2 control-label"></label>
+          <div class="col-md-10">
+            <input id="unitPrice" asp-for="Product.UnitPrice" class="form-control" data-val-required="Le prix unitaire est obligatoire" data-val-number="Le prix unitaire doit être un nombre." />
+            <span asp-validation-for="Product.UnitPrice" class="text-danger" />
+          </div>
         </div>
         <!--HIDDEN-->
         <div class="form-group" hidden="hidden">

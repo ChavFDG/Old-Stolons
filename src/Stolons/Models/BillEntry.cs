@@ -21,6 +21,58 @@ namespace Stolons.Models
         [Display(Name = "Quantité")]
         public int Quantity { get; set; }
 
+	[NotMapped]
+	public string QuantityString
+	{
+	    get
+	    {
+		if (Product.Type == Product.SellType.Piece)
+		{
+		    if (Quantity == 1)
+		    {
+			return Quantity + " pièce";
+		    }
+		    else
+		    {
+			return Quantity + " pièces";
+		    }
+		}
+		else
+		{
+		    float qty = (Quantity * Product.QuantityStep);
+		    if (Product.ProductUnit == Product.Unit.Kg)
+		    {
+			string unit = " g";
+			if (qty >= 1000)
+			{
+			    qty /= 1000;
+			    unit = " Kg";
+			}
+			return qty + unit;
+		    }
+		    else
+		    {
+			string unit = " mL";
+			if (qty >= 1000)
+			{
+			    qty /= 1000;
+			    unit = " L";
+			}
+			return qty + unit;
+		    }
+		}
+	    }
+	}
+
+	[NotMapped]
+	public float Price
+	{
+	    get
+	    {
+		return Quantity * Product.UnitPrice;
+	    }
+	}
+
         public BillEntry Clone()
         {
             BillEntry clonedBillEntry = new BillEntry();
