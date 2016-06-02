@@ -40,6 +40,7 @@ A finir avant Jeudi 16h :
 DAMIEN
 - Factures à mettre à jour
 - Les pages à bloquer
-- Stock restant / Stock de la semaine
+- Vérifier qu'on passe bien les stocks en attente lors du passage en ORder
 NICO
 - Panier
+- Ajouter les photos 2 et 3 ;)

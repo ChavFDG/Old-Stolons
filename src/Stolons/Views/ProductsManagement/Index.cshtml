@@ -25,12 +25,18 @@
         <th>
             @Html.DisplayNameFor(model => model.Type)
         </th>
-	<th>
-          @Html.DisplayNameFor(model => model.RemainingStock)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.WeekStock)
-        </th>
+        @if(Configurations.Mode == ApplicationConfig.Modes.Order)
+        {
+            <th>
+                @Html.DisplayNameFor(model => model.RemainingStock)
+            </th>
+        }
+        @if (Configurations.Mode == ApplicationConfig.Modes.DeliveryAndStockUpdate)
+        {
+            <th>
+                @Html.DisplayNameFor(model => model.WeekStock)
+            </th>
+        }
         <th>
             @Html.DisplayNameFor(model => model.State)
         </th>
@@ -54,9 +60,11 @@
         <th>
             @(EnumHelper<Product.SellType>.GetDisplayValue(@item.Type))
         </th>
-	<th>
-          <input id="@("RemainingStockEdition" + item.Id)" asp-for="@item.RemainingStock" class="form-control" min="0" />
-          <script>
+        @if (Configurations.Mode == ApplicationConfig.Modes.Order)
+        {
+            <th>
+                <input id="@("RemainingStockEdition" + item.Id)" asp-for="@item.RemainingStock" class="form-control" min="0" />
+                <script>
             $('#@("RemainingStockEdition" + item.Id)').change(function ()
             {
             $.ajax({
@@ -68,13 +76,16 @@
             }
             });
             });
-          </script>
-        </th>
-        <th>
-            @if (Configurations.Mode != ApplicationConfig.Modes.Order)
-            {
-                <input id="@("WeekStockEdition" + item.Id)" asp-for="@item.WeekStock" class="form-control" min="0" />
-                <script>
+                </script>
+            </th>
+        }
+        @if (Configurations.Mode == ApplicationConfig.Modes.DeliveryAndStockUpdate)
+        {
+            <th>
+                @if (Configurations.Mode != ApplicationConfig.Modes.Order)
+                {
+                    <input id="@("WeekStockEdition" + item.Id)" asp-for="@item.WeekStock" class="form-control" min="0" />
+                    <script>
                 $('#@("WeekStockEdition" + item.Id)').change(function ()
                 {
                     $.ajax({
@@ -86,13 +97,14 @@
                         }
                     });
                 });
-                </script>
-            }
-            else
-            {
-                @Html.DisplayFor(model => item.WeekStock)
-            }            
-        </th>
+                    </script>
+                }
+                else
+                {
+                    @Html.DisplayFor(model => item.WeekStock)
+                }
+            </th>
+        }
         @switch (@item.State)
         {
             case Product.ProductState.Disabled:
