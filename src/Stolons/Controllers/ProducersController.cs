@@ -232,7 +232,10 @@ namespace Stolons.Controllers
             //Delete App User
             ApplicationUser appUser = _context.Users.First(x => x.Email == producer.Email);
             _context.Users.Remove(appUser);
-            //Delete User
+            //Delete User => TODO voir mieux car la on supprime tout ce qui est dépendant avant de supprimer le producteur, on fait le job de EF soit un Cascade delete !
+            _context.News.RemoveRange(_context.News.Include(x => x.User).Where(x => x.User.Id == producer.Id));
+            _context.Products.RemoveRange(_context.Products.Include(x => x.Producer).Where(x => x.Producer.Id == producer.Id));
+            _context.ProducerBills.RemoveRange(_context.ProducerBills.Include(x => x.Producer).Where(x => x.Producer.Id == producer.Id));
             _context.Producers.Remove(producer);
             //Save
             _context.SaveChanges();

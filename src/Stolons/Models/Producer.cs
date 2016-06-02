@@ -60,9 +60,9 @@ namespace Stolons.Models
         public string WebSiteLink { get; set; }
         [Display(Name = "Factures")]
         public List<ProducerBill> Bills { get; set; }
-	[Display(Name = "Latitude")]
+	    [Display(Name = "Latitude")]
         public double Latitude { get; set; }
-	[Display(Name = "Longitude")]
+	    [Display(Name = "Longitude")]
         public double Longitude { get; set; }
     }
 }
