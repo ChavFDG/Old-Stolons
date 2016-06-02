@@ -19,9 +19,9 @@ namespace Stolons.Models
         public List<BillEntry> Products { get; set; }
 
 	public bool Validated { get; set; }
-
+	
 	[NotMapped]
-	float Price
+	public float TotalPrice
 	{
 	    get
 	    {
