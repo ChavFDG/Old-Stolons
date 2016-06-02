@@ -54,6 +54,7 @@ ManageProductView = Backbone.View.extend(
 		var qtyStep = $("#Product_QuantityStep").val();
 		if (price && qtyStep) {
 		    $("#unitPrice").val(price * qtyStep / 1000);
+		    $("#unitPrice").attr("value", price * qtyStep / 1000);
 		}
 	    }
 	},
@@ -79,6 +80,7 @@ ManageProductView = Backbone.View.extend(
 	    if (selected) {
 		$("#price").attr("disabled", true);
 		$("#price").val(0);
+		$("#price").attr("value", 0);
 	    } else if (sellType != 1) {
 		$("#price").removeAttr("disabled");
 	    } else {

@@ -457,6 +457,7 @@ ProductActionView = Backbone.View.extend(
 		this.$(".productQuantityChanger").removeClass("hidden");
 		this.$(".productQuantityLoading").addClass("hidden");
 	    }, this));
+	    return false;
 	},
 
 	increment: function() {
@@ -466,6 +467,7 @@ ProductActionView = Backbone.View.extend(
 		this.$(".productQuantityLoading").addClass("hidden");
 		this.$(".productQuantityChanger").removeClass("hidden");
 	    }, this));
+	    return false;
 	},
 
 	decrement: function() {
@@ -475,6 +477,7 @@ ProductActionView = Backbone.View.extend(
 		this.$(".productQuantityLoading").addClass("hidden");
 		this.$(".productQuantityChanger").removeClass("hidden");
 	    }, this));
+	    return false;
 	},
 
 	render: function() {
