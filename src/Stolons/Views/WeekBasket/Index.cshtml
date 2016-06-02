@@ -169,7 +169,7 @@
           <span> <%= entry.QuantityString %> </span>
 	</td>
 	<td>
-          <span> <%= entry.Quantity * entry.Product.Price %> </span>
+          <span> <%= entry.Price %> </span>
 	</td>
       </tr>
       <% });
@@ -186,7 +186,7 @@
 	</td>
 	<td>
 	  <b>
-	    <%= validatedBasketModel.getTotal() %>
+	    <%= validatedBasket.TotalPrice %>
 	    <span class="glyphicon glyphicon-euro" data-toggle="tooltip" title="Prix en euros">
             </span>
 	  </b>
@@ -235,7 +235,7 @@
         <span> <%= entry.QuantityString %></span>
       </td>
       <td>
-        <span> <%= entry.Quantity * entry.Product.Price %> </span>
+        <span> <%= entry.Price %> </span>
       </td>
       <td data-toggle="tooltip" title="Cliquer pour supprimer le produit du panier">
 	<a href="#" class="deleteEntry" onclick="WeekBasket.TmpWeekBasketModel.removeBillEntry('<%= entry.ProductId %>');return false;">
@@ -258,7 +258,7 @@
       </td>
       <td>
 	<b>
-	  <%= tmpBasketModel.getTotal() %>
+	  <%= tmpBasket.TotalPrice %>
 	  <span class="glyphicon glyphicon-euro" data-toggle="tooltip" title="Prix en euros">
           </span>
 	</b>
