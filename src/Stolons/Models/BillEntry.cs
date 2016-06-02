@@ -69,7 +69,7 @@ namespace Stolons.Models
 	{
 	    get
 	    {
-		return Quantity * Product.UnitPrice;
+		return (float) Math.Round(Quantity * Product.UnitPrice, 2);
 	    }
 	}
 

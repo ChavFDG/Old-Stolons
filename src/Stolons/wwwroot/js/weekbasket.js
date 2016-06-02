@@ -278,12 +278,25 @@ FiltersView = Backbone.View.extend({
 	this.filterProducts();
     },
 
+    famillyMatch: function(product) {
+	return this.selectedFamily == "Tous" || (product.Familly && product.Familly.FamillyName == this.selectedFamily);
+    },
+
+    productNameMatch: function(product, searchTerm) {
+	return _.isEmpty(searchTerm) || product.Name.toLowerCase().indexOf(searchTerm) != -1;
+    },
+
+    productDescMatch: function(product, searchTerm) {
+	return _.isEmpty(searchTerm) || product.Description.toLowerCase().indexOf(searchTerm) != -1;
+    },
+
     filterProducts: function() {
 	var searchTerm = this.$("#search").val();
+	searchTerm = searchTerm.toLowerCase();
 	this.productsModel.forEach(function(productModel) {
 	    var product = productModel.toJSON();
-	    if ((this.selectedFamily == "Tous" || (product.Familly && product.Familly.FamillyName == this.selectedFamily)) &&
-		(_.isEmpty(searchTerm) || product.Name.toLowerCase().contains(searchTerm) || (product.Description && product.Description.toLowerCase().contains(searchTerm)))) {
+
+	    if (this.famillyMatch(product) && (this.productNameMatch(product, searchTerm) || this.productDescMatch(product, searchTerm))) {
 		$("#product-" + product.Id).removeClass("hidden");
 	    } else {
 		$("#product-" + product.Id).removeClass("hidden").addClass("hidden");

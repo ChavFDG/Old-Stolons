@@ -2,8 +2,6 @@
 @using Stolons.ViewModels.WeekBasket;
 @model WeekBasketViewModel
 
-
-
 @if (Configurations.Mode == ApplicationConfig.Modes.DeliveryAndStockUpdate)
 {
     <h3>Commande indisponible</h3>
@@ -15,6 +13,7 @@
 else
 {
     <h2>Mon panier</h2>
+
 
     <div class="weekBasketContainer">
 
@@ -177,7 +176,7 @@ else
                         <span> <%= entry.QuantityString %> </span>
                     </td>
                     <td>
-                        <span> <%= entry.Quantity * entry.Product.Price %> </span>
+                        <span> <%= entry.Price %> </span>
                     </td>
                 </tr>
                 <% });
@@ -194,7 +193,7 @@ else
                     </td>
                     <td>
                         <b>
-                            <%= validatedBasketModel.getTotal() %>
+                            <%= validatedBasket.TotalPrice %>
                             <span class="glyphicon glyphicon-euro" data-toggle="tooltip" title="Prix en euros">
                             </span>
                         </b>
@@ -243,7 +242,7 @@ else
                     <span> <%= entry.QuantityString %></span>
                 </td>
                 <td>
-                    <span> <%= entry.Quantity * entry.Product.Price %> </span>
+                    <span> <%= entry.Price %> </span>
                 </td>
                 <td data-toggle="tooltip" title="Cliquer pour supprimer le produit du panier">
                     <a href="#" class="deleteEntry" onclick="WeekBasket.TmpWeekBasketModel.removeBillEntry('<%= entry.ProductId %>');return false;">
@@ -266,7 +265,7 @@ else
                 </td>
                 <td>
                     <b>
-                        <%= tmpBasketModel.getTotal() %>
+                        <%= tmpBasket.TotalPrice %>
                         <span class="glyphicon glyphicon-euro" data-toggle="tooltip" title="Prix en euros">
                         </span>
                     </b>
