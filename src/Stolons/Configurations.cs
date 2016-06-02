@@ -56,8 +56,8 @@ namespace Stolons
                 preparationTime = preparationTime.AddHours(ApplicationConfig.DeliveryAndStockUpdateDayStartDateHourStartDate).AddMinutes(ApplicationConfig.DeliveryAndStockUpdateDayStartDateMinuteStartDate);
 		
                 DateTime orderTime = DateTime.Today;
-                orderTime = orderTime.AddDays(GetDaysDiff(currentTime.DayOfWeek, ApplicationConfig.OrderAndUpdateDayStartDate));
-                orderTime = orderTime.AddHours(ApplicationConfig.OrderAndUpdateHourStartDate).AddMinutes(ApplicationConfig.OrderAndUpdateMinuteStartDate);
+                orderTime = orderTime.AddDays(GetDaysDiff(currentTime.DayOfWeek, ApplicationConfig.OrderDayStartDate));
+                orderTime = orderTime.AddHours(ApplicationConfig.OrderHourStartDate).AddMinutes(ApplicationConfig.OrderMinuteStartDate);
 
                
                 if(orderTime <= currentTime && currentTime <= preparationTime)

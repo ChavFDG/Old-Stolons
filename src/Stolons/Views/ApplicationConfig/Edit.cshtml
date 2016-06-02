@@ -123,24 +123,24 @@
         <div asp-validation-summary="ValidationSummary.ModelOnly" class="text-danger"></div>
         <input type="hidden" asp-for="Id" />
         <div class="form-group">
-            <label asp-for="OrderAndUpdateDayStartDate" class="col-md-2 control-label"></label>
+            <label asp-for="OrderDayStartDate" class="col-md-2 control-label"></label>
             <div class="col-md-10">
-                <select asp-for="OrderAndUpdateDayStartDate" asp-items="Html.GetEnumSelectList<DayOfWeek>()" class="form-control"></select>
-                <span asp-validation-for="OrderAndUpdateDayStartDate" class="text-danger" />
+                <select asp-for="OrderDayStartDate" asp-items="Html.GetEnumSelectList<DayOfWeek>()" class="form-control"></select>
+                <span asp-validation-for="OrderDayStartDate" class="text-danger" />
             </div>
         </div>
         <div class="form-group">
-            <label asp-for="OrderAndUpdateHourStartDate" class="col-md-2 control-label"></label>
+            <label asp-for="OrderHourStartDate" class="col-md-2 control-label"></label>
             <div class="col-md-10">
-                <input asp-for="OrderAndUpdateHourStartDate" class="form-control" />
-                <span asp-validation-for="OrderAndUpdateHourStartDate" class="text-danger" />
+                <input asp-for="OrderHourStartDate" class="form-control" />
+                <span asp-validation-for="OrderHourStartDate" class="text-danger" />
             </div>
         </div>
         <div class="form-group">
-            <label asp-for="OrderAndUpdateMinuteStartDate" class="col-md-2 control-label"></label>
+            <label asp-for="OrderMinuteStartDate" class="col-md-2 control-label"></label>
             <div class="col-md-10">
-                <input asp-for="OrderAndUpdateMinuteStartDate" class="form-control" />
-                <span asp-validation-for="OrderAndUpdateMinuteStartDate" class="text-danger" />
+                <input asp-for="OrderMinuteStartDate" class="form-control" />
+                <span asp-validation-for="OrderMinuteStartDate" class="text-danger" />
             </div>
         </div>
 

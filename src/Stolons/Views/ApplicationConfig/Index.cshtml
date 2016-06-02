@@ -1,11 +1,12 @@
 ﻿@model ApplicationConfig
+@using Stolons.Helpers;
 
 @{
     ViewData["Title"] = "Configuration du site web";
 }
 
 <h2>@ViewData["Title"]</h2>
-<p>Mode actuel : @Configurations.Mode</p>
+<p>Mode actuel : <b>@(EnumHelper<ApplicationConfig.Modes>.GetDisplayValue(Configurations.Mode))</b></p>
 <div>
     <h4>Configuration de la structure</h4>
     <dl class="dl-horizontal">
@@ -93,22 +94,22 @@
     <h4>Début des commandes :</h4>
     <dl class="dl-horizontal">
         <dt>
-            @Html.DisplayNameFor(model => model.OrderAndUpdateDayStartDate)
+            @Html.DisplayNameFor(model => model.OrderDayStartDate)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.OrderAndUpdateDayStartDate)
+            @Model.OrderDayStartDate.ToFrench()
         </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.OrderAndUpdateHourStartDate)
+            @Html.DisplayNameFor(model => model.OrderHourStartDate)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.OrderAndUpdateHourStartDate)
+            @Html.DisplayFor(model => model.OrderHourStartDate)
         </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.OrderAndUpdateMinuteStartDate)
+            @Html.DisplayNameFor(model => model.OrderMinuteStartDate)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.OrderAndUpdateMinuteStartDate)
+            @Html.DisplayFor(model => model.OrderMinuteStartDate)
         </dd>
     </dl>
     <h4>Début livraison et mise à jour des stocks :</h4>
@@ -117,7 +118,7 @@
             @Html.DisplayNameFor(model => model.DeliveryAndStockUpdateDayStartDate)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.DeliveryAndStockUpdateDayStartDate)
+            @Model.DeliveryAndStockUpdateDayStartDate.ToFrench()
         </dd>
         <dt>
             @Html.DisplayNameFor(model => model.DeliveryAndStockUpdateDayStartDateHourStartDate)
@@ -144,7 +145,7 @@
             @Html.DisplayNameFor(model => model.SimulationMode)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.SimulationMode)
+            @(EnumHelper<ApplicationConfig.Modes>.GetDisplayValue(Model.SimulationMode))
         </dd>
     </dl>
 </div>

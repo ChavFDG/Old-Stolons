@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
@@ -37,13 +38,29 @@ namespace Stolons.Helpers
 
         public static string GetDisplayValue(T value)
         {
-            var fieldInfo = value.GetType().GetField(value.ToString());
+            if (typeof(T) == typeof(DayOfWeek))
+            {
+                DayOfWeek dayOfWeek = (DayOfWeek)Enum.Parse(typeof(DayOfWeek),value.ToString()) ;
+                return dayOfWeek.ToFrench();
+            }
+            else
+            {
+                var fieldInfo = value.GetType().GetField(value.ToString());
 
-            var descriptionAttributes = fieldInfo.GetCustomAttributes(
-                typeof(DisplayAttribute), false) as DisplayAttribute[];
+                var descriptionAttributes = fieldInfo.GetCustomAttributes(
+                    typeof(DisplayAttribute), false) as DisplayAttribute[];
 
-            if (descriptionAttributes == null) return string.Empty;
-            return (descriptionAttributes.Length > 0) ? descriptionAttributes[0].Name : value.ToString();
+                if (descriptionAttributes == null) return string.Empty;
+                return (descriptionAttributes.Length > 0) ? descriptionAttributes[0].Name : value.ToString();
+            }
+        }
+    }
+
+    public static class EnumHelper
+    {
+        public static string ToFrench(this DayOfWeek dayOfWeekValue)
+        {
+            return DateTimeFormatInfo.CurrentInfo.GetDayName(dayOfWeekValue).ToUpper();
         }
     }
 }

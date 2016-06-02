@@ -33,13 +33,13 @@ Fait :
 - (1) Ajout d'un mode production (RELEASE)
 - (2) Virer le mode Préparation des commandes => Il n'y a plus que Order et DeliveryAndStockUpdate
 - (2) Ajouter une entré Couriel de contact pour la page Contact
+- (1) Blocage de la page "mon panier" quand on est en mode StockUpdateAndDelivery
 
 
 
 A finir avant Jeudi 16h :
 DAMIEN
 - Factures à mettre à jour
-- Les pages à bloquer
 - Vérifier qu'on passe bien les stocks en attente lors du passage en ORder
 NICO
 - Panier
