@@ -37,8 +37,9 @@ namespace Stolons.Tools
                 if (lastMode == ApplicationConfig.Modes.Order && currentMode == ApplicationConfig.Modes.DeliveryAndStockUpdate)
                 {
                     //We moved form Order to Preparation, create and send bills
-                    List<IBill> bills = new List<IBill>();
-                    Dictionary<Producer, List<BillEntryConsumer>> producerBills = new Dictionary<Producer, List<BillEntryConsumer>>();
+                    List<IBill> consumerBills = new List<IBill>();
+                    List<IBill> producerBills = new List<IBill>();
+                    Dictionary<Producer, List<BillEntryConsumer>> brutProducerBills = new Dictionary<Producer, List<BillEntryConsumer>>();
                     //Consumer (create bills)
                     List<ValidatedWeekBasket> consumerWeekBaskets = dbContext.ValidatedWeekBaskets.Include(x => x.Products).Include(x => x.Consumer).ToList();
                     GenerateBill(consumerWeekBaskets,dbContext);
@@ -46,25 +47,26 @@ namespace Stolons.Tools
                     {
                         //Generate bill for consumer
                         ConsumerBill consumerBill = GenerateBill(weekBasket, dbContext);
-                        bills.Add(consumerBill);
+                        consumerBills.Add(consumerBill);
                         dbContext.Add(consumerBill);
                         //Add to producer bill entry
                         foreach (var tmpBillEntry in weekBasket.Products)
                         {
                             var billEntry = dbContext.BillEntrys.Include(x => x.Product).ThenInclude(x => x.Producer).First(x=>x.Id == tmpBillEntry.Id);
                             Producer producer = billEntry.Product.Producer;
-                            if (!producerBills.ContainsKey(producer))
+                            if (!brutProducerBills.ContainsKey(producer))
                             {
-                                producerBills.Add(producer, new List<BillEntryConsumer>());
+                                brutProducerBills.Add(producer, new List<BillEntryConsumer>());
                             }
-                            producerBills[producer].Add(new BillEntryConsumer(billEntry,weekBasket.Consumer));
+                            brutProducerBills[producer].Add(new BillEntryConsumer(billEntry,weekBasket.Consumer));
                         }
                     }
                     //Producer (creates bills)
-                    foreach (var producerBill in producerBills)
+                    foreach (var producerBill in brutProducerBills)
                     {
                         //Generate bill for producer
                         ProducerBill bill = GenerateBill(producerBill.Key, producerBill.Value, dbContext);
+                        producerBills.Add(bill);
                         dbContext.Add(bill);
                         //Send mail to producer
                         AuthMessageSender.SendEmail(bill.Producer.Email, 
@@ -75,13 +77,13 @@ namespace Stolons.Tools
                                                         "Facture "+ bill.BillNumber +".xlsx");
                     }
                     // => Producer, send mails
-                    foreach (var producer in dbContext.Producers.Where(x=> !producerBills.Keys.Contains(x)))
+                    foreach (var producer in dbContext.Producers.Where(x=> !brutProducerBills.Keys.Contains(x)))
                     {
                         //Un mail à tout les producteurs n'ayant pas de commande
                         AuthMessageSender.SendEmail(producer.Email, producer.CompanyName, "Aucune commande cette semaine", "<h3>Vous n'avez pas de commande cette semaine</h3>");
                     }
                     //Bills (save bills and send mails to user)
-                    foreach(var bill in bills)
+                    foreach(var bill in consumerBills)
                     {
                         dbContext.Add(bill);
                         //Send mail to user with bill
@@ -102,8 +104,12 @@ namespace Stolons.Tools
                     dbContext.BillEntrys.Clear();
                     //Move product to, to validate
                     dbContext.Products.ToList().ForEach(x => x.State = Product.ProductState.Stock);
-                    //For test, remove existing consumer bill
-                    dbContext.RemoveRange(dbContext.ConsumerBills.Where(x=> bills.Any(y=>y.BillNumber == x.BillNumber)));
+
+                    #if (DEBUG)
+                        //For test, remove existing consumer bill and producer bill => That will never exit in normal mode cause they can only have one bill by week per user
+                        dbContext.RemoveRange(dbContext.ConsumerBills.Where(x=> consumerBills.Any(y=>y.BillNumber == x.BillNumber)));
+                        dbContext.RemoveRange(dbContext.ProducerBills.Where(x => producerBills.Any(y => y.BillNumber == x.BillNumber)));
+                    #endif      
                     //
                     dbContext.SaveChanges();
                 }
@@ -123,7 +129,7 @@ namespace Stolons.Tools
         private static void GenerateBill(List<ValidatedWeekBasket> consumerWeekBaskets, ApplicationDbContext dbContext)
         {
             //Generate exel file with bill number for user
-            #region File creation
+#region File creation
             string filePath = Path.Combine(Configurations.Environment.WebRootPath, Configurations.StolonsBillsStockagePath);
             string billNumber = DateTime.Now.Year + "_" + DateTime.Now.GetIso8601WeekOfYear();
             FileInfo newFile = new FileInfo(filePath + @"\" + billNumber + ".xlsx");
@@ -137,7 +143,7 @@ namespace Stolons.Tools
             {
                 Directory.CreateDirectory(filePath);
             }
-            #endregion File creation
+#endregion File creation
             //
             using (ExcelPackage package = new ExcelPackage(newFile))
             {
@@ -225,7 +231,7 @@ namespace Stolons.Tools
                                 worksheet.Cells[row, 1, row, 2].Merge = true;
                                 worksheet.Cells[row, 1, row, 2].Value = billEntry.Product.Name; ;
                                 worksheet.Cells[row, 3].Value = EnumHelper<Product.SellType>.GetDisplayValue(billEntry.Product.Type);
-                                worksheet.Cells[row, 4].Value = billEntry.Product.Price;
+                                worksheet.Cells[row, 4].Value = billEntry.Product.UnitPrice;
                                 worksheet.Cells[row, 4].Style.Numberformat.Format = "0.00€";
                                 worksheet.Cells[row, 5].Value = billEntry.Quantity;
                                 worksheet.Cells[row, 6].Formula = new ExcelCellAddress(row, 4).Address + "*" + new ExcelCellAddress(row, 5).Address;
@@ -349,7 +355,7 @@ namespace Stolons.Tools
                 {
                     // - Add the headers
                     worksheet.Cells[row, 2].Value = EnumHelper<Product.SellType>.GetDisplayValue(prod.Key.Type) + ( prod.Key.Type == Product.SellType.Piece ? "" : " (" + prod.Key.ProductUnit.ToString() + ")"  );
-                    worksheet.Cells[row, 3].Value = prod.Key.Price ;
+                    worksheet.Cells[row, 3].Value = prod.Key.UnitPrice ;
                     worksheet.Cells[row, 3].Style.Numberformat.Format = "0.00€";
                     worksheet.Cells[row, 2, row, 3].Style.Font.Bold = true;
                     worksheet.Cells[row, 2, row, 3].Style.Font.Size = 12;
@@ -415,32 +421,50 @@ namespace Stolons.Tools
                     worksheet.Cells[row, 2].Style.Border.BorderAround(ExcelBorderStyle.Thin);
                     worksheet.Cells[row, 3].Formula = new ExcelCellAddress(row - 2, 3).Address + "-" + new ExcelCellAddress(row - 1, 3).Address;
                     worksheet.Cells[row, 3].Style.Numberformat.Format = "0.00€";
-                    worksheet.Cells[row, 4].Value = "☐";
-                    worksheet.Cells[row, 1, row, 4].Style.Font.Size = 14;
                     worksheet.Cells[row, 1, row, 3].Style.Font.Bold = true;
                     worksheet.Cells[row, 1, row, 3].Style.Border.BorderAround(ExcelBorderStyle.Thin);
+                    worksheet.Cells[row, 4].Value = "☐";
+                    worksheet.Cells[row, 1, row, 4].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                    worksheet.Cells[row, 1, row, 4].Style.Font.Size = 14;
                     //
                     //Next product
                     row++;
                     row++;
                 }
                 //Super total
-                string totalFormula ="";
-                for(int cpt = 0; cpt<rowsTotal.Count;cpt++)
+                string totalWhitoutComissionFormula ="";
+                string totalComission = "";
+                for (int cpt = 0; cpt<rowsTotal.Count;cpt++)
                 {
-                    totalFormula += new ExcelCellAddress(rowsTotal[cpt], 3).Address;
-                    if(cpt != rowsTotal.Count -1)
+                    totalWhitoutComissionFormula += new ExcelCellAddress(rowsTotal[cpt], 3).Address;
+                    totalComission += new ExcelCellAddress(rowsTotal[cpt] +1, 3).Address;
+                    if (cpt != rowsTotal.Count -1)
                     {
-                        totalFormula += "+";
+                        totalWhitoutComissionFormula += "+";
+                        totalComission += "+";
                     }
                 }
+                worksheet.Cells[row, 2].Value = "Total sans comission";
+                worksheet.Cells[row, 2].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
+                worksheet.Cells[row, 3].Formula = totalWhitoutComissionFormula;
+                worksheet.Cells[row, 3].Style.Numberformat.Format = "0.00€";
+                worksheet.Cells[row, 2, row, 3].Style.Font.Italic = true;
+                worksheet.Cells[row, 2, row, 3].Style.Font.Size = 9;
+                row++;
+                worksheet.Cells[row, 2].Value = "Total comission à " + Configurations.ApplicationConfig.Comission + "%";
+                worksheet.Cells[row, 2].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
+                worksheet.Cells[row, 3].Formula = totalComission;
+                worksheet.Cells[row, 3].Style.Numberformat.Format = "0.00€";
+                worksheet.Cells[row, 2, row, 3].Style.Font.Italic = true;
+                worksheet.Cells[row, 2, row, 3].Style.Font.Size = 9;
+                row++;
                 worksheet.Cells[row, 2].Value = "TOTAL :";
                 worksheet.Cells[row, 2].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
-                worksheet.Cells[row, 3].Formula = totalFormula;
+                worksheet.Cells[row, 3].Formula = new ExcelCellAddress(row - 2, 3).Address + "-" + new ExcelCellAddress(row - 1, 3).Address;
                 worksheet.Cells[row, 3].Style.Numberformat.Format = "0.00€";
                 worksheet.Cells[row, 2, row, 3].Style.Font.Bold = true;
                 worksheet.Cells[row, 2, row ,3].Style.Font.Size = 18;
-                
+
                 // Document properties
                 package.Workbook.Properties.Title = "Facture : " + bill.BillNumber;
                 package.Workbook.Properties.Author = "Stolons";
@@ -547,7 +571,7 @@ namespace Stolons.Tools
                     worksheet.Cells[row, 1].Style.Font.Bold = true;
                     worksheet.Cells[row, 2].Value = billEntry.Product.Familly.FamillyName;
                     worksheet.Cells[row, 3].Value = EnumHelper<Product.SellType>.GetDisplayValue(billEntry.Product.Type);
-                    worksheet.Cells[row, 4].Value = billEntry.Product.Price;
+                    worksheet.Cells[row, 4].Value = billEntry.Product.UnitPrice;
                     worksheet.Cells[row, 4].Style.Numberformat.Format = "0.00€";
                     worksheet.Cells[row, 5].Value = billEntry.Quantity;
                     worksheet.Cells[row, 6].Formula = new ExcelCellAddress(row,4).Address +"*" + new ExcelCellAddress(row, 5).Address;
@@ -599,106 +623,6 @@ namespace Stolons.Tools
             bill.State = BillState.Pending;
             bill.EditionDate = DateTime.Now;
             return bill as T;
-        }
-
-        //Exemple de comment générer un ficher exel
-        public static void GenerateExel(string filePath)
-        {
-            FileInfo newFile = new FileInfo(filePath + @"\sample1.xlsx");
-            if (newFile.Exists)
-            {
-                newFile.Delete();  // ensures we create a new workbook
-                newFile = new FileInfo(filePath + @"\sample1.xlsx");
-            }
-            using (OfficeOpenXml.ExcelPackage package = new OfficeOpenXml.ExcelPackage(newFile))
-            {
-                // add a new worksheet to the empty workbook
-                OfficeOpenXml.ExcelWorksheet worksheet = package.Workbook.Worksheets.Add("Inventory");
-                //Add the headers
-                worksheet.Cells[1, 1].Value = "ID";
-                worksheet.Cells[1, 2].Value = "Product";
-                worksheet.Cells[1, 3].Value = "Quantity";
-                worksheet.Cells[1, 4].Value = "Price";
-                worksheet.Cells[1, 5].Value = "Value";
-
-                //Add some items...
-                worksheet.Cells["A2"].Value = 12001;
-                worksheet.Cells["B2"].Value = "Nails";
-                worksheet.Cells["C2"].Value = 37;
-                worksheet.Cells["D2"].Value = 3.99;
-
-                worksheet.Cells["A3"].Value = 12002;
-                worksheet.Cells["B3"].Value = "Hammer";
-                worksheet.Cells["C3"].Value = 5;
-                worksheet.Cells["D3"].Value = 12.10;
-
-                worksheet.Cells["A4"].Value = 12003;
-                worksheet.Cells["B4"].Value = "Saw";
-                worksheet.Cells["C4"].Value = 12;
-                worksheet.Cells["D4"].Value = 15.37;
-
-                //Add a formula for the value-column
-                worksheet.Cells["E2:E4"].Formula = "C2*D2";
-
-                //Ok now format the values;
-                using (var range = worksheet.Cells[1, 1, 1, 5])
-                {
-                    range.Style.Font.Bold = true;
-                    range.Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
-                    range.Style.Fill.BackgroundColor.SetColor(System.Drawing.Color.DarkBlue);
-                    range.Style.Font.Color.SetColor(System.Drawing.Color.White);
-                }
-
-                worksheet.Cells["A5:E5"].Style.Border.Top.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
-                worksheet.Cells["A5:E5"].Style.Font.Bold = true;
-
-                worksheet.Cells[5, 3, 5, 5].Formula = string.Format("SUBTOTAL(9,{0})", new OfficeOpenXml.ExcelAddress(2, 3, 4, 3).Address);
-                worksheet.Cells["C2:C5"].Style.Numberformat.Format = "#,##0";
-                worksheet.Cells["D2:E5"].Style.Numberformat.Format = "#,##0.00";
-
-                //Create an autofilter for the range
-                worksheet.Cells["A1:E4"].AutoFilter = true;
-
-                worksheet.Cells["A2:A4"].Style.Numberformat.Format = "@";   //Format as text
-
-                //There is actually no need to calculate, Excel will do it for you, but in some cases it might be useful. 
-                //For example if you link to this workbook from another workbook or you will open the workbook in a program that hasn't a calculation engine or 
-                //you want to use the result of a formula in your program.
-                worksheet.Calculate();
-
-                worksheet.Cells.AutoFitColumns(0);  //Autofit columns for all cells
-
-                // lets set the header text 
-                worksheet.HeaderFooter.OddHeader.CenteredText = "&24&U&\"Arial,Regular Bold\" Inventory";
-                // add the page number to the footer plus the total number of pages
-                worksheet.HeaderFooter.OddFooter.RightAlignedText =
-                    string.Format("Page {0} of {1}", OfficeOpenXml.ExcelHeaderFooter.PageNumber, OfficeOpenXml.ExcelHeaderFooter.NumberOfPages);
-                // add the sheet name to the footer
-                worksheet.HeaderFooter.OddFooter.CenteredText = OfficeOpenXml.ExcelHeaderFooter.SheetName;
-                // add the file path to the footer
-                worksheet.HeaderFooter.OddFooter.LeftAlignedText = OfficeOpenXml.ExcelHeaderFooter.FilePath + OfficeOpenXml.ExcelHeaderFooter.FileName;
-
-                worksheet.PrinterSettings.RepeatRows = worksheet.Cells["1:2"];
-                worksheet.PrinterSettings.RepeatColumns = worksheet.Cells["A:G"];
-
-                // Change the sheet view to show it in page layout mode
-                worksheet.View.PageLayoutView = true;
-
-                // set some document properties
-                package.Workbook.Properties.Title = "Invertory";
-                package.Workbook.Properties.Author = "Jan Källman";
-                package.Workbook.Properties.Comments = "This sample demonstrates how to create an Excel 2007 workbook using EPPlus";
-
-                // set some extended property values
-                package.Workbook.Properties.Company = "AdventureWorks Inc.";
-
-                // set some custom property values
-                package.Workbook.Properties.SetCustomPropertyValue("Checked by", "Jan Källman");
-                package.Workbook.Properties.SetCustomPropertyValue("AssemblyName", "EPPlus");
-                // save our new workbook and we are done!
-                package.Save();
-
-            }
         }
 
         public static int GetIso8601WeekOfYear(this DateTime time)

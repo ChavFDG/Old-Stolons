@@ -22,7 +22,7 @@
 @if (Model == null)
 {
     <p>
-        Votre panier a été annulé, un courriel de confirmation vous a été envoyé.
+        Votre panier a été annulé.
     </p>
     
 }
@@ -70,13 +70,13 @@ else
                     @Html.DisplayFor(modelItem => item.Product.Name)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Product.Price) €
+                    @Html.DisplayFor(modelItem => item.Product.UnitPrice) €
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Quantity)
                 </td>
                 <td>
-                    @(item.Quantity * item.Product.Price) €
+                    @(item.Quantity * item.Product.UnitPrice) €
                 </td>
             </tr>
         }

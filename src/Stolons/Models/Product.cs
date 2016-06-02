@@ -96,50 +96,50 @@ namespace Stolons.Models
         [Display(Name = "Prix (kg ou l)")]
         [Required]
         public float Price { get; set; }
-	[Display(Name = "Prix unitaire")]
-	[Required]
-	public float UnitPrice { get; set; }
+	    [Display(Name = "Prix unitaire")]
+	    [Required]
+	    public float UnitPrice { get; set; }
 
         [Display(Name = "Stock de la semaine")]
         public int WeekStock { get; set; }
         [Display(Name = "Stock restant")]
         public int RemainingStock { get; set; }
         [Display(Name = "Pallier de poids (g ou ml)")]
-	[Required]
+	    [Required]
         public int QuantityStep { get; set; }
-	[NotMapped]
-	public string QuantityStepString
-	{
-	    get
+	    [NotMapped]
+	    public string QuantityStepString
 	    {
-		if (QuantityStep == 0)
-		{
-		    return " rien";
-		}
-		if (ProductUnit == Unit.Kg)
-		{
-		    if (QuantityStep >= 1000)
+	        get
+	        {
+		    if (QuantityStep == 0)
 		    {
-			return QuantityStep / 1000 + " Kg";
+		        return " rien";
+		    }
+		    if (ProductUnit == Unit.Kg)
+		    {
+		        if (QuantityStep >= 1000)
+		        {
+			    return QuantityStep / 1000 + " Kg";
+		        }
+		        else
+		        {
+			    return QuantityStep  + " g";
+		        }
 		    }
 		    else
 		    {
-			return QuantityStep  + " g";
+		        if (QuantityStep >= 1000)
+		        {
+			    return QuantityStep / 1000 + " L";
+		        }
+		        else
+		        {
+			    return QuantityStep  + " mL";
+		        }
 		    }
-		}
-		else
-		{
-		    if (QuantityStep >= 1000)
-		    {
-			return QuantityStep / 1000 + " L";
-		    }
-		    else
-		    {
-			return QuantityStep  + " mL";
-		    }
-		}
+	        }
 	    }
-	}
         [Display(Name = "Quantité moyenne")]
         public int AverageQuantity { get; set; }
         [Display(Name = "Unité de mesure")]

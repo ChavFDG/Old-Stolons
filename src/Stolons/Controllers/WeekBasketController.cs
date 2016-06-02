@@ -363,13 +363,13 @@ namespace Stolons.Controllers
 	{
 	    if (basket == null)
 	    {
-		return 0;
+		    return 0;
 	    }
 	    float price = 0;
 	    foreach (BillEntry entry in basket.Products)
 	    {
-		Product product = _context.Products.First(x => x.Id == entry.ProductId);
-		price += (product.Price * entry.Quantity);
+		    Product product = _context.Products.First(x => x.Id == entry.ProductId);
+		    price += (product.UnitPrice * entry.Quantity);
 	    }
 	    return price;
 	}
