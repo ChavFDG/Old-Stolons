@@ -27,7 +27,7 @@ namespace Stolons.Models
 		{
 		    price += entry.Price;
 		}
-		return price;
+		return (float) Math.Round(price, 2);
 	    }
 	}
     }
