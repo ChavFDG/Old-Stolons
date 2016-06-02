@@ -47,9 +47,9 @@ ManageProductView = Backbone.View.extend(
 	    var sellType = $("#SellType").val();
 
 	    if (sellType == 1) {
-		$("#unitPrice").removeAttr("disabled");
+		$("#unitPrice").removeAttr("readonly");
 	    } else {
-		$("#unitPrice").attr("disabled", true);
+		$("#unitPrice").attr("readonly", true);
 		var price = $("#price").val();
 		var qtyStep = $("#Product_QuantityStep").val();
 		if (price && qtyStep) {
@@ -66,10 +66,10 @@ ManageProductView = Backbone.View.extend(
 
 	    if (!selected && sellType == 1 && price == 0) {
 		$("#hideVolumePrice").prop("checked", true);
-		$("#price").attr("disabled", true);
+		$("#price").attr("readonly", true);
 	    } else {
 		$("#hideVolumePrice").prop("checked", false);
-		$("#price").removeAttr("disabled");
+		$("#price").removeAttr("readonly");
 	    }
 	},
 
