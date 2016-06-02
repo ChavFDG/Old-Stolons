@@ -299,7 +299,7 @@ FiltersView = Backbone.View.extend({
 	    if (this.famillyMatch(product) && (this.productNameMatch(product, searchTerm) || this.productDescMatch(product, searchTerm))) {
 		$("#product-" + product.Id).removeClass("hidden");
 	    } else {
-		$("product-" + product.Id).removeClass("hidden").addClass("hidden");
+		$("#product-" + product.Id).removeClass("hidden").addClass("hidden");
 	    }
 	}, this);
     },

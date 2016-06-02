@@ -12,7 +12,6 @@ ProductTypesModel = Backbone.Collection.extend({
     }
 });
 
-
 ProductModel = Backbone.Model.extend({
 
     //Products id key is 'Id'
@@ -54,7 +53,10 @@ ProductModel = Backbone.Model.extend({
 
     getVolumePriceString: function() {
 	var productUnit = this.get("ProductUnit");
-	return this.get("Price") + " € / " +  this.unitsEnum[productUnit];
+	if (this.get("Price") === 0 || this.get("QuantityStep") === 1000) {
+	    return "";
+	}
+	return "(" + this.get("Price") + " € / " +  this.unitsEnum[productUnit] + ")";
     },
 
     getSellStepString: function() {
@@ -62,6 +64,15 @@ ProductModel = Backbone.Model.extend({
 	    return " Pièce(s)";
 	}
 	var productUnit = this.get("ProductUnit"); 
+    },
+
+    //retourne la string correctement formattee pour le poids donne en grammes
+    prettyPrintQuantity: function(weight) {
+	
+	if (weight >= 1000) {
+	    return (weight / 1000) + " " + largeunit;
+	}
+	return weight + " " + productUnit;
     }
 });
 
@@ -163,12 +174,24 @@ FiltersView = Backbone.View.extend({
 	this.filterProducts();
     },
 
+    famillyMatch: function(product) {
+	return this.selectedFamily == "Tous" || (product.Familly && product.Familly.FamillyName == this.selectedFamily);
+    },
+
+    productNameMatch: function(product, searchTerm) {
+	return _.isEmpty(searchTerm) || product.Name.toLowerCase().indexOf(searchTerm) != -1;
+    },
+
+    productDescMatch: function(product, searchTerm) {
+	return _.isEmpty(searchTerm) || product.Description.toLowerCase().indexOf(searchTerm) != -1;
+    },
+
     filterProducts: function() {
 	var searchTerm = this.$("#search").val();
+	searchTerm = searchTerm.toLowerCase();
 	this.productsModel.forEach(function(productModel) {
 	    var product = productModel.toJSON();
-	    if ((this.selectedFamily == "Tous" || (product.Familly && product.Familly.FamillyName == this.selectedFamily)) &&
-		(_.isEmpty(searchTerm) || product.Name.toLowerCase().contains(searchTerm) || (product.Description && product.Description.toLowerCase().contains(searchTerm)))) {
+	    if (this.famillyMatch(product) && (this.productNameMatch(product, searchTerm) || this.productDescMatch(product, searchTerm))) {
 		$("#product-" + product.Id).removeClass("hidden");
 	    } else {
 		$("#product-" + product.Id).removeClass("hidden").addClass("hidden");
