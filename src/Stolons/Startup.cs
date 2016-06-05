@@ -41,15 +41,25 @@ namespace Stolons
         }
 
         public IConfigurationRoot Configuration { get; set; }
-
+        
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
             // Add framework services.
-            services.AddEntityFramework()
-                .AddSqlite()
-                .AddDbContext<ApplicationDbContext>(options =>
-                    options.UseSqlite(Configuration["Data:DefaultConnection:ConnectionString"]));
+            if (Configuration["Data:UseSqLite"] == "true")
+            {
+                services.AddEntityFramework()
+                    .AddSqlite()
+                    .AddDbContext<ApplicationDbContext>(options =>
+                        options.UseSqlite(Configuration["Data:DefaultConnection:SqLiteConnectionString"]));
+            }
+            else
+            {
+                services.AddEntityFramework()
+                        .AddSqlServer()
+                        .AddDbContext<ApplicationDbContext>(options =>
+                            options.UseSqlServer(Configuration["Data:DefaultConnection:MsSqlConnectionString"]));
+            }
 
             services.AddIdentity<ApplicationUser, IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()
@@ -116,9 +126,9 @@ namespace Stolons
             await CreateAdminAcount(context, userManager);
             CreateProductCategories(context);
             SetGlobalConfigurations(context);
-            #if DEBUG
+#if DEBUG
                 await InitializeSampleAndTestData(serviceProvider, context, userManager);
-            #endif
+#endif
             Thread billManager = new Thread(() => BillGenerator.ManageBills(context));
             Configurations.Environment = env;
             billManager.Start();
@@ -390,7 +400,7 @@ namespace Stolons
             }
 
 
-            #region Creating linked application data
+#region Creating linked application data
             var appUser = new ApplicationUser { UserName = user.Email, Email = user.Email };
             appUser.User = user;
 
@@ -402,7 +412,7 @@ namespace Stolons
                 //Add user type
                 result = await userManager.AddToRoleAsync(appUser, userType.ToString());
             }
-            #endregion Creating linked application data
+#endregion Creating linked application data
 
             context.SaveChanges();
 
