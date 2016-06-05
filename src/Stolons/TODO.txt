@@ -1,7 +1,7 @@
 ﻿A faire :
 
 Priorité 1 : pour jeudi
-- Passer les vues restantes en partiel pour Ajout/Modification
+- Passer les vues restantes en partiel pour Ajout/Modification -> producteurs fait, voir pour les autres vues
 - Gérer les produits sans images et sans label
 - Revérifier les factures dans exel et entre autre dans open office
 - Lors de stock update dans week basket changer mauvais jour affiché (Afficher jour en français)
