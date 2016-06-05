@@ -6,13 +6,17 @@
 
 <h2>@ViewData["Title"]</h2>
 
-
-@{
-   Html.Partial("Templates/EditProducer");
-}
+<form asp-action="Edit" enctype="multipart/form-data">
+  @Html.Partial("Templates/EditProducer");
+  <div class="form-group">
+    <div class="col-md-offset-2 col-md-10">
+      <input type="submit" value="Editer" class="btn btn-default" />
+    </div>
+  </div>
+</form>
 
 <div>
-    <a asp-action="Index">Retourner à mon compte</a>
+  <a asp-action="Index">Retourner à mon compte</a>
 </div>
 
 @section Scripts {
