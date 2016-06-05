@@ -1,45 +1,19 @@
 ﻿A faire :
 
-Damien ou Nico (car Damien il arrive plus à avoir de temps)
-- (1) Bloquer les pages en fonctions du mode du site et des utilisateurs (presque finis, reste week basket et mise en place de la page en fonction de Commande /PRrparation / Stock ...)
-- (1) mettre à jour les fichier Exel suite au changement de système de calcul du poids / prix
-- (1) Quand on écrit une news faire apparaitre le logo de Stolons à la place de l'avatar de la personne ayant mis la news
-- (1) Pouvoir reseter les mot de passe des adhérents => envoie d'un mail à l'adhérent
+Priorité 1 : pour jeudi
+- Passer les vues restantes en partiel pour Ajout/Modification
+- Gérer les produits sans images et sans label
+- Revérifier les factures dans exel et entre autre dans open office
+- Lors de stock update dans week basket changer mauvais jour affiché (Afficher jour en français)
+- Passer à SQL Server et mettre dans le web.config la possibilité de configurer ça
 
-Nico
-- (1) Ne pas afficher direct le panier en modifier, mais devoir appuyer sur un bouton ( ou au pire le + et - ) pour le faire apparaitre. Si bouton inactiver le + et - des produits
-- (1) Vérifier le fonctionnement sur les navigateurs des scripts => BUG (bug avec chrome) => Production pas production le javascript
-- (1) Quand le stock d'un produit est à 0, je peux quand même l'ajouter
-- (1) /!\ Bug dans la gestion des produits / panier 
+Priorité 2 : pour plus tard
+- Pouvoir reseter les mot de passe des adhérents => envoie d'un mail à l'adhérent
+- Re voir IE
+- Ajouter les photos 2 et 3 sur les produits
+- Ajouter dans les stocks => rendre dispo tout les stocks en attente
+- Ajouter dans les stocks => rendre indisponible tout les produits
 
-Plus tard
-- (2) Faire la page "nos producteurs" => presque fini, reste a faire la popup des producteurs
-- (3) Intégrer les images de Marion
-
-Fait :
-- (1) Faire la page "mes factures" => Ok c'est bon
-- (1) Faire la page "Gérer les paniers" => Ok c'est bon
-- (1) Ajouter l'envoie de mail après génération des factures => Ok c'est bon 
-- (1) Lors de la validation ou non d'un panier envoyer un mail récapitulatif => Ok c'est bon 
-- (1) Faire la page "qui sommes-nous" => Fait rapidement mais pour l'instant ça devrait suffir, il faudra à terme faire une vraie présentation
-- (3) Refaire la facture utilisateur en plus beau ( car elle est bien moche !) => Ok c'est bon
-- (2) Dans Le recap de Mon panier validé ou non, faire un lien de retour à la modification du panier ( "Cliquer ici pour modifier le panier")=> Avec moulte correction de bug sur la validation du panier
-- (2) Dans gerer les panier, séparer les facture producteur à payer de à livrer
-- (1) BUG dans la fonction de recherche, quand on tape "tomates" on a la salade qui apparait aussi => c'est normal ^^ la description des tomates contient 'salade'!
-- (1) Ajouter % du producteur
-- (1) Passer les suppressions de news, d'utilisateur, de producteur ... en admin et ajouter un message de confirmation
-- (1) Envoyer un mail lors de la création d'un compte adhérents => Avec le rappel des identifiants de compte ;)
-- (1) Lors de l'envoie des mails de validation de panier, enlever ce qui n'a pas besoin d'être dans le mail (message disant qu'un mail a été envoyé ainsi que le "cliquer ici pour modifier votre panier")
-- (1) Ajout d'un mode production (RELEASE)
-- (2) Virer le mode Préparation des commandes => Il n'y a plus que Order et DeliveryAndStockUpdate
-- (2) Ajouter une entré Couriel de contact pour la page Contact
-- (1) Blocage de la page "mon panier" quand on est en mode StockUpdateAndDelivery
-
-
-
-A finir avant Jeudi 16h :
-DAMIEN
-
-NICO
-- Panier
-- Ajouter les photos 2 et 3 ;)
+Priorité 3 : pour bien plus tard
+- Quand on écrit une news faire apparaitre le logo de Stolons à la place de l'avatar de la personne ayant mis la news. Et faire apparaitre l'avatar dans les news
+- Passer en RC2
