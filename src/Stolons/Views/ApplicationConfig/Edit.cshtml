@@ -1,7 +1,17 @@
 ﻿@model Stolons.Models.ApplicationConfig
 
 @{
-    ViewData["Title"] = "Modifier la configuration";
+ViewData["Title"] = "Modifier la configuration";
+
+}
+
+@functions
+{
+string DayToFrench(DayOfWeek dayOfWeekValue)
+{
+var culture = new System.Globalization.CultureInfo("fr-FR");
+return culture.DateTimeFormat.GetDayName(dayOfWeekValue);
+}
 }
 
 <h2>@ViewData["Title"]</h2>
@@ -95,20 +105,25 @@
                 <span asp-validation-for="OrderDeliveryMessage" class="text-danger" />
             </div>
         </div>
-       
+
         <h4>Début livraison et mise à jour des stocks :</h4>
         <div class="form-group">
-            <label asp-for="DeliveryAndStockUpdateDayStartDate" class="col-md-2 control-label"></label>
-            <div class="col-md-10">
-                <select asp-for="DeliveryAndStockUpdateDayStartDate" asp-items="Html.GetEnumSelectList<DayOfWeek>()" class="form-control"></select>
-                <span asp-validation-for="DeliveryAndStockUpdateDayStartDate" class="text-danger" />
-            </div>
+          <label asp-for="DeliveryAndStockUpdateDayStartDate" class="col-md-2 control-label"></label>
+          <div class="col-md-10">
+	    <select asp-for="DeliveryAndStockUpdateDayStartDate" class="form-control">
+	      @foreach (DayOfWeek item in Enum.GetValues(typeof(DayOfWeek)))
+	      {
+	      <option value="@item">@DayToFrench(item)</option>
+	      }
+	    </select>
+            <span asp-validation-for="DeliveryAndStockUpdateDayStartDate" class="text-danger" />
+          </div>
         </div>
         <div class="form-group">
             <label asp-for="DeliveryAndStockUpdateDayStartDateHourStartDate" class="col-md-2 control-label"></label>
             <div class="col-md-10">
-                <input asp-for="DeliveryAndStockUpdateDayStartDateHourStartDate" class="form-control" />
-                <span asp-validation-for="DeliveryAndStockUpdateDayStartDateHourStartDate" class="text-danger" />
+              <input asp-for="DeliveryAndStockUpdateDayStartDateHourStartDate" class="form-control" />
+              <span asp-validation-for="DeliveryAndStockUpdateDayStartDateHourStartDate" class="text-danger" />
             </div>
         </div>
         <div class="form-group">
@@ -125,8 +140,13 @@
         <div class="form-group">
             <label asp-for="OrderDayStartDate" class="col-md-2 control-label"></label>
             <div class="col-md-10">
-                <select asp-for="OrderDayStartDate" asp-items="Html.GetEnumSelectList<DayOfWeek>()" class="form-control"></select>
-                <span asp-validation-for="OrderDayStartDate" class="text-danger" />
+              <select asp-for="OrderDayStartDate" class="form-control">
+		@foreach (DayOfWeek item in Enum.GetValues(typeof(DayOfWeek)))
+		{
+		<option value="@item">@DayToFrench(item)</option>
+		}
+	      </select>
+              <span asp-validation-for="OrderDayStartDate" class="text-danger" />
             </div>
         </div>
         <div class="form-group">
