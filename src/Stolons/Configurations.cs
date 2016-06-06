@@ -57,8 +57,7 @@ namespace Stolons
                 DateTime orderStartDate = DateTime.Today;
                 orderStartDate = orderStartDate.AddDays(GetDaysDiff(currentTime.DayOfWeek, ApplicationConfig.OrderDayStartDate));
                 orderStartDate = orderStartDate.AddHours(ApplicationConfig.OrderHourStartDate).AddMinutes(ApplicationConfig.OrderMinuteStartDate);
-
-                currentTime = currentTime.Add(new TimeSpan(4, 0, 0, 0));
+                
                 if (deliveryAndStockUpdateStartDate < orderStartDate)
                 {
                     if (deliveryAndStockUpdateStartDate <= currentTime && currentTime <= orderStartDate)

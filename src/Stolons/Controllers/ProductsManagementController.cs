@@ -158,6 +158,30 @@ namespace Stolons.Controllers
             return RedirectToAction("Index");
 
         }
+
+        [Authorize(Roles = Configurations.UserType_Producer)]
+        public IActionResult EnableAllStockProduct()
+        {
+            foreach(var product in _context.Products.Where(x => x.State == Product.ProductState.Stock))
+            {
+                product.State = Product.ProductState.Enabled;
+            }
+            _context.SaveChanges();
+            return RedirectToAction("Index");
+        }
+
+        [Authorize(Roles = Configurations.UserType_Producer)]
+        public IActionResult DisableAllProduct()
+        {
+            foreach (var product in _context.Products.Where(x => x.State != Product.ProductState.Disabled))
+            {
+                product.State = Product.ProductState.Disabled;
+            }
+            _context.SaveChanges();
+            return RedirectToAction("Index");
+        }
+
+
         [Authorize(Roles = Configurations.UserType_Producer)]
         public IActionResult Disable(Guid? id)
         {
@@ -175,7 +199,7 @@ namespace Stolons.Controllers
             return RedirectToAction("Index");
         }
 
-	[Authorize(Roles = Configurations.UserType_Producer)]
+	    [Authorize(Roles = Configurations.UserType_Producer)]
         [HttpPost, ActionName("ChangeCurrentStock")]
         public IActionResult ChangeCurrentStock(Guid id, int newStock)
         {

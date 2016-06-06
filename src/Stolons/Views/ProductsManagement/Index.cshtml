@@ -9,8 +9,16 @@
 <h2>@ViewData["Title"]</h2>
 
 <p>
-    <a asp-action="Manage">Ajouter un produit</a>
-</p>
+    <a asp-action="Manage">Ajouter un produit</a> 
+    @if (Configurations.Mode == ApplicationConfig.Modes.DeliveryAndStockUpdate)
+    {        
+        if (Model.Any(x => x.State == Product.ProductState.Stock))
+        {
+            <p>
+                <a asp-action="EnableAllStockProduct">Activer tout les produits en attente de stock</a>
+            </p>
+        }
+    }
 <table class="table">
     <tr>
         <th>
@@ -40,7 +48,12 @@
         <th>
             @Html.DisplayNameFor(model => model.State)
         </th>
-        <th></th>
+        <th>
+            @if (Configurations.Mode == ApplicationConfig.Modes.DeliveryAndStockUpdate)
+            {
+                <a asp-action="DisableAllProduct">Désactiver tout les produits</a>
+            }
+        </th>
     </tr>
     
 @foreach (var item in Model) {
@@ -128,14 +141,14 @@
             {
                 if (@item.State == Product.ProductState.Enabled)
                 {
-                    <a asp-action="Disable" asp-route-id="@item.Id">Rendre indisponible |</a>
+                    <a asp-action="Disable" asp-route-id="@item.Id">Rendre indisponible</a>
                 }
                 else
                 {
-                    <a asp-action="Enable" asp-route-id="@item.Id">Rendre disponible |</a>
+                    <a asp-action="Enable" asp-route-id="@item.Id">Rendre disponible</a>
                 }
             }
-            <a asp-action="Manage" asp-route-id="@item.Id">Editer</a> |
+            | <a asp-action="Manage" asp-route-id="@item.Id">Editer</a> |
             <a asp-action="Delete" asp-route-id="@item.Id">Supprimer</a>
         </td>
     </tr>

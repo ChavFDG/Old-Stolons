@@ -112,32 +112,32 @@ namespace Stolons.Models
 	    {
 	        get
 	        {
-		    if (QuantityStep == 0)
-		    {
-		        return " rien";
-		    }
-		    if (ProductUnit == Unit.Kg)
-		    {
-		        if (QuantityStep >= 1000)
+		        if (QuantityStep == 0)
 		        {
-			    return QuantityStep / 1000 + " Kg";
+		            return " rien";
+		        }
+		        if (ProductUnit == Unit.Kg)
+		        {
+		            if (QuantityStep >= 1000)
+		            {
+			            return QuantityStep / 1000 + " kg";
+		            }
+		            else
+		            {
+			            return QuantityStep  + " g";
+		            }
 		        }
 		        else
 		        {
-			    return QuantityStep  + " g";
+		            if (QuantityStep >= 1000)
+		            {
+			            return QuantityStep / 1000 + " l";
+		            }
+		            else
+		            {
+			            return QuantityStep  + " ml";
+		            }
 		        }
-		    }
-		    else
-		    {
-		        if (QuantityStep >= 1000)
-		        {
-			    return QuantityStep / 1000 + " L";
-		        }
-		        else
-		        {
-			    return QuantityStep  + " mL";
-		        }
-		    }
 	        }
 	    }
         [Display(Name = "Quantité moyenne")]

@@ -3,15 +3,12 @@
 Priorité 1 : pour jeudi
 - Passer les vues restantes en partiel pour Ajout/Modification -> producteurs fait, voir pour les autres vues
 - Gérer les produits sans images et sans label
-- Revérifier les factures dans exel et entre autre dans open office
 - Mettre sur HostForLife
 
 Priorité 2 : pour plus tard
 - Pouvoir reseter les mot de passe des adhérents => envoie d'un mail à l'adhérent
 - Re voir IE
 - Ajouter les photos 2 et 3 sur les produits
-- Ajouter dans les stocks => rendre dispo tout les stocks en attente
-- Ajouter dans les stocks => rendre indisponible tout les produits
 
 Priorité 3 : pour bien plus tard
 - Quand on écrit une news faire apparaitre le logo de Stolons à la place de l'avatar de la personne ayant mis la news. Et faire apparaitre l'avatar dans les news
@@ -21,3 +18,6 @@ Priorité 3 : pour bien plus tard
 FAIT :
 - Passer à SQL Server et mettre dans le web.config la possibilité de configurer ça
 - Lors de stock update dans week basket changer mauvais jour affiché (Afficher jour en français)
+- Revérifier les factures dans exel et entre autre dans open office => Ca marche dand ma version d'open office, j'ai ajouté les pallier de poids. Il faudrat voir les retours utilisateurs maintenant
+- Ajouter dans les stocks => rendre dispo tout les stocks en attente
+- Ajouter dans les stocks => rendre indisponible tout les produits
