@@ -32,14 +32,16 @@
             </div>
 	    <div class="col-md-4">
               <div id="productModal-img" class="pr_img">
-		<img src="<%= product.Pictures[0] %>" />
+		<img src="<%= productModel.getPictureUrl() %>" />
               </div>
 	      <div>
-		<% _.forEach(product.LabelsSerialized.split(';'), function(label) { %>
+		<% _.forEach(product.LabelsSerialized.split(';'), function(label) {
+		   if (!_.isEmpty(label)) {
+		   %>
 		<div class="pr_label">
 		  <img src="/images/labels/<%= label %>.jpg" />
 		</div>
-		<% }); %>
+		<% } }); %>
 	      </div>
 	    </div>
           </div>
