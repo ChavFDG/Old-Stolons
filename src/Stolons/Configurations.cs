@@ -50,23 +50,37 @@ namespace Stolons
 
                 DateTime currentTime = DateTime.Now;
 
-
-                DateTime preparationTime = DateTime.Today;
-                preparationTime = preparationTime.AddDays(GetDaysDiff(currentTime.DayOfWeek, ApplicationConfig.DeliveryAndStockUpdateDayStartDate ));
-                preparationTime = preparationTime.AddHours(ApplicationConfig.DeliveryAndStockUpdateDayStartDateHourStartDate).AddMinutes(ApplicationConfig.DeliveryAndStockUpdateDayStartDateMinuteStartDate);
+                DateTime deliveryAndStockUpdateStartDate = DateTime.Today;
+                deliveryAndStockUpdateStartDate = deliveryAndStockUpdateStartDate.AddDays(GetDaysDiff(currentTime.DayOfWeek, ApplicationConfig.DeliveryAndStockUpdateDayStartDate ));
+                deliveryAndStockUpdateStartDate = deliveryAndStockUpdateStartDate.AddHours(ApplicationConfig.DeliveryAndStockUpdateDayStartDateHourStartDate).AddMinutes(ApplicationConfig.DeliveryAndStockUpdateDayStartDateMinuteStartDate);
 		
-                DateTime orderTime = DateTime.Today;
-                orderTime = orderTime.AddDays(GetDaysDiff(currentTime.DayOfWeek, ApplicationConfig.OrderDayStartDate));
-                orderTime = orderTime.AddHours(ApplicationConfig.OrderHourStartDate).AddMinutes(ApplicationConfig.OrderMinuteStartDate);
+                DateTime orderStartDate = DateTime.Today;
+                orderStartDate = orderStartDate.AddDays(GetDaysDiff(currentTime.DayOfWeek, ApplicationConfig.OrderDayStartDate));
+                orderStartDate = orderStartDate.AddHours(ApplicationConfig.OrderHourStartDate).AddMinutes(ApplicationConfig.OrderMinuteStartDate);
 
-               
-                if(orderTime <= currentTime && currentTime <= preparationTime)
+                currentTime = currentTime.Add(new TimeSpan(4, 0, 0, 0));
+                if (deliveryAndStockUpdateStartDate < orderStartDate)
                 {
-                    return ApplicationConfig.Modes.DeliveryAndStockUpdate;
+                    if (deliveryAndStockUpdateStartDate <= currentTime && currentTime <= orderStartDate)
+                    {
+                        return ApplicationConfig.Modes.DeliveryAndStockUpdate;
+                    }
+                    else
+                    {
+                        return ApplicationConfig.Modes.Order;
+                    }
+
                 }
                 else
                 {
-                    return ApplicationConfig.Modes.Order;
+                    if (orderStartDate <= currentTime && currentTime <= deliveryAndStockUpdateStartDate)
+                    {
+                        return ApplicationConfig.Modes.Order;
+                    }
+                    else
+                    {
+                        return ApplicationConfig.Modes.DeliveryAndStockUpdate;
+                    }
                 }
             }
         }

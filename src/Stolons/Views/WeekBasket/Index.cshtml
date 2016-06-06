@@ -6,7 +6,7 @@
 {
     <h3>Commande indisponible</h3>
     <p>Les commandes seront à nouveau disponible : </p>
-    <p><b>@(Configurations.ApplicationConfig.OrderDayStartDate.ToFrench() + " à " + Configurations.ApplicationConfig.OrderHourStartDate + ":" + Configurations.ApplicationConfig.OrderMinuteStartDate)</b></p>
+    <p><b>@(Configurations.ApplicationConfig.OrderDayStartDate.ToFrench() + " à " + String.Format("{0:00}", Configurations.ApplicationConfig.OrderHourStartDate)  + ":" + String.Format("{0:00}", Configurations.ApplicationConfig.OrderMinuteStartDate))</b></p>
     <a asp-controller="Bills" asp-action="Index">(Cliquer ici pour voir vos commandes / factures)</a>
 
 }

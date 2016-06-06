@@ -44,17 +44,17 @@ namespace Stolons.Models
 
         //ORDER
         [Display(Name = "Jour")]
-        public DayOfWeek OrderDayStartDate { get; set; } = DayOfWeek.Wednesday;
+        public DayOfWeek OrderDayStartDate { get; set; } = DayOfWeek.Sunday;
         [Display(Name = "Heure")]
-        public int OrderHourStartDate { get; set; } = 12;
+        public int OrderHourStartDate { get; set; } = 0;
         [Display(Name = "Minute")]
         public int OrderMinuteStartDate { get; set; } = 0;
 
         //DeliveryAndStockUpdate
         [Display(Name = "Jour")]
-        public DayOfWeek DeliveryAndStockUpdateDayStartDate { get; set; } = DayOfWeek.Sunday;
+        public DayOfWeek DeliveryAndStockUpdateDayStartDate { get; set; } = DayOfWeek.Wednesday;
         [Display(Name = "Heure")]
-        public int DeliveryAndStockUpdateDayStartDateHourStartDate { get; set; } = 0;
+        public int DeliveryAndStockUpdateDayStartDateHourStartDate { get; set; } = 12;
         [Display(Name = "Minute")]
         public int DeliveryAndStockUpdateDayStartDateMinuteStartDate { get; set; } = 0;
 

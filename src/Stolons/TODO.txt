@@ -4,7 +4,6 @@ Priorité 1 : pour jeudi
 - Passer les vues restantes en partiel pour Ajout/Modification -> producteurs fait, voir pour les autres vues
 - Gérer les produits sans images et sans label
 - Revérifier les factures dans exel et entre autre dans open office
-- Lors de stock update dans week basket changer mauvais jour affiché (Afficher jour en français)
 - Mettre sur HostForLife
 
 Priorité 2 : pour plus tard
@@ -21,3 +20,4 @@ Priorité 3 : pour bien plus tard
 
 FAIT :
 - Passer à SQL Server et mettre dans le web.config la possibilité de configurer ça
+- Lors de stock update dans week basket changer mauvais jour affiché (Afficher jour en français)

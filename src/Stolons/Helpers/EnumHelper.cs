@@ -60,7 +60,25 @@ namespace Stolons.Helpers
     {
         public static string ToFrench(this DayOfWeek dayOfWeekValue)
         {
-            return DateTimeFormatInfo.CurrentInfo.GetDayName(dayOfWeekValue).ToUpper();
+            switch(dayOfWeekValue)
+            {
+                case DayOfWeek.Monday:
+                    return "Lundi";
+                case DayOfWeek.Tuesday:
+                    return "Mardi";
+                case DayOfWeek.Wednesday:
+                    return "Mercredi";
+                case DayOfWeek.Thursday:
+                    return "Jeudi";
+                case DayOfWeek.Friday:
+                    return "Vendredi";
+                case DayOfWeek.Saturday:
+                    return "Samedi";
+                case DayOfWeek.Sunday:
+                    return "Dimanche";
+            }
+            return null;
+            //return DateTimeFormatInfo.CurrentInfo.GetDayName(dayOfWeekValue).ToUpper();
         }
     }
 }
