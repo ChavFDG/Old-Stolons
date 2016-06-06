@@ -78,13 +78,12 @@ ManageProductView = Backbone.View.extend(
 	    var selected = $("#hideVolumePrice").is(':checked');
 
 	    if (selected) {
-		$("#price").attr("disabled", true);
+		$("#price").attr("readonly", true);
 		$("#price").val(0);
-		$("#price").attr("value", 0);
 	    } else if (sellType != 1) {
-		$("#price").removeAttr("disabled");
+		$("#price").removeAttr("readonly");
 	    } else {
-		$("#price").removeAttr("disabled");
+		$("#price").removeAttr("readonly");
 	    }
 	}
     }
