@@ -37,12 +37,14 @@
 	      <a href="<%= producer.WebSiteLink %>"><%= producer.WebSiteLink %></a>
 	    </li>
 	    <% } %>
+	    <% if (producer.OpenText) { %>
 	    <li>
 	      <label>Le mot du producteur: </label>
 	      <span class="producerOpenText">
 		<%= producer.OpenText %>
 	      </span>
 	    </li>
+	    <% } %>
 	  </ul>
 	</div>
       </div>
