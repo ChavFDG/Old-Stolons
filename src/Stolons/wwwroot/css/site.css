@@ -78,11 +78,14 @@ input[type="file"] {
 
 .nextToDiv {
     display: inline-block;
+    padding-right: 10px;
 }
 
 .userNewsAvatar {
     width: 40px;
+    max-width: 40px;
     height: 40px;
+    max-height: 40px;
 }
 
 .newsIcon {

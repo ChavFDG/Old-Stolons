@@ -229,15 +229,22 @@ FiltersView = Backbone.View.extend({
     filterProducts: function() {
 	var searchTerm = this.$("#search").val();
 	searchTerm = searchTerm.toLowerCase();
+	var nbMatch = 0;
 	this.productsModel.forEach(function(productModel) {
 	    var product = productModel.toJSON();
 
 	    if (this.famillyMatch(product) && (this.productNameMatch(product, searchTerm) || this.productDescMatch(product, searchTerm))) {
 		$("#product-" + product.Id).removeClass("hidden");
+		nbMatch++;
 	    } else {
 		$("#product-" + product.Id).removeClass("hidden").addClass("hidden");
 	    }
 	}, this);
+	if (nbMatch === 0) {
+	    $("#emptyProducts").removeClass("hidden");
+	} else {
+	    $("#emptyProducts").addClass("hidden");
+	}
     },
 
     selectElemTemplate: function(elem) {
