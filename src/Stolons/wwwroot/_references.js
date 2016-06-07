@@ -3,6 +3,7 @@
 /// <reference path="js/confirmationdialog.js" />
 /// <reference path="js/confirmationdialog.min.js" />
 /// <reference path="js/manageproduct.js" />
+/// <reference path="js/productmodel.js" />
 /// <reference path="js/publicproducers.js" />
 /// <reference path="js/publicproducts.js" />
 /// <reference path="js/site.js" />

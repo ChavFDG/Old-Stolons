@@ -2,9 +2,9 @@
 A faire :
 
 Priorité 1 : pour jeudi
-- Passer les vues restantes en partiel pour Ajout/Modification -> producteurs fait, voir pour les autres vues
-- Revérifier les factures dans exel et entre autre dans open office
 - Mettre sur HostForLife
+- Un producteur doit pouvoir modifier ou supprimer ces news
+- On peut ajouter un produit sans Type
 
 Priorité 2 : pour plus tard
 - Pouvoir reseter les mot de passe des adhérents => envoie d'un mail à l'adhérent
@@ -23,3 +23,4 @@ FAIT :
 - Ajouter dans les stocks => rendre indisponible tout les produits
 - Gérer les produits sans images et sans label
 - Lors de stock update dans week basket changer mauvais jour affiché (Afficher jour en français)
+- Passer les vues restantes en partiel pour Ajout/Modification
