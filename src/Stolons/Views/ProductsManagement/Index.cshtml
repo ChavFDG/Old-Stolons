@@ -92,32 +92,29 @@
                 </script>
             </th>
         }
-        @if (Configurations.Mode == ApplicationConfig.Modes.DeliveryAndStockUpdate)
-        {
-            <th>
-                @if (Configurations.Mode != ApplicationConfig.Modes.Order)
-                {
-                    <input id="@("WeekStockEdition" + item.Id)" asp-for="@item.WeekStock" class="form-control" min="0" />
-                    <script>
-                $('#@("WeekStockEdition" + item.Id)').change(function ()
-                {
-                    $.ajax({
-                        url: '@Url.Action("ChangeStock", "ProductsManagement")',
-                        type: 'POST',
-                        data: {
-                            id: '@item.Id',
-                            newStock: $('#@("WeekStockEdition" + item.Id)').val()
-                        }
-                    });
+        <th>
+            @if (Configurations.Mode == ApplicationConfig.Modes.DeliveryAndStockUpdate)
+            {
+                <input id="@("WeekStockEdition" + item.Id)" asp-for="@item.WeekStock" class="form-control" min="0" />
+                <script>
+            $('#@("WeekStockEdition" + item.Id)').change(function ()
+            {
+                $.ajax({
+                    url: '@Url.Action("ChangeStock", "ProductsManagement")',
+                    type: 'POST',
+                    data: {
+                        id: '@item.Id',
+                        newStock: $('#@("WeekStockEdition" + item.Id)').val()
+                    }
                 });
-                    </script>
-                }
-                else
-                {
-                    @Html.DisplayFor(model => item.WeekStock)
-                }
-            </th>
-        }
+            });
+                </script>
+            }
+            else
+            {
+                @Html.DisplayFor(model => item.WeekStock)
+            }
+        </th>
         @switch (@item.State)
         {
             case Product.ProductState.Disabled:
