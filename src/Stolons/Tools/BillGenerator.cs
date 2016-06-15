@@ -142,7 +142,7 @@ namespace Stolons.Tools
             }
             else
             {
-                Directory.CreateDirectory(newBillPath);
+                Directory.CreateDirectory(consumerBillsPath);
             }
 #endregion File creation
             //
@@ -311,7 +311,7 @@ namespace Stolons.Tools
             }
             else
             {
-                Directory.CreateDirectory(newBillPath);
+                Directory.CreateDirectory(producerBillsPath);
             }
             
             using (ExcelPackage package = new ExcelPackage(newFile))
@@ -509,7 +509,7 @@ namespace Stolons.Tools
             }
             else
             {
-                Directory.CreateDirectory(newBillPath);
+                Directory.CreateDirectory(consumerBillsPath);
             }
             using (ExcelPackage package = new ExcelPackage(newFile))
             {
