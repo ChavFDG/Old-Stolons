@@ -74,7 +74,7 @@ namespace Stolons.Tools
                                                         "Votre commande de la semaine (Facture "+ bill.BillNumber +")",
                                                         "<h3>En pièce jointe votre commande de la semaine (Facture " + bill.BillNumber + ")</h3>", 
                                                         File.ReadAllBytes(bill.GetFilePath()),
-                                                        "Facture "+ bill.BillNumber +".xlsx");
+                                                        "Facture "+ bill.BillNumber + ".xlsx");
                     }
                     // => Producer, send mails
                     foreach (var producer in dbContext.Producers.Where(x=> !brutProducerBills.Keys.Contains(x)))
@@ -132,7 +132,7 @@ namespace Stolons.Tools
 	    #region File creation
 	    string billNumber = DateTime.Now.Year + "_" + DateTime.Now.GetIso8601WeekOfYear();
             string consumerBillsPath = Path.Combine(Configurations.Environment.WebRootPath, Configurations.StolonsBillsStockagePath);
-	    string newBillPath = Path.Combine(consumerBillsPath, billNumber, ".xlsx");
+	    string newBillPath = Path.Combine(consumerBillsPath, billNumber + ".xlsx");
 	    FileInfo newFile = new FileInfo(newBillPath);
 	    if (newFile.Exists)
             {
@@ -301,7 +301,7 @@ namespace Stolons.Tools
             ProducerBill bill = CreateBill<ProducerBill>(producer);
             //Generate exel file with bill number for user
             string producerBillsPath = Path.Combine(Configurations.Environment.WebRootPath, Configurations.ProducersBillsStockagePath, bill.User.Id.ToString());
-	    string newBillPath = Path.Combine(producerBillsPath, bill.BillNumber, ".xlsx");
+	    string newBillPath = Path.Combine(producerBillsPath, bill.BillNumber + ".xlsx");
             FileInfo newFile = new FileInfo(newBillPath);
             if (newFile.Exists)
             {
@@ -499,7 +499,7 @@ namespace Stolons.Tools
             ConsumerBill bill = CreateBill<ConsumerBill>(weekBasket.Consumer);
             //Generate exel file with bill number for user
             string consumerBillsPath = Path.Combine(Configurations.Environment.WebRootPath, Configurations.ConsumersBillsStockagePath, bill.User.Id.ToString());
-	    string newBillPath = Path.Combine(consumerBillsPath,  bill.BillNumber, ".xlsx");
+	    string newBillPath = Path.Combine(consumerBillsPath,  bill.BillNumber + ".xlsx");
             FileInfo newFile = new FileInfo(newBillPath);
             if (newFile.Exists)
             {
