@@ -129,19 +129,20 @@ namespace Stolons.Tools
         private static void GenerateBill(List<ValidatedWeekBasket> consumerWeekBaskets, ApplicationDbContext dbContext)
         {
             //Generate exel file with bill number for user
-#region File creation
-            string filePath = Path.Combine(Configurations.Environment.WebRootPath, Configurations.StolonsBillsStockagePath);
-            string billNumber = DateTime.Now.Year + "_" + DateTime.Now.GetIso8601WeekOfYear();
-            FileInfo newFile = new FileInfo(filePath + @"\" + billNumber + ".xlsx");
-            if (newFile.Exists)
+	    #region File creation
+	    string billNumber = DateTime.Now.Year + "_" + DateTime.Now.GetIso8601WeekOfYear();
+            string consumerBillsPath = Path.Combine(Configurations.Environment.WebRootPath, Configurations.StolonsBillsStockagePath);
+	    string newBillPath = Path.Combine(consumerBillsPath, billNumber, ".xlsx");
+	    FileInfo newFile = new FileInfo(newBillPath);
+	    if (newFile.Exists)
             {
                 //Normaly impossible
                 newFile.Delete();  // ensures we create a new workbook
-                newFile = new FileInfo(filePath + @"\" + billNumber + ".xlsx");
+		newFile = new FileInfo(newBillPath);
             }
             else
             {
-                Directory.CreateDirectory(filePath);
+                Directory.CreateDirectory(newBillPath);
             }
 #endregion File creation
             //
@@ -299,17 +300,18 @@ namespace Stolons.Tools
         {
             ProducerBill bill = CreateBill<ProducerBill>(producer);
             //Generate exel file with bill number for user
-            string filePath = Path.Combine(Configurations.Environment.WebRootPath, Configurations.ProducersBillsStockagePath, bill.User.Id.ToString());
-            FileInfo newFile = new FileInfo(filePath + @"\" + bill.BillNumber + ".xlsx");
+            string producerBillsPath = Path.Combine(Configurations.Environment.WebRootPath, Configurations.ProducersBillsStockagePath, bill.User.Id.ToString());
+	    string newBillPath = Path.Combine(producerBillsPath, bill.BillNumber, ".xlsx");
+            FileInfo newFile = new FileInfo(newBillPath);
             if (newFile.Exists)
             {
                 //Normaly impossible
                 newFile.Delete();  // ensures we create a new workbook
-                newFile = new FileInfo(filePath + @"\" + bill.BillNumber + ".xlsx");
+		newFile = new FileInfo(newBillPath);
             }
             else
             {
-                Directory.CreateDirectory(filePath);
+                Directory.CreateDirectory(newBillPath);
             }
             
             using (ExcelPackage package = new ExcelPackage(newFile))
@@ -496,17 +498,18 @@ namespace Stolons.Tools
         {
             ConsumerBill bill = CreateBill<ConsumerBill>(weekBasket.Consumer);
             //Generate exel file with bill number for user
-            string filePath = Path.Combine(Configurations.Environment.WebRootPath, Configurations.ConsumersBillsStockagePath,bill.User.Id.ToString());
-            FileInfo newFile = new FileInfo(filePath + @"\"+ bill .BillNumber+ ".xlsx");
+            string consumerBillsPath = Path.Combine(Configurations.Environment.WebRootPath, Configurations.ConsumersBillsStockagePath, bill.User.Id.ToString());
+	    string newBillPath = Path.Combine(consumerBillsPath,  bill.BillNumber, ".xlsx");
+            FileInfo newFile = new FileInfo(newBillPath);
             if (newFile.Exists)
             {
                 //Normaly impossible
                 newFile.Delete();  // ensures we create a new workbook
-                newFile = new FileInfo(filePath + @"\" + bill.BillNumber + ".xlsx");
+		newFile = new FileInfo(newBillPath);
             }
             else
             {
-                Directory.CreateDirectory(filePath);
+                Directory.CreateDirectory(newBillPath);
             }
             using (ExcelPackage package = new ExcelPackage(newFile))
             {
