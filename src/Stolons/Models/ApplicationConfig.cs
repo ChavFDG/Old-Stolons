@@ -46,7 +46,7 @@ namespace Stolons.Models
         [Display(Name = "Jour")]
         public DayOfWeek OrderDayStartDate { get; set; } = DayOfWeek.Sunday;
         [Display(Name = "Heure")]
-        public int OrderHourStartDate { get; set; } = 0;
+        public int OrderHourStartDate { get; set; } = 16;
         [Display(Name = "Minute")]
         public int OrderMinuteStartDate { get; set; } = 0;
 

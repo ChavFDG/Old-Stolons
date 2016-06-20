@@ -5,7 +5,6 @@ Priorité 1 : retour producteur
 - Un producteur doit pouvoir modifier ou supprimer ces news
 - On peut ajouter un produit sans Type
 - Pouvoir reseter les mot de passe des adhérents => envoie d'un mail à l'adhérent
-- Ajouter un classeur avec les produits par clients pour le producteur sur la factures producteurs ( indispensable pour les producteurs qui prépare leurs panier)
 - Ajouter le visu des photos dans l'édition et l'ajout d'un produit
 - Ajouter le visu des photos dans le management des produits
 - Vérifier l'affichage des stocks courent dans le détail d'un produit. Bug ?
@@ -23,4 +22,6 @@ FAIT :
 - Pouvoir rendre un produit disponible lors de la période commande (mais pas l'inverse)
 - Pouvoir editer un produit seulement si il est indisponible ou si on est en stock update.
 - Sur la factures globals pour Stolons afficher les totals aux kg.
+- Ajouter un classeur avec les produits par clients pour le producteur sur la factures producteurs ( indispensable pour les producteurs qui prépare leurs panier)
+
 
