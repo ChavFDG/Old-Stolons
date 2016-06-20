@@ -138,20 +138,20 @@
             {
                 if (@item.State == Product.ProductState.Enabled)
                 {
-                    <a asp-action="Disable" asp-route-id="@item.Id">Rendre indisponible</a>
+                    <a asp-action="Disable" asp-route-id="@item.Id">Rendre indisponible </a>
                 }
             }
-            @if (@item.State == Product.ProductState.Disabled)
+            @if (@item.State != Product.ProductState.Enabled)
             {
                 <a asp-action="Enable" asp-route-id="@item.Id">Rendre disponible </a>
 
             }
-            |
-            @if (@item.State == Product.ProductState.Disabled || Configurations.Mode == ApplicationConfig.Modes.DeliveryAndStockUpdate)
+            @if (@item.State != Product.ProductState.Enabled || Configurations.Mode == ApplicationConfig.Modes.DeliveryAndStockUpdate)
             {
                 <a asp-action="Manage" asp-route-id="@item.Id"> Editer</a>
+                
+                <a asp-action="Delete" asp-route-id="@item.Id"> Supprimer</a>
             }
-            <a asp-action="Delete" asp-route-id="@item.Id">Supprimer</a>
         </td>
     </tr>
 }
