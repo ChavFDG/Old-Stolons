@@ -19,6 +19,7 @@ using Microsoft.AspNet.Authentication.Cookies;
 using Microsoft.AspNet.Http;
 using System.Diagnostics;
 using System.Globalization;
+using Microsoft.AspNet.Localization;
 
 namespace Stolons
 {
@@ -39,6 +40,7 @@ namespace Stolons
 	    
             builder.AddEnvironmentVariables();
             Configuration = builder.Build();
+            
         }
 
         public IConfigurationRoot Configuration { get; set; }
@@ -83,6 +85,10 @@ namespace Stolons
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public async void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, IServiceProvider serviceProvider, ApplicationDbContext context, UserManager<ApplicationUser> userManager)
         {
+            //Change culture to English
+            // Configure the localization options
+            app.UseRequestLocalization(new RequestCulture("En-Gb"));
+            //
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
 
