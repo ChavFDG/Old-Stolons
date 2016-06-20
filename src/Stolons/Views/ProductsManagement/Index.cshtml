@@ -28,7 +28,10 @@
             @Html.DisplayNameFor(model => model.UnitPrice)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.ProductUnit)
+            Pallier de poids
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Price)
         </th>
         <th>
             @Html.DisplayNameFor(model => model.Type)
@@ -39,12 +42,9 @@
                 @Html.DisplayNameFor(model => model.RemainingStock)
             </th>
         }
-        @if (Configurations.Mode == ApplicationConfig.Modes.DeliveryAndStockUpdate)
-        {
-            <th>
-                @Html.DisplayNameFor(model => model.WeekStock)
-            </th>
-        }
+        <th>
+            @Html.DisplayNameFor(model => model.WeekStock)
+        </th>
         <th>
             @Html.DisplayNameFor(model => model.State)
         </th>
@@ -65,8 +65,15 @@
             @Html.DisplayFor(model => item.UnitPrice) @("€")
         </th>
         <th>
-            @if (item.Type != Product.SellType.Piece)
+            @if (item.QuantityStep != 0)
             {
+                @Html.DisplayFor(model => item.QuantityStepString)
+            }
+        </th>
+        <th>
+            @if (item.QuantityStep != 0)
+            {
+                @Html.DisplayFor(model => item.Price)@("€/")
                 @Html.DisplayFor(model => item.ProductUnit)
             }
         </th>
