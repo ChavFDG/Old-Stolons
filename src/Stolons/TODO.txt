@@ -22,4 +22,5 @@ Priorité 3 : pour bien plus tard
 
 FAIT :
 - Pouvoir rendre un produit disponible lors de la période commande (mais pas l'inverse)
+- Pouvoir editer un produit seulement si il est indisponible ou si on est en stock update.
 
