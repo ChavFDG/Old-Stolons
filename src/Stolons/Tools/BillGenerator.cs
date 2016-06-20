@@ -235,8 +235,9 @@ namespace Stolons.Tools
                                 worksheet.Cells[row, 3].Value = EnumHelper<Product.SellType>.GetDisplayValue(billEntry.Product.Type) + typeDetail;
                                 worksheet.Cells[row, 4].Value = billEntry.Product.UnitPrice;
                                 worksheet.Cells[row, 4].Style.Numberformat.Format = "0.00€";
-                                worksheet.Cells[row, 5].Value = billEntry.Quantity;
-                                worksheet.Cells[row, 6].Formula = new ExcelCellAddress(row, 4).Address + "*" + new ExcelCellAddress(row, 5).Address;
+                                worksheet.Cells[row, 5].Value = billEntry.QuantityString;
+                                worksheet.Cells[row, 5].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
+                                worksheet.Cells[row, 6].Formula = billEntry.Quantity + "*" + new ExcelCellAddress(row, 4).Address;
                                 worksheet.Cells[row, 6].Style.Numberformat.Format = "0.00€";
                                 worksheet.Cells[row, 1, row, 6].Style.Font.Bold = true;
                                 worksheet.Cells[row, 1, row, 6].Style.Font.Size = 13;
@@ -301,13 +302,13 @@ namespace Stolons.Tools
             ProducerBill bill = CreateBill<ProducerBill>(producer);
             //Generate exel file with bill number for user
             string producerBillsPath = Path.Combine(Configurations.Environment.WebRootPath, Configurations.ProducersBillsStockagePath, bill.User.Id.ToString());
-	    string newBillPath = Path.Combine(producerBillsPath, bill.BillNumber + ".xlsx");
+	        string newBillPath = Path.Combine(producerBillsPath, bill.BillNumber + ".xlsx");
             FileInfo newFile = new FileInfo(newBillPath);
             if (newFile.Exists)
             {
                 //Normaly impossible
                 newFile.Delete();  // ensures we create a new workbook
-		newFile = new FileInfo(newBillPath);
+		        newFile = new FileInfo(newBillPath);
             }
             else
             {
