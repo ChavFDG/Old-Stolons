@@ -44,6 +44,7 @@ ManageProductView = Backbone.View.extend(
 	},
 
 	updatePriceField: function() {
+	    $("#price").val($("#price").val().replace(',', '.'));
 	    var sellType = $("#SellType").val();
 
 	    if (sellType == 1) {
