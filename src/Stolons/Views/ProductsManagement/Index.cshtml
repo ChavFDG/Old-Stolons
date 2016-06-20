@@ -140,10 +140,10 @@
                 {
                     <a asp-action="Disable" asp-route-id="@item.Id">Rendre indisponible</a>
                 }
-                else
-                {
-                    <a asp-action="Enable" asp-route-id="@item.Id">Rendre disponible</a>
-                }
+            }
+            @if (@item.State == Product.ProductState.Disabled)
+            {
+                <a asp-action="Enable" asp-route-id="@item.Id">Rendre disponible</a>
             }
             | <a asp-action="Manage" asp-route-id="@item.Id">Editer</a> |
             <a asp-action="Delete" asp-route-id="@item.Id">Supprimer</a>
