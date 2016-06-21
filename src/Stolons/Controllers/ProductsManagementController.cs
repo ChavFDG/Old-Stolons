@@ -14,6 +14,7 @@ using System.IO;
 using Microsoft.Net.Http.Headers;
 using Stolons.ViewModels.ProductsManagement;
 using Microsoft.AspNet.Authorization;
+using System.Drawing;
 
 namespace Stolons.Controllers
 {
@@ -88,7 +89,7 @@ namespace Stolons.Controllers
                     if (uploadFile != null)
                     {
                         //Image uploading
-                        string fileName = await Configurations.UploadFile(_environment, uploadFile, Configurations.ProductsStockagePath);
+                        string fileName = await Configurations.UploadAndResizeImageFile(_environment, uploadFile, Configurations.ProductsStockagePath);
                         if(!vmProduct.IsNew && vmProduct.Product.Pictures.Count > cpt)
                         {
                             //Replace

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNet.Hosting;
+﻿
+using Microsoft.AspNet.Hosting;
 using Microsoft.AspNet.Http;
 using Microsoft.Net.Http.Headers;
 using Stolons.Models;
@@ -8,6 +9,7 @@ using System.ComponentModel.DataAnnotations;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Drawing;
 
 namespace Stolons
 {
@@ -168,7 +170,7 @@ namespace Stolons
             return localPath.Replace("\\", "/");
         }
 
-        public static async Task<string> UploadFile(IHostingEnvironment environment, IFormFile uploadFile, string path)
+        public static async Task<string> UploadAndResizeImageFile(IHostingEnvironment environment, IFormFile uploadFile, string path)
         {
             string uploads = Path.Combine(environment.WebRootPath, path);
             string fileName = Guid.NewGuid().ToString() + "_" + ContentDispositionHeaderValue.Parse(uploadFile.ContentDisposition).FileName.Trim('"');
