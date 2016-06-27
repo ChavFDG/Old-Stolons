@@ -196,6 +196,7 @@ namespace Stolons.Controllers
         public IActionResult ChangeStock(Guid id, int newStock)
         {
             _context.Products.First(x => x.Id == id).WeekStock = newStock;
+            _context.Products.First(x => x.Id == id).RemainingStock = newStock;
             _context.SaveChanges();
             return RedirectToAction("Index");
         }

@@ -109,8 +109,16 @@ namespace Stolons.Tools
                         //For test, remove existing consumer bill and producer bill => That will never exit in normal mode cause they can only have one bill by week per user
                         dbContext.RemoveRange(dbContext.ConsumerBills.Where(x=> consumerBills.Any(y=>y.BillNumber == x.BillNumber)));
                         dbContext.RemoveRange(dbContext.ProducerBills.Where(x => producerBills.Any(y => y.BillNumber == x.BillNumber)));
-                    #endif      
+                    #endif
                     //
+                    dbContext.SaveChanges();
+                    //Set product remaining stock to week stock value
+                    dbContext.Products.ToList().ForEach(x => x.RemainingStock = x.WeekStock);
+                    dbContext.SaveChanges();
+                }
+                if(lastMode == ApplicationConfig.Modes.DeliveryAndStockUpdate && currentMode == ApplicationConfig.Modes.Order)
+                {
+                    dbContext.Products.ToList().Where(x => x.State == Product.ProductState.Stock).ToList().ForEach(x => x.State = Product.ProductState.Disabled);
                     dbContext.SaveChanges();
                 }
                 lastMode = currentMode;
@@ -129,22 +137,22 @@ namespace Stolons.Tools
         private static void GenerateBill(List<ValidatedWeekBasket> consumerWeekBaskets, ApplicationDbContext dbContext)
         {
             //Generate exel file with bill number for user
-	    #region File creation
-	    string billNumber = DateTime.Now.Year + "_" + DateTime.Now.GetIso8601WeekOfYear();
+	        #region File creation
+	        string billNumber = DateTime.Now.Year + "_" + DateTime.Now.GetIso8601WeekOfYear();
             string consumerBillsPath = Path.Combine(Configurations.Environment.WebRootPath, Configurations.StolonsBillsStockagePath);
-	    string newBillPath = Path.Combine(consumerBillsPath, billNumber + ".xlsx");
-	    FileInfo newFile = new FileInfo(newBillPath);
-	    if (newFile.Exists)
+	        string newBillPath = Path.Combine(consumerBillsPath, billNumber + ".xlsx");
+	        FileInfo newFile = new FileInfo(newBillPath);
+	        if (newFile.Exists)
             {
                 //Normaly impossible
                 newFile.Delete();  // ensures we create a new workbook
-		newFile = new FileInfo(newBillPath);
+		        newFile = new FileInfo(newBillPath);
             }
             else
             {
                 Directory.CreateDirectory(consumerBillsPath);
             }
-#endregion File creation
+            #endregion File creation
             //
             using (ExcelPackage package = new ExcelPackage(newFile))
             {
@@ -152,7 +160,7 @@ namespace Stolons.Tools
                 {
                     //Rien de commander cette semaine :'(
                     ExcelWorksheet worksheet = package.Workbook.Worksheets.Add("Rien :'(");
-                    worksheet.Cells[1, 1].Value = "Rien cette semaine ! C'est trop triste :'(";
+                    worksheet.Cells[1, 1].Value = "Rien cette semaine !";
                 }
                 else
                 {
