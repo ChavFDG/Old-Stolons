@@ -1,21 +1,31 @@
-﻿
-A faire :
+﻿A faire :
 
 Priorité 1 : retour producteur
+DAMIEN
 - Un producteur doit pouvoir modifier ou supprimer ces news
-- On peut ajouter un produit sans Type
 - Pouvoir reseter les mot de passe des adhérents => envoie d'un mail à l'adhérent
+- Corriger les fautes d'orthographe !
+- Réduire automatiquement la taille des images importés
+- Changer le texte de "Activer tout les produits ..." en "Rendre disponible tout les produits ..."
+- Corriger les chemin d'accès aux fichier en passant tout en minuscule
+- Voir pour envoyer les fichier en PDF !!! Voir XLS déjà
+NICO
+- On peut ajouter un produit sans Type, sans catégorie, c'est mal
 - Ajouter le visu des photos dans l'édition et l'ajout d'un produit
 - Ajouter le visu des photos dans le management des produits
 - Vérifier l'affichage des stocks courent dans le détail d'un produit. Bug ?
-- Corriger les fautes d'orthographe !
-- Réduire automatiquement la taille des images importés
+- Corriger le bug du stock quand au poids !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+- Faire en sote qu'il soit impossible que le prix au pallier de poids ai un reste.
+NOUS
+- Passer en Release 1.0.0.0
 
 Priorité 2 
+- Possibilité d'ajouter des catégorie et type
 - Re voir IE
 - Ajouter les photos 2 et 3 sur les produits
-- Quand on écrit une news faire apparaitre le logo de Stolons à la place de l'avatar de la personne ayant mis la news. Et faire apparaitre l'avatar dans les news
-- Passer en RC2
+- Quand on écrit une news entant que bénévole faire apparaitre le logo de Stolons à la place de l'avatar de la personne ayant mis la news. Et faire apparaitre l'avatar stolons dans les news
+- Quand on va dans l'onglet Nos produits sans être connecter voir tout les produits ( même ce indisponible), c'est à dire voir le catalogue complet des produits. Le top serait un truc du genre : les produits de la semaine . Tout nos produits 
+- Améliorer
 
 Priorité 3 : pour bien plus tard
 
@@ -25,5 +35,3 @@ FAIT :
 - Sur la factures globals pour Stolons afficher les totals aux kg.
 - Ajouter un classeur avec les produits par clients pour le producteur sur la factures producteurs ( indispensable pour les producteurs qui prépare leurs panier)
 - Passage de l'application en anglais pour les bugs de virgules.
-
-
