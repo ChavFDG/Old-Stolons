@@ -9,12 +9,12 @@
 
 
 <h2>@ViewData["Title"]</h2>
-@if (Stolons.Configurations.Mode == ApplicationConfig.Modes.DeliveryAndStockUpdate)
+@if (Configurations.Mode == ApplicationConfig.Modes.DeliveryAndStockUpdate)
 {
     <h4>Les paniers de la semaine </h4>
         
     string fileName = DateTime.Now.Year + "_" + DateTime.Now.GetIso8601WeekOfYear();
-    string downloadPath = "/Bills/Stolons/" + fileName + ".xlsx";
+    string downloadPath = Configurations.GetUrl(Configurations.StolonsBillsStockagePath) +"/"+ fileName + ".xlsx";
     <a href=@downloadPath>Télécharger les factures utilisateur de la semaine</a>
     
 }
@@ -61,17 +61,7 @@
                 </td>                
                 <td>
                     @{
-                        string downloadPath = "/Bills/";
-                        if (item.User is Consumer)
-                        {
-                            downloadPath += "Consumer";
-                        }
-                        if (item.User is Producer)
-                        {
-                            downloadPath += "Producer";
-                        }
-                        downloadPath += "/" + item.User.Id + "/" + item.BillNumber + ".xlsx";
-                        <a href="@downloadPath">@item.BillNumber</a>
+                        <a href="@Configurations.GetUrl(item)">@item.BillNumber</a>
                     }
                 </td>
             </tr>
@@ -126,17 +116,7 @@ else
             </td>
             <td>
                 @{
-                    string downloadPath = "/Bills/";
-                    if (item.User is Consumer)
-                    {
-                        downloadPath += "Consumer";
-                    }
-                    if (item.User is Producer)
-                    {
-                        downloadPath += "Producer";
-                    }
-                    downloadPath += "/" + item.User.Id + "/" + item.BillNumber + ".xlsx";
-                    <a href="@downloadPath">@item.BillNumber</a>
+                    <a href="@Configurations.GetUrl(item)">@item.BillNumber</a>
                 }
             </td>
         </tr>
@@ -195,17 +175,7 @@ else
                 </td>
                 <td>
                     @{
-                        string downloadPath = "/Bills/";
-                        if (item.User is Consumer)
-                        {
-                            downloadPath += "Consumer";
-                        }
-                        if (item.User is Producer)
-                        {
-                            downloadPath += "Producer";
-                        }
-                        downloadPath += "/" + item.User.Id + "/" + item.BillNumber + ".xlsx";
-                        <a href="@downloadPath">@item.BillNumber</a>
+                        <a href="@Configurations.GetUrl(item)">@item.BillNumber</a>
                     }
                 </td>
             </tr>

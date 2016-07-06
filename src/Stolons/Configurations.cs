@@ -170,6 +170,13 @@ namespace Stolons
             return localPath.Replace("\\", "/");
         }
 
+        public static string GetUrl(IBill bill)
+        {
+            string url = GetUrl(bill.User is Consumer ? Configurations.ConsumersBillsStockagePath : Configurations.ProducersBillsStockagePath);
+            url += "/" + bill.User.Id + "/" + bill.BillNumber + ".xlsx";
+            return url;
+        }
+
         public static async Task<string> UploadAndResizeImageFile(IHostingEnvironment environment, IFormFile uploadFile, string path)
         {
             string uploads = Path.Combine(environment.WebRootPath, path);

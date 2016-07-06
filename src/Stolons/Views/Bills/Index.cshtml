@@ -40,17 +40,7 @@ ViewData["Title"] = "Mes Factures";
                 </td>
                 <td>
                     @{
-                        string downloadPath = "/bills/";
-                        if (item.User is Consumer)
-                        {
-                            downloadPath += "consumer";
-                        }
-                        if (item.User is Producer)
-                        {
-                            downloadPath += "producer";
-                        }
-                        downloadPath += "/" + item.User.Id + "/" + item.BillNumber + ".xlsx";
-                        <a href="@downloadPath">Télécharger</a>
+                        <a href="@Configurations.GetUrl(item)">Télécharger</a>
                     }
                 </td>
             </tr>
