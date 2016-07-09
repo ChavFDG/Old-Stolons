@@ -426,3 +426,7 @@ input[type="file"] {
     display: none;
 }
 
+.productMgtImage img {
+    width: 50px;
+    height: 40px;
+}

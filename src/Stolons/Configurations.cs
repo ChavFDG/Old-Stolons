@@ -181,6 +181,7 @@ namespace Stolons
         {
             string uploads = Path.Combine(environment.WebRootPath, path);
             string fileName = Guid.NewGuid().ToString() + "_" + ContentDispositionHeaderValue.Parse(uploadFile.ContentDisposition).FileName.Trim('"');
+	    
             await uploadFile.SaveAsAsync(Path.Combine(uploads, fileName));
             return Path.Combine(path,fileName);
         }

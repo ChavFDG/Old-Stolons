@@ -20,7 +20,10 @@
         }
     }
 <table class="table">
-    <tr>
+  <tr>
+	<th>
+	    Image
+	</th>
         <th>
             @Html.DisplayNameFor(model => model.Name)
         </th>
@@ -57,7 +60,18 @@
     </tr>
     
 @foreach (var item in Model) {
-    <tr>
+  <tr>
+    <td>
+      <div class="productMgtImage">
+	@{
+	if (item.Pictures.Count > 0) {
+	<img src="@item.Pictures[0]" />
+	} else {
+	<img alt="pas d'image" />
+	}
+	}
+      </div>
+    </td>
         <th>
           @Html.DisplayFor(modelItem => item.Name)
         </th>
