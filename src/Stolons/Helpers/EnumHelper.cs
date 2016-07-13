@@ -5,6 +5,7 @@ using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
+using Stolons.Models;
 
 namespace Stolons.Helpers
 {
@@ -63,5 +64,24 @@ namespace Stolons.Helpers
 	    var culture = new System.Globalization.CultureInfo("fr-FR");
 	    return culture.DateTimeFormat.GetDayName(dayOfWeekValue).ToUpper();
         }
+    }
+
+    public static class ProductHelper
+    {
+	public static string GetStockUnit(this Product product)
+	{
+	    if (product.Type == Product.SellType.Piece)
+	    {
+		return " Pièces";
+	    } else
+	    {
+		if (product.ProductUnit == Product.Unit.Kg)
+		{
+		    return " Kg";
+		} else {
+		    return " L";
+		}
+	    }
+	}
     }
 }

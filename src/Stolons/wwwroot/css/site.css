@@ -4,6 +4,18 @@ body {
     padding-bottom: 20px;
 }
 
+@media (max-width: @screen-xs) {
+    body {font-size: 10px;}
+}
+
+@media (max-width: @screen-sm) {
+    body {font-size: 14px;}
+}
+
+h2 {
+    font-size: 1.45em;
+}
+
 .nav-container {
     width: 70%;
     margin-right: auto;
@@ -21,6 +33,7 @@ body {
 
 .navbar-right {
     display: block !important;
+    float: right !important;
     position: absolute;
     top: 0;
     right: 10px;
@@ -31,6 +44,7 @@ body {
 .navbar-toggle {
     float: left !important;
     min-width: 40px;
+    margin-right: 10px !important;
 }
 /* Set widths on the form inputs since otherwise they're 100% wide */
 input,
@@ -57,7 +71,7 @@ input[type="file"] {
 
 .bannerAvatar img {
     max-height: 40px;
-    max-width: 40px;
+    max-width: 37px;
 }
 
 /* Image */
@@ -187,6 +201,7 @@ input[type="file"] {
 }
 
 .product {
+    position: relative;
     display: inline-block;
     float: left;
     width: 240px;
@@ -246,16 +261,18 @@ input[type="file"] {
 }
 
 .product-bottom {
-    height: 100px;
+    /* height: 100px; */
 }
 
 .pr_name {
     text-align: center;
-    font-size:large
+    font-size: 15px;
 }
 
 .pr_qtystock {
-    padding: 10px;
+    text-align: center;
+    padding: 2% 5% 0 5%;
+    /* padding: 10px; */
 }
 
 .pr_qtystock ul {
@@ -267,12 +284,16 @@ input[type="file"] {
 .pr_priceQuantity {
     text-align: left;
     font-size: medium;
+    font-weight: 500;
     display: block;
 }
 
 .pr_actions {
     text-align: center;
-    padding-top: 10px;
+    position: absolute;
+    left: 22%;
+    bottom: 5px;
+    margin-top: 10px;
 }
 .pr_actionDetail {
     display: inline;
@@ -426,7 +447,42 @@ input[type="file"] {
     display: none;
 }
 
+.productMgtImage {
+    vertical-align: middle !important;
+}
+
 .productMgtImage img {
     width: 50px;
     height: 40px;
+}
+
+.productsMgtTable > td, th {
+    vertical-align: middle !important;
+    text-align: center;
+}
+
+.noLiStyle {
+    list-style-type: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
+}
+
+.noLiStyle li {
+    padding: 3px;
+}
+
+.btn-small {
+    -moz-user-select: none;
+    background-image: none;
+    border-radius: 4px;
+    cursor: pointer;
+    display: inline-block;
+    font-size: 13px;
+    font-weight: 350;
+    line-height: 1.32857;
+    margin-bottom: 0;
+    padding: 4px 8px;
+    text-align: center;
+    vertical-align: middle;
+    white-space: nowrap;
 }

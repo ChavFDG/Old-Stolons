@@ -376,7 +376,13 @@ ProductActionView = Backbone.View.extend(
 	    var validatedBillEntry = WeekBasket.ValidatedWeekBasketModel.getProductEntry(this.productId);
 	    var validatedQty = (validatedBillEntry && validatedBillEntry.Quantity) || 0;
 	    var diffQty = this.billEntry.Quantity - validatedQty;
-	    return diffQty < this.billEntry.Product.RemainingStock;
+	    var stepStock = this.billEntry.Product.RemainingStock;
+
+	    if (this.billEntry.Product.Type != 1)
+	    {
+		stepStock = (this.billEntry.Product.RemainingStock * 1000) / this.billEntry.Product.QuantityStep;
+	    }
+	    return diffQty < stepStock;
 	},
 
 	canAddToBasket: function() {

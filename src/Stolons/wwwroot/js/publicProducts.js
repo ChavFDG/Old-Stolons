@@ -18,7 +18,7 @@ ProductsModel = Backbone.Collection.extend(
 
 	model: ProductModel,
 
-	url: "/api/Products",
+	url: "/api/publicProducts",
 
 	initialize: function() {
 	    this.fetch();

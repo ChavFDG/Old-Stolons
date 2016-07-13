@@ -96,50 +96,49 @@ namespace Stolons.Models
         [Display(Name = "Prix (kg ou l)")]
         [Required]
         public float Price { get; set; }
-	    [Display(Name = "Prix unitaire")]
-	    [Required]
-	    public float UnitPrice { get; set; }
-
+	[Display(Name = "Prix unitaire")]
+	[Required]
+	public float UnitPrice { get; set; }
         [Display(Name = "Stock de la semaine")]
-        public int WeekStock { get; set; }
+        public float WeekStock { get; set; }
         [Display(Name = "Stock restant")]
-        public int RemainingStock { get; set; }
+        public float RemainingStock { get; set; }
         [Display(Name = "Pallier de poids (g ou ml)")]
-	    [Required]
+	[Required]
         public int QuantityStep { get; set; }
-	    [NotMapped]
-	    public string QuantityStepString
+	[NotMapped]
+	public string QuantityStepString
+	{
+	    get
 	    {
-	        get
-	        {
-		        if (QuantityStep == 0)
-		        {
-		            return " rien";
-		        }
-		        if (ProductUnit == Unit.Kg)
-		        {
-		            if (QuantityStep >= 1000)
-		            {
-			            return QuantityStep / 1000 + " kg";
-		            }
-		            else
-		            {
-			            return QuantityStep  + " g";
-		            }
-		        }
-		        else
-		        {
-		            if (QuantityStep >= 1000)
-		            {
-			            return QuantityStep / 1000 + " l";
-		            }
-		            else
-		            {
-			            return QuantityStep  + " ml";
-		            }
-		        }
-	        }
+		if (QuantityStep == 0)
+		{
+		    return " rien";
+		}
+		if (ProductUnit == Unit.Kg)
+		{
+		    if (QuantityStep >= 1000)
+		    {
+			return QuantityStep / 1000 + " kg";
+		    }
+		    else
+		    {
+			return QuantityStep  + " g";
+		    }
+		}
+		else
+		{
+		    if (QuantityStep >= 1000)
+		    {
+			return QuantityStep / 1000 + " l";
+		    }
+		    else
+		    {
+			return QuantityStep  + " ml";
+		    }
+		}
 	    }
+	}
         [Display(Name = "Quantité moyenne")]
         public int AverageQuantity { get; set; }
         [Display(Name = "Unité de mesure")]

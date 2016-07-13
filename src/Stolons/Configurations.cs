@@ -147,9 +147,6 @@ namespace Stolons
 
         #region FileManagement
 
-        //public static string ServerUrl = "http://localhost:5000";//TOdo
-
-
         public static string StolonsBillsStockagePath = Path.Combine("bills", "stolons");
         public static string ConsumersBillsStockagePath = Path.Combine("bills","consumer");
         public static string ProducersBillsStockagePath = Path.Combine("bills", "producer");

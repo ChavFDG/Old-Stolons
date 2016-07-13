@@ -12,6 +12,7 @@ using Microsoft.AspNet.Http;
 using System.Collections.Generic;
 using System.IO;
 using Microsoft.Net.Http.Headers;
+using Newtonsoft.Json;
 using Stolons.ViewModels.ProductsManagement;
 using Microsoft.AspNet.Authorization;
 using System.Drawing;
@@ -39,6 +40,16 @@ namespace Stolons.Controllers
             var products = _context.Products.Include(m => m.Familly).Include(m=>m.Familly.Type).Where(x => x.Producer.Email == appUser.Email).ToList();
             return View(products);
         }
+
+	[Authorize(Roles = Configurations.UserType_Producer)]
+	[HttpGet, ActionName("ProducerProducts"), Route("api/producerProducts")]
+	public string JsonProducerProducts() {
+	    var appUser = GetCurrentUserSync();
+	    var products = _context.Products.Include(m => m.Familly).Include(m=>m.Familly.Type).Where(x => x.Producer.Email == appUser.Email).ToList();
+	    return JsonConvert.SerializeObject(products, Formatting.Indented, new JsonSerializerSettings() {
+		    ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+			});
+	}
 
         // GET: ProductsManagement/Details/5
         [Authorize(Roles = Configurations.UserType_Producer)]
@@ -198,7 +209,7 @@ namespace Stolons.Controllers
             _context.Products.First(x => x.Id == id).WeekStock = newStock;
             _context.Products.First(x => x.Id == id).RemainingStock = newStock;
             _context.SaveChanges();
-            return RedirectToAction("Index");
+	    return Ok();
         }
 
 	    [Authorize(Roles = Configurations.UserType_Producer)]
@@ -207,7 +218,13 @@ namespace Stolons.Controllers
         {
             _context.Products.First(x => x.Id == id).RemainingStock = newStock;
             _context.SaveChanges();
-            return RedirectToAction("Index");
+            return Ok();
+        }
+
+	[Authorize(Roles = Configurations.UserType_Producer)]
+	private ApplicationUser GetCurrentUserSync()
+        {
+            return _userManager.FindByIdAsync(HttpContext.User.GetUserId()).GetAwaiter().GetResult();
         }
 
         [Authorize(Roles = Configurations.UserType_Producer)]

@@ -4,6 +4,7 @@ using Microsoft.AspNet.Mvc.Rendering;
 using Microsoft.Data.Entity;
 using Stolons.Models;
 using System;
+using Newtonsoft.Json;
 using Microsoft.AspNet.Authorization;
 using static Stolons.Configurations;
 
@@ -31,6 +32,13 @@ namespace Stolons.Controllers
         {
             return View(_context.ApplicationConfig.First());
         }
+
+	[HttpGet, ActionName("CurrentMode"), Route("api/currentMode")]
+	public string JsonCurrentMode() {
+	    return JsonConvert.SerializeObject(Configurations.Mode, Formatting.Indented, new JsonSerializerSettings() {
+		    ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+			});
+	}
 
         // POST: ApplicationConfig/Edit/5
         [HttpPost]
