@@ -210,6 +210,15 @@ input[type="file"] {
     margin: 5px;
 }
 
+.publicProduct {
+    display: inline-block;
+    float: left;
+    width: 240px;
+    height: 160px;
+    border: 1px solid #222;
+    margin: 5px;
+}
+
 #filters .searchFilter {
     display: inline;
 }
