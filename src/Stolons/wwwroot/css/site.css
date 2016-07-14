@@ -465,9 +465,9 @@ input[type="file"] {
     height: 40px;
 }
 
-.productsMgtTable > td, th {
+.productsMgtTable td,th {
     vertical-align: middle !important;
-    text-align: center;
+    /* text-align: center; */
 }
 
 .noLiStyle {
@@ -494,4 +494,9 @@ input[type="file"] {
     text-align: center;
     vertical-align: middle;
     white-space: nowrap;
+}
+
+.imgPreview {
+    width: 60px;
+    height: 50px;   
 }

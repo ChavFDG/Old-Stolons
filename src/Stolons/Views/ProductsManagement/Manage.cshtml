@@ -54,22 +54,34 @@
         </div>
         <div class="form-group">
             <label class="col-md-2 control-label">Photo principale</label>
-            <div class="col-md-10">
-                <input type="file" accept="image/*" name="UploadFile1" class="form-control" />
+            <div class="col-md-4">
+              <input id="UploadFile1" type="file" accept="image/*" name="UploadFile1" class="form-control" value="toto.png" />
             </div>
+	    <div class="col-md-4">
+	      @{
+	      if (!Model.IsNew)
+	      {
+	         <img id="image1Preview" src="/@Model.Product.Pictures[0]" class="imgPreview" />
+	      }
+	      else
+	      {
+		 <img id="image1Preview" class="imgPreview" />
+	      }
+	      }
+	    </div>
         </div>
-        <div class="form-group">
-            <label class="col-md-2 control-label">2ieme photo</label>
-            <div class="col-md-10">
-                <input type="file" accept="image/*" name="UploadFile2" class="form-control" />
-            </div>
-        </div>
-        <div class="form-group">
-            <label class="col-md-2 control-label">3ieme photo</label>
-            <div class="col-md-10">
-                <input type="file" accept="image/*" name="UploadFile3" class="form-control" />
-            </div>
-        </div>
+        <!-- <div class="form-group"> -->
+        <!--     <label class="col-md-2 control-label">2ieme photo</label> -->
+        <!--     <div class="col-md-10"> -->
+        <!--         <input id="UploadFile2" type="file" accept="image/*" name="UploadFile2" class="form-control" /> -->
+        <!--     </div> -->
+        <!-- </div> -->
+        <!-- <div class="form-group"> -->
+        <!--     <label class="col-md-2 control-label">3ieme photo</label> -->
+        <!--     <div class="col-md-10"> -->
+        <!--         <input id="UploadFile3" type="file" accept="image/*" name="UploadFile3" class="form-control" /> -->
+        <!--     </div> -->
+        <!-- </div> -->
         <div class="form-group">
             <label asp-for="Product.DLC" class="col-md-2 control-label"></label>
             <div class="col-md-10">

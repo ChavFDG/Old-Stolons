@@ -9,11 +9,6 @@ DAMIEN
 - Voir pour envoyer les fichier en PDF !!! Voir XLS déjà
 NICO
 - On peut ajouter un produit sans Type, sans catégorie, c'est mal
-- Ajouter le visu des photos dans l'édition et l'ajout d'un produit
-- Ajouter le visu des photos dans le management des produits
-- Vérifier l'affichage des stocks courent dans le détail d'un produit. Bug ?
-- Corriger le bug du stock quand au poids !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-- Faire en sote qu'il soit impossible que le prix au pallier de poids ai un reste.
 - Suite au bug trouvé :
 	- Seul les admins peuvent rendre les utilisateurs et producteur actif / inactif
 	- Les bénévoles peuvent choisir entre bénévoles et utilisateur pour les producteurs et les utilisateurs
@@ -22,17 +17,15 @@ NOUS
 - Passer en Release 1.0.0.0
 
 Priorité 2 
-- Rendre la pnier flottant ( qu'il suive tout le temps la page quand on scroll)
-- Dans le panier, la corbeille noir ne sert à rien et est trompeuse, voir si on l'enlève vu que les corbeille rouge son plus explicite
+- Rendre le panier flottant ( qu'il suive tout le temps la page quand on scroll)
 -"Ajouter au panier" qui est décalé quand le nom du produit est trop long
 - Pas de lien pour revenir sur la page d'accueil, voir quand on aura mis le logo
-- La page d'accuiel devrait être les news
+- La page d'acceuil devrait être les news
 - Possibilité d'ajouter des catégorie et type
 - Re voir IE
 - Ajouter les photos 2 et 3 sur les produits
 - Quand on écrit une news entant que bénévole faire apparaitre le logo de Stolons à la place de l'avatar de la personne ayant mis la news. Et faire apparaitre l'avatar stolons dans les news
-- Quand on va dans l'onglet Nos produits sans être connecter voir tout les produits ( même ce indisponible), c'est à dire voir le catalogue complet des produits. Le top serait un truc du genre : les produits de la semaine . Tout nos produits 
-- Améliorer
+- Quand on va dans l'onglet Nos produits sans être connecter voir tout les produits ( même ce indisponible), c'est à dire voir le catalogue complet des produits. Le top serait un truc du genre : les produits de la semaine . Tout nos produits
 
 Priorité 3 : pour bien plus tard
 
@@ -44,3 +37,8 @@ FAIT :
 - Passage de l'application en anglais pour les bugs de virgules.
 - Changer le texte de "Activer tout les produits ..." en "Rendre disponible tout les produits ..."
 - Corriger les chemin d'accès aux fichier en passant tout en minuscule
+- Vérifier l'affichage des stocks courent dans le détail d'un produit. Bug ?
+- Corriger le bug du stock quand au poids
+- Faire en sote qu'il soit impossible que le prix au pallier de poids ai un reste.
+- Dans le panier, la corbeille noir ne sert à rien et est trompeuse, voir si on l'enlève vu que les corbeille rouge son plus explicite
+- Ajouter le visu des photos dans l'édition et l'ajout d'un produit
