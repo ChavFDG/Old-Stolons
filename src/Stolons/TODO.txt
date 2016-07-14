@@ -9,10 +9,7 @@ DAMIEN
 - Voir pour envoyer les fichier en PDF !!! Voir XLS déjà
 NICO
 - On peut ajouter un produit sans Type, sans catégorie, c'est mal
-- Suite au bug trouvé :
-	- Seul les admins peuvent rendre les utilisateurs et producteur actif / inactif
-	- Les bénévoles peuvent choisir entre bénévoles et utilisateur pour les producteurs et les utilisateurs
-	- Les admins peuvent choisir Administrateur en plus de bénévoles et utilisateurs pour les producteurs et les utilisateurs
+
 NOUS
 - Passer en Release 1.0.0.0
 
@@ -42,3 +39,7 @@ FAIT :
 - Faire en sote qu'il soit impossible que le prix au pallier de poids ai un reste.
 - Dans le panier, la corbeille noir ne sert à rien et est trompeuse, voir si on l'enlève vu que les corbeille rouge son plus explicite
 - Ajouter le visu des photos dans l'édition et l'ajout d'un produit
+- Suite au bug trouvé :
+  	- Seul les admins peuvent rendre les utilisateurs et producteur actif / inactif
+	- Les bénévoles peuvent choisir entre bénévoles et utilisateur pour les producteurs et les utilisateurs
+	- Les admins peuvent choisir Administrateur en plus de bénévoles et utilisateurs pour les producteurs et les utilisateurs
