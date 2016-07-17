@@ -1,28 +1,27 @@
 ﻿@model IndexViewModel
 @{
-    ViewData["Title"] = "Gérer son compte";
+    ViewData["Title"] = "Gérer mon compte";
 }
 
 <h2>@ViewData["Title"].</h2>
 <p class="text-success">@ViewData["StatusMessage"]</p>
 <div>
-    <h4>Changer vos informations de compte</h4>
     <hr />
     <dl class="dl-horizontal">
-        <dt>Informations:</dt>
+        <dt>Paramètres personnels :</dt>
         <dd>
             @if (User.IsInRole(Configurations.UserType.Consumer.ToString()))
             {
-            <a asp-controller="Manage" asp-action="ChangeUserInformations">Modifier vos informations de profil</a>
+            <a asp-controller="Manage" asp-action="ChangeUserInformations">Modifier mes paramètres personnels</a>
             }
             @if (User.IsInRole(Configurations.UserType.Producer.ToString()))
             {
-            <a asp-controller="Manage" asp-action="ChangeProducerInformations">Modifier vos informations de profil</a>
+            <a asp-controller="Manage" asp-action="ChangeProducerInformations">Modifier mes paramètres personnels</a>
              }
         </dd>
         <dt>Mot de passe :</dt>
         <dd>
-          <a asp-controller="Manage" asp-action="ChangePassword">Changer votre mot de passe</a>
+          <a asp-controller="Manage" asp-action="ChangePassword">Changer mon mot de passe</a>
         </dd>
     </dl>
 </div>

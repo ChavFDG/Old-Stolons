@@ -89,11 +89,14 @@
           <div class="col-md-10">
 	    <select id="UserRole" class="form-control valid" name="UserRole" data-val-required="The Droit utilisateur field is required." data-val="true" aria-required="true" aria-invalid="false" aria-describedby="UserRole-error">
 	      <option value="1"> Adhérent </option>
-	      <option value="2"> Bénévole </option>
-	      @if (User.IsInRole(Configurations.Role.Administrator.ToString()))
-	      {
-	         <option value="3">Administrateur</option>
-	      }
+            @if (User.IsInRole(Configurations.Role.Volunteer.ToString()) ||User.IsInRole(Configurations.Role.Administrator.ToString()))
+            {
+                <option value="2">Bénévole</option>
+            }
+	        @if (User.IsInRole(Configurations.Role.Administrator.ToString()))
+	        {
+	            <option value="3">Administrateur</option>
+	        }
 	    </select>
             <!-- <select asp-for="UserRole" asp-items="Html.GetEnumSelectList<Configurations.Role>()" class="form-control"></select> -->
             <span asp-validation-for="UserRole" class="text-danger"></span>

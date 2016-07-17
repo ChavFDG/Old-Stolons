@@ -10,7 +10,7 @@ namespace Stolons.Models
     public abstract class User
     {
         [Key]
-        [Display(Name = "Identifiant de l'utilisateur")]
+        [Display(Name = "Identifiant")]
         public int Id { get; set; }
         [Display(Name = "Nom")]
         [Required]

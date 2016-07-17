@@ -70,7 +70,7 @@ var StockMgtViewModal = Backbone.View.extend({
 	if (this.currentProduct.get("Type") != 1) {
 	    console.log("qtyStp = " + this.currentProduct.get("QuantityStep"));
 	    if ((weekStock * 1000) % this.currentProduct.get("QuantityStep") != 0) {
-		this.validation.weekStockError = "Le stock doit être divisible par le pallier de vente (" + this.currentProduct.get("QuantityStepString") + ").";
+		this.validation.weekStockError = "Le stock doit être divisible par le palier de vente (" + this.currentProduct.get("QuantityStepString") + ").";
 		this.render();
 		return;
 	    }
@@ -86,7 +86,7 @@ var StockMgtViewModal = Backbone.View.extend({
 	if (this.currentProduct.get("Type") != 1) {
 	    console.log("qtyStp = " + this.currentProduct.get("QuantityStep"));
 	    if ((remainingStock * 1000) % this.currentProduct.get("QuantityStep") != 0) {
-		this.validation.remainingStockError = "Le stock doit être divisible par le pallier de vente.";
+		this.validation.remainingStockError = "Le stock doit être divisible par le palier de vente.";
  		this.render();
 		return;
 	    }

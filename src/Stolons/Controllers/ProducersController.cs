@@ -14,6 +14,7 @@ using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
 using Stolons.ViewModels.Producers;
 using Microsoft.AspNet.Authorization;
+using System.Security.Claims;
 
 namespace Stolons.Controllers
 {
@@ -55,10 +56,8 @@ namespace Stolons.Controllers
             {
                 return HttpNotFound();
             }
-            ApplicationUser appUser = _context.Users.First(x => x.Email == producer.Email);
-            IList<string> roles = await _userManager.GetRolesAsync(appUser);
-            string role = roles.FirstOrDefault(x => Configurations.GetRoles().Contains(x));
-            return View(new ProducerViewModel(producer, (Configurations.Role)Enum.Parse(typeof(Configurations.Role), role)));
+            ApplicationUser producerAppUser = _context.Users.First(x => x.Email == producer.Email);
+            return View(new ProducerViewModel(producer, await GetUserRole(producerAppUser)));
         }
 
 
@@ -76,17 +75,15 @@ namespace Stolons.Controllers
             {
                 return HttpNotFound();
             }
-            ApplicationUser appUser = _context.Users.First(x => x.Email == producer.Email);
-            IList<string> roles = await _userManager.GetRolesAsync(appUser);
-            string role = roles.FirstOrDefault(x => Configurations.GetRoles().Contains(x));
-            return PartialView(new ProducerViewModel(producer, (Configurations.Role)Enum.Parse(typeof(Configurations.Role), role)));
+            ApplicationUser producerAppUser = _context.Users.First(x => x.Email == producer.Email);
+            return PartialView(new ProducerViewModel(producer, await GetUserRole(producerAppUser)));
         }
 
         [Authorize(Roles = Configurations.Role_Volunteer + "," + Configurations.Role_Administrator)]
         // GET: Producer/Create
         public IActionResult Create()
         {
-            return View();
+            return View(new ProducerViewModel());
         }
 
         // POST: Producer/Create
@@ -114,16 +111,16 @@ namespace Stolons.Controllers
                 #endregion Creating Producer
 
                 #region Creating linked application data
-                var appUser = new ApplicationUser { UserName = vmProducer.Producer.Email, Email = vmProducer.Producer.Email };
-                appUser.User = vmProducer.Producer;
+                var producerAppUser = new ApplicationUser { UserName = vmProducer.Producer.Email, Email = vmProducer.Producer.Email };
+                producerAppUser.User = vmProducer.Producer;
 
-                var result = await _userManager.CreateAsync(appUser, vmProducer.Producer.Email);
+                var result = await _userManager.CreateAsync(producerAppUser, vmProducer.Producer.Email);
                 if (result.Succeeded)
                 {
                     //Add user role
-                    result = await _userManager.AddToRoleAsync(appUser, vmProducer.UserRole.ToString());
+                    result = await _userManager.AddToRoleAsync(producerAppUser, vmProducer.UserRole.ToString());
                     //Add user type
-                    result = await _userManager.AddToRoleAsync(appUser, Configurations.UserType.Producer.ToString());
+                    result = await _userManager.AddToRoleAsync(producerAppUser, Configurations.UserType.Producer.ToString());
                 }
                 #endregion Creating linked application data
 
@@ -133,6 +130,7 @@ namespace Stolons.Controllers
                 
                 return RedirectToAction("Index");
             }
+
             return View(vmProducer);
         }
 
@@ -150,10 +148,9 @@ namespace Stolons.Controllers
             {
                 return HttpNotFound();
             }
-            ApplicationUser appUser = _context.Users.First(x => x.Email == producer.Email);
-            IList<string> roles = await _userManager.GetRolesAsync(appUser);
-            string role = roles.FirstOrDefault(x => Configurations.GetRoles().Contains(x));
-            return View(new ProducerViewModel(producer, (Configurations.Role)Enum.Parse(typeof(Configurations.Role), role)));
+            ApplicationUser producerAppUser = _context.Users.First(x => x.Email == producer.Email);
+
+            return View(new ProducerViewModel(producer, await GetUserRole(producerAppUser)));
         }
 
         // POST: Producer/Edit/5
@@ -177,17 +174,17 @@ namespace Stolons.Controllers
                     //Setting new value, saving
                     vmProducer.Producer.Avatar = Path.Combine(Configurations.UserAvatarStockagePath, fileName);
                 }
-                ApplicationUser appUser = _context.Users.First(x => x.Email == vmProducer.OriginalEmail);
-                appUser.Email = vmProducer.Producer.Email;
-                _context.Update(appUser);
+                ApplicationUser producerAppUser = _context.Users.First(x => x.Email == vmProducer.OriginalEmail);
+                producerAppUser.Email = vmProducer.Producer.Email;
+                _context.Update(producerAppUser);
                 //Getting actual roles
-                IList<string> roles = await _userManager.GetRolesAsync(appUser);
+                IList<string> roles = await _userManager.GetRolesAsync(producerAppUser);
                 if (!roles.Contains(UserRole.ToString()))
                 {
                     string roleToRemove = roles.FirstOrDefault(x => Configurations.GetRoles().Contains(x));
-                    await _userManager.RemoveFromRoleAsync(appUser, roleToRemove);
+                    await _userManager.RemoveFromRoleAsync(producerAppUser, roleToRemove);
                     //Add user role
-                    await _userManager.AddToRoleAsync(appUser, UserRole.ToString());
+                    await _userManager.AddToRoleAsync(producerAppUser, UserRole.ToString());
                 }
                 _context.Update(vmProducer.Producer);
                 _context.SaveChanges();
@@ -211,10 +208,8 @@ namespace Stolons.Controllers
             {
                 return HttpNotFound();
             }
-            ApplicationUser appUser = _context.Users.First(x => x.Email == producer.Email);
-            IList<string> roles = await _userManager.GetRolesAsync(appUser);
-            string role = roles.FirstOrDefault(x => Configurations.GetRoles().Contains(x));
-            return View(new ProducerViewModel(producer, (Configurations.Role)Enum.Parse(typeof(Configurations.Role), role)));
+            ApplicationUser producerAppUser = _context.Users.First(x => x.Email == producer.Email);
+            return View(new ProducerViewModel(producer, await GetUserRole(producerAppUser)));
         }
 
         // POST: Producer/Delete/5
@@ -230,8 +225,8 @@ namespace Stolons.Controllers
             if (System.IO.File.Exists(image) && producer.Avatar != Path.Combine(Configurations.UserAvatarStockagePath, Configurations.DefaultFileName))
                 System.IO.File.Delete(Path.Combine(uploads, producer.Avatar));
             //Delete App User
-            ApplicationUser appUser = _context.Users.First(x => x.Email == producer.Email);
-            _context.Users.Remove(appUser);
+            ApplicationUser producerAppUser = _context.Users.First(x => x.Email == producer.Email);
+            _context.Users.Remove(producerAppUser);
             //Delete User => TODO voir mieux car la on supprime tout ce qui est dépendant avant de supprimer le producteur, on fait le job de EF soit un Cascade delete !
             _context.News.RemoveRange(_context.News.Include(x => x.User).Where(x => x.User.Id == producer.Id));
             _context.Products.RemoveRange(_context.Products.Include(x => x.Producer).Where(x => x.Producer.Id == producer.Id));
@@ -240,6 +235,22 @@ namespace Stolons.Controllers
             //Save
             _context.SaveChanges();
             return RedirectToAction("Index");
+        }
+        private async Task<ApplicationUser> GetCurrentUserAsync()
+        {
+            return await _userManager.FindByIdAsync(HttpContext.User.GetUserId());
+        }
+
+        private async Task<Configurations.Role> GetUserRole(ApplicationUser user)
+        {
+            IList<string> roles = await _userManager.GetRolesAsync(user);
+            string role = roles.FirstOrDefault(x => Configurations.GetRoles().Contains(x));
+            return (Configurations.Role)Enum.Parse(typeof(Configurations.Role), role);
+        }
+        private async Task<Configurations.Role> GetCurrentUserRole()
+        {
+            var user = await GetCurrentUserAsync();
+            return await GetUserRole(user);
         }
     }
 }

@@ -17,9 +17,10 @@ namespace Stolons.ViewModels.Producers
         public ProducerViewModel(Producer producer, Configurations.Role userRole)
         {
             Producer = producer;
-            UserRole = userRole;
             OriginalEmail = producer.Email;
+            UserRole = userRole;
         }
+        
 
         public string OriginalEmail { get; set; }
         public Producer Producer { get; set; }
@@ -32,7 +33,8 @@ namespace Stolons.ViewModels.Producers
             }
         }
 
-        [Display(Name = "Droit utilisateur ")]
-        public Configurations.Role UserRole { get; set; }
+
+        [Display(Name = "Droit utilisateur")]
+        public Configurations.Role UserRole { get; set; } = Configurations.Role.User;
     }
 }

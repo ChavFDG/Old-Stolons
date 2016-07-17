@@ -103,7 +103,7 @@ namespace Stolons.Models
         public float WeekStock { get; set; }
         [Display(Name = "Stock restant")]
         public float RemainingStock { get; set; }
-        [Display(Name = "Pallier de poids (g ou ml)")]
+        [Display(Name = "Palier de poids (g ou ml)")]
 	[Required]
         public int QuantityStep { get; set; }
 	[NotMapped]

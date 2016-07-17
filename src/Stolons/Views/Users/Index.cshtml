@@ -62,9 +62,8 @@
             </td>
             <td>
                 <a asp-action="ShowBills" asp-route-id="@item.Id">Factures</a> |
-                <a asp-action="ShowBasketWeek" asp-route-id="@item.Id">Panier de la semaine</a> |
-                <a asp-action="Edit" asp-route-id="@item.Id">Editer</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Détail</a> |
+                <a asp-action="Edit" asp-route-id="@item.Id">Modifier</a> |
+                <a asp-action="Details" asp-route-id="@item.Id">Fiche</a> |
                 @if (User.IsInRole(Configurations.Role.Administrator.ToString()))
                 {
                     <a asp-action="Delete" asp-route-id="@item.Id">Supprimer</a>

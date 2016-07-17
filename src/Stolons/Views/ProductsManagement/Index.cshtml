@@ -162,53 +162,57 @@
 	  <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
 	  </div>
-	  <div class="modal-body">
-	    <div>
-	      <span><b>Gestion des stocks pour le produit: "<%= product.Name %>"</b></span>
-	    </div>
-	    <br />
-	    <div><label>Vente:</label> <%= productModel.getSellTypeString() %></div>
-	    <%
-	       if (product.Type != 1) {
-	    %>
-	    <div><label>Pallier de vente:</label> <%= product.QuantityStepString %></div>
-	    <% } %>
-	    <br />
-	    <div class="form-horizontal">
-	      <div class="form-group">
-		<label for="WeekStock" class="col-md-4 control-label">Stock de la semaine</label>
-		<div class="col-md-4">
-		  <input id="WeekStock" name="WeekStock" class="form-control" type="number" step="<%= product.QuantityStep / 1000 || 1 %>" value="<%= product.WeekStock %>" />
-		  <span id="WeekStockError" class="text-danger"><%= validation.weekStockError %></span>
-		</div>
-		<div class="col-md-4">
-		  <label class="control-label"><%= productModel.getStockUnitString() %></label>
-		</div>
-	      </div>
-	      <% if (currentMode.mode == 0) { %>
-	      <div class="form-group">
-		<label for="RemainingStock" class="col-md-4 control-label">Stock en cours</label>
-		<div class="col-md-4">
-		  <input id="RemainingStock" name="RemainingStock" class="form-control" type="number" step="<%= product.QuantityStep / 1000 || 1 %>" value="<%= product.RemainingStock %>" />
-		</div>
-		<div class="col-md-4">
-		  <label class="control-label"><%= productModel.getStockUnitString() %></label>
-		  <span id="RemainingStockError" class="text-danger"><%= validation.remainingStockError %></span>
-		</div>
-	      </div>
-	      <% } %>
-	    </div>
-	    <div class="row">
-	      <div class="col-md-4">
-	      </div>
-	      <a id="saveStocks" href="javascript:;" class="btn btn-default" <% if (!_.isEmpty(validation.weekStockError) || !_.isEmpty(validation.remainingStockError)) { %> disabled <% } %> >Valider les stocks</a>
-	      <a id="cancelEditStocks" href="javascript:;" class="btn btn-default">Annuler</a>
-	      <div class="col-md-4">
-	      </div>
-	    </div>
-	  </div>
-	</div>
-      </div>
+        <div class="modal-body">
+            <div>
+                <span><b>Gestion des stocks pour le produit : "<%= product.Name %>"</b></span>
+            </div>
+            <br />
+            <div><label>Vente : </label> <%= productModel.getSellTypeString() %></div>
+            <%
+            if (product.Type != 1) {
+            %>
+            <div><label>Palier de vente : </label> <%= product.QuantityStepString %></div>
+            <% } %>
+            <br />
+            @if (Configurations.Mode == ApplicationConfig.Modes.DeliveryAndStockUpdate)
+            {
+                <div class="form-horizontal">
+                    <div class="form-group">
+                        <label for="WeekStock" class="col-md-4 control-label">Je propose cette semaine : </label>
+                        <div class="col-md-4">
+                            <input id="WeekStock" name="WeekStock" class="form-control" type="number" step="<%= product.QuantityStep / 1000 || 1 %>" value="<%= product.WeekStock %>" />
+                            <span id="WeekStockError" class="text-danger"><%= validation.weekStockError %></span>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="control-label"><%= productModel.getStockUnitString() %></label>
+                        </div>
+                    </div>
+                </div>
+            }
+            @if (Configurations.Mode == ApplicationConfig.Modes.Order)
+            {
+                <div><label>J'ai proposé cette semaine </label><%= product.WeekStock %> <%= productModel.getStockUnitString() %></div>
+                <div class="form-horizontal">
+                    <div class="form-group">
+                        <label for="RemainingStock" class="col-md-4 control-label">Il reste : </label>
+                        <div class="col-md-4">
+                            <input id="RemainingStock" name="RemainingStock" class="form-control" type="number" step="<%= product.QuantityStep / 1000 || 1 %>" value="<%= product.RemainingStock %>" />
+                            <span id="RemainingStockError" class="text-danger"><%= validation.remainingStockError %></span>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="control-label"><%= productModel.getStockUnitString() %></label>
+                        </div>
+                    </div>
+                </div>
+            }
+            <div class="row">
+                <div class="col-md-4">
+                </div>
+                <a id="saveStocks" href="javascript:;" class="btn btn-default" <% if (!_.isEmpty(validation.weekStockError) || !_.isEmpty(validation.remainingStockError)) { %> disabled <% } %> >Enregistrer les modifications</a>
+                <div class="col-md-4">
+                </div>
+            </div>
+        </div>
   </script>
 
   <script src="/js/productModel.js"></script>
