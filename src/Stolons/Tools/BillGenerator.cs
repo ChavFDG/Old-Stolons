@@ -118,7 +118,10 @@ namespace Stolons.Tools
                 }
                 if(lastMode == ApplicationConfig.Modes.DeliveryAndStockUpdate && currentMode == ApplicationConfig.Modes.Order)
                 {
-                    dbContext.Products.ToList().Where(x => x.State == Product.ProductState.Stock).ToList().ForEach(x => x.State = Product.ProductState.Disabled);
+                    foreach( var product in dbContext.Products.Where(x => x.State == Product.ProductState.Stock))
+                    {
+                        product.State = Product.ProductState.Disabled;
+                    }
                     dbContext.SaveChanges();
                 }
                 lastMode = currentMode;

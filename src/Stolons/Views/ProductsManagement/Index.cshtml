@@ -55,11 +55,14 @@
       <td class="productMgtImage">
 	<div>
 	  @{
-	  if (item.Pictures.Count > 0) {
-	  <img src="@item.Pictures[0]" />
-	  } else {
-	  <img alt="pas d'image" />
-	  }
+          if (item.Pictures.Any())
+          {
+	        <img src="@item.Pictures[0]" />
+          }
+          else
+          {
+	        <img alt="Pas d'image" />
+	     }
 	  }
 	</div>
       </td>

@@ -6,6 +6,8 @@ DAMIEN
 - Corriger les fautes d'orthographe ! Et modifier les termes trops informatiques
 - Réduire automatiquement la taille des images importés
 - Voir pour envoyer les fichier en PDF !!! Voir XLS déjà
+- Quand on envoie un mail si ça plante faire sorte que tout ne plante pas ! Si c'est bien ça le bug
+
 NICO
 - On peut ajouter un produit sans Type, sans catégorie, c'est mal
 
@@ -43,6 +45,8 @@ FAIT :
 -"Ajouter au panier" qui est décalé quand le nom du produit est trop long
 - Un producteur doit pouvoir modifier ou supprimer ces news
 - Quand on va dans l'onglet Nos produits sans être connecter voir tout les produits ( même ceux indisponibles), c'est à dire voir le catalogue complet des produits. 
+- Correction d'un bug quand pas d'image dans le manage product
+- Correction du bug qui met les produits indisponibles lors du passage en commande
 
 - Corriger le bug du stock quand au poids
 - Faire en sorte qu'il soit impossible que le prix au palier de poids ai un reste.

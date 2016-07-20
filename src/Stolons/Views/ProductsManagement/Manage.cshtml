@@ -59,13 +59,22 @@
             </div>
 	    <div class="col-md-4">
 	      @{
-	      if (!Model.IsNew)
-	      {
-	         <img id="image1Preview" src="/@Model.Product.Pictures[0]" class="imgPreview" />
+              if (!Model.IsNew)
+              {
+
+                {  if (Model.Product.Pictures.Any())
+                    {
+                        <img id="image1Preview" src="/@Model.Product.Pictures[0]" class="imgPreview" />
+                    }
+                    else
+                    {
+                        <img alt="Pas d'image" />
+                    }
+                }
 	      }
 	      else
 	      {
-		 <img id="image1Preview" class="imgPreview" />
+		    <img id="image1Preview" class="imgPreview" />
 	      }
 	      }
 	    </div>
