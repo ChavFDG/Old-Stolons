@@ -41,9 +41,9 @@ namespace Stolons.Controllers
             return View(products);
         }
 
-	    [Authorize(Roles = Configurations.UserType_Producer)]
-	    [HttpGet, ActionName("ProducerProducts"), Route("api/producerProducts")]
-	    public string JsonProducerProducts()
+	[Authorize(Roles = Configurations.UserType_Producer)]
+	[HttpGet, ActionName("ProducerProducts"), Route("api/producerProducts")]
+	public string JsonProducerProducts()
         {
 	        var appUser = GetCurrentUserSync();
 	        List<ProductViewModel> vmProducts = new List<ProductViewModel>();
@@ -216,7 +216,7 @@ namespace Stolons.Controllers
 
         [Authorize(Roles = Configurations.UserType_Producer)]
         [HttpPost, ActionName("ChangeStock")]
-        public IActionResult ChangeStock(Guid id, int newStock)
+        public IActionResult ChangeStock(Guid id, float newStock)
         {
             _context.Products.First(x => x.Id == id).WeekStock = newStock;
             _context.Products.First(x => x.Id == id).RemainingStock = newStock;
@@ -224,9 +224,9 @@ namespace Stolons.Controllers
 	    return Ok();
         }
 
-	    [Authorize(Roles = Configurations.UserType_Producer)]
+	[Authorize(Roles = Configurations.UserType_Producer)]
         [HttpPost, ActionName("ChangeCurrentStock")]
-        public IActionResult ChangeCurrentStock(Guid id, int newStock)
+        public IActionResult ChangeCurrentStock(Guid id, float newStock)
         {
             _context.Products.First(x => x.Id == id).RemainingStock = newStock;
             _context.SaveChanges();
