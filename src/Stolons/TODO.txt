@@ -3,8 +3,10 @@
 APRES CORE :
 
 Priorité 0 pour 1er Octobre :
+- Passer en Release Core 1.0.0.0
 - Gestion des adhérent sympatisant
 - Gestion des cotisations
+- Virer "éngagé dans le bio"
 
 Priorité 1 : retour producteur
 DAMIEN
@@ -19,9 +21,10 @@ NICO
 - Ajouter la chat box
 - Ajouter des transactions pour les modifs sur le stock
 - Ajouter validation lors de la modif producteur du stock en cours
+- Bug du Temps week basket
 
 NOUS
-- Passer en Release 1.0.0.0
+- Revoir la gestion des roles ( supprimer, éditer, changement de mail ...)
 
 Priorité 2 
 - Rendre le panier flottant ( qu'il suive tout le temps la page quand on scroll)
@@ -58,24 +61,9 @@ FAIT :
 - Correction du bug qui met les produits indisponibles lors du passage en commande
 - Ajout dans les factures producteurs par produits du Quantity string
 - Corriger les fautes d'orthographe ! Et modifier les termes trops informatiques
-
-
 - Corriger le bug du stock quand au poids
 - Faire en sorte qu'il soit impossible que le prix au palier de poids ai un reste.
 - Suite au bug trouvé :
   	- Seul les admins peuvent rendre les utilisateurs et producteur actif / inactif => OK
 	- Les bénévoles peuvent choisir entre bénévoles et utilisateur pour les producteurs et les utilisateurs => ok
 	- Les admins peuvent choisir Administrateur en plus de bénévoles et utilisateurs pour les producteurs et les utilisateurs
-
-
-
-
-
-
- => BUG
- En STOCK que changer stock de la semaine => Ok
- EN COMMANDE , que changer stock courent => à faire
- On peut mettre un stock restant en négatif
- Vérifier si dans Pièces, le S par sinon le mettre entre paraentehtehre
- Virer "éngagé dans le bio"
-
