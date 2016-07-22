@@ -1,8 +1,11 @@
 
-
 var CurrentModeModel = Backbone.Model.extend(
     {
 	default: {mode: 0},
+	/*
+	  0: commandes,
+	  1: livraisons et stocks
+	 */
 
 	url: "/api/currentMode",
 
@@ -28,6 +31,17 @@ var ProductsCollection = Backbone.Collection.extend(
 
 	initialize: function() {
 	    this.fetch();
+	},
+
+	parse: function(data) {
+	    var products = [];
+
+	    _.forEach(data, function(productVm) {
+		var product = productVm.Product;
+		product["OrderedQuantityString"] = productVm.OrderedQuantityString;
+		products.push(product);
+	    });
+	    return products;
 	}
     }
 );
@@ -55,16 +69,19 @@ var StockMgtViewModal = Backbone.View.extend({
 	this.currentProduct = ProductsModel.get(productId);
 	console.log(this.currentProduct);
 	this.renderModal();
-	this.validateWeekStock();
-	this.validateRemainingStock();
+	if (window.CurrentModeModel.get("mode") == 0) {
+	    this.validateRemainingStock();
+	} else {
+	    this.validateWeekStock();
+	}
     },
 
     isInt: function(n) {
-	return Number(n) === n && n % 1 === 0;
+	return n % 1 === 0;
     },
 
     validateWeekStock: function() {
-	var weekStock = parseFloat($("#WeekStock").val());
+	var weekStock = Math.abs(parseFloat($("#WeekStock").val()));
 	this.currentProduct.set({WeekStock: weekStock});
 
 	if (this.currentProduct.get("Type") != 1) {
@@ -74,13 +91,20 @@ var StockMgtViewModal = Backbone.View.extend({
 		this.render();
 		return;
 	    }
+	} else {
+	    if (!this.isInt(weekStock)) {
+		this.validation.weekStockError = "Le nombre de pièces doit être un nombre entier.";
+		this.render();
+		return;
+	    }
 	}
 	this.validation.weekStockError = "";
 	this.render();
     },
 
     validateRemainingStock: function() {
-	var remainingStock = parseFloat($("#RemainingStock").val());
+	var remainingStock = Math.
+	    abs(parseFloat($("#RemainingStock").val()));
 	this.currentProduct.set({RemainingStock: remainingStock});
 
 	if (this.currentProduct.get("Type") != 1) {
@@ -90,32 +114,47 @@ var StockMgtViewModal = Backbone.View.extend({
  		this.render();
 		return;
 	    }
+	} else {
+	    if (!this.isInt(remainingStock)) {
+		this.validation.remainingStockError = "Le nombre de pièces doit être un nombre entier.";
+		this.render();
+		return;
+	    }
 	}
 	this.validation.remainingStockError = "";
 	this.render();
     },
 
     saveStocks: function() {
+	if ($("#saveStocks").attr("disabled") == "disabled") {
+	    return false;
+	}
 	var self = this;
-	$.ajax({
-	    url: "/ProductsManagement/ChangeCurrentStock",
-	    type: 'POST',
-	    data: {
-		id: self.currentProduct.get("Id"),
-		newStock: self.currentProduct.get("RemainingStock"),
-	    }
-	}).always(function() {
-	    $.ajax({
+	var responseHandler = function(xhr) {
+	    location.reload();
+	};
+
+	var promise;
+	if (window.CurrentModeModel.get("mode") == 0) {
+	    promise = $.ajax({
+		url: "/ProductsManagement/ChangeCurrentStock",
+		type: 'POST',
+		data: {
+		    id: self.currentProduct.get("Id"),
+		    newStock: self.currentProduct.get("RemainingStock"),
+		}
+	    });
+	} else {
+	    promise = $.ajax({
 		url: "/ProductsManagement/ChangeStock",
 		type: 'POST',
 		data: {
 		    id: self.currentProduct.get("Id"),
 		    newStock: self.currentProduct.get("WeekStock"),
 		}
-	    }).always(function() {
-		location.reload();
 	    });
-	});
+	}
+	promise.then(responseHandler);
 	return false;
     },
 

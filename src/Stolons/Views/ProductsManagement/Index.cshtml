@@ -91,16 +91,18 @@
 	@(EnumHelper<Product.SellType>.GetDisplayValue(@item.Type))
       </td>
       <td>
-	@Html.DisplayNameFor(model => item.WeekStock)
-	@(" : ")
-	@Html.DisplayFor(model => item.WeekStock)
-	@item.GetStockUnit()
-	<br />
 	@if (Configurations.Mode == ApplicationConfig.Modes.Order)
 	{
 	@Html.DisplayNameFor(model => item.RemainingStock)
 	@(" : ")
 	@Html.DisplayFor(model => item.RemainingStock)
+	@item.GetStockUnit()
+	}
+	else
+	{
+	@Html.DisplayNameFor(model => item.WeekStock)
+	@(" : ")
+	@Html.DisplayFor(model => item.WeekStock)
 	@item.GetStockUnit()
 	}
 	<br />
@@ -171,47 +173,43 @@
             </div>
             <br />
             <div><label>Vente : </label> <%= productModel.getSellTypeString() %></div>
-            <%
-            if (product.Type != 1) {
-            %>
+            <% if (product.Type != 1) { %>
             <div><label>Palier de vente : </label> <%= product.QuantityStepString %></div>
             <% } %>
             <br />
-            @if (Configurations.Mode == ApplicationConfig.Modes.DeliveryAndStockUpdate)
-            {
-                <div class="form-horizontal">
-                    <div class="form-group">
-                        <label for="WeekStock" class="col-md-4 control-label">Je propose cette semaine : </label>
-                        <div class="col-md-4">
-                            <input id="WeekStock" name="WeekStock" class="form-control" type="number" step="<%= product.QuantityStep / 1000 || 1 %>" value="<%= product.WeekStock %>" />
-                            <span id="WeekStockError" class="text-danger"><%= validation.weekStockError %></span>
-                        </div>
-                        <div class="col-md-4">
-                            <label class="control-label"><%= productModel.getStockUnitString() %></label>
-                        </div>
-                    </div>
-                </div>
-            }
-            @if (Configurations.Mode == ApplicationConfig.Modes.Order)
-            {
-                <div><label>J'ai proposé cette semaine </label><%= product.WeekStock %> <%= productModel.getStockUnitString() %></div>
-                <div class="form-horizontal">
-                    <div class="form-group">
-                        <label for="RemainingStock" class="col-md-4 control-label">Il reste : </label>
-                        <div class="col-md-4">
-                            <input id="RemainingStock" name="RemainingStock" class="form-control" type="number" step="<%= product.QuantityStep / 1000 || 1 %>" value="<%= product.RemainingStock %>" />
-                            <span id="RemainingStockError" class="text-danger"><%= validation.remainingStockError %></span>
-                        </div>
-                        <div class="col-md-4">
-                            <label class="control-label"><%= productModel.getStockUnitString() %></label>
-                        </div>
-                    </div>
-                </div>
-            }
-            <div class="row">
+            <% if (currentMode.mode == 1) { %> <!-- Livraisons/stocks -->
+            <div class="form-horizontal">
+              <div class="form-group">
+                <label for="WeekStock" class="col-md-4 control-label">Je propose cette semaine : </label>
                 <div class="col-md-4">
+                  <input id="WeekStock" name="WeekStock" class="form-control" type="number" step="<%= product.QuantityStep / 1000 || 1 %>" value="<%= product.WeekStock %>" />
+                  <span id="WeekStockError" class="text-danger"><%= validation.weekStockError %></span>
                 </div>
-                <a id="saveStocks" href="javascript:;" class="btn btn-default" <% if (!_.isEmpty(validation.weekStockError) || !_.isEmpty(validation.remainingStockError)) { %> disabled <% } %> >Enregistrer les modifications</a>
+                <div class="col-md-4">
+                  <label class="control-label"><%= productModel.getStockUnitString() %></label>
+                </div>
+              </div>
+            </div>
+	    <% } else { %> <!-- Commandes -->
+            <div class="form-horizontal">
+              <div class="form-group">
+                <label for="RemainingStock" class="col-md-4 control-label">Il reste en stock : </label>
+                <div class="col-md-4">
+                  <input id="RemainingStock" name="RemainingStock" class="form-control" type="number" step="<%= product.QuantityStep / 1000 || 1 %>" value="<%= product.RemainingStock %>" />
+                  <span id="RemainingStockError" class="text-danger"><%= validation.remainingStockError %></span>
+                </div>
+                <div class="col-md-4">
+                  <label class="control-label"><%= productModel.getStockUnitString() %></label>
+                </div>
+              </div>
+	      <div>
+		<span><%= product.OrderedQuantityString %> ont déjà été commandé(e)s. </span>
+		<span>Attention: modifications possibles jusqu'à la cloture des commandes.</span>
+	      </div>
+            </div>
+            <% } %>
+            <div class="row">
+                <a id="saveStocks" href="javascript:;" class="btn btn-default" <% if (!_.isEmpty(validation.weekStockError) || !_.isEmpty(validation.remainingStockError)) { %> disabled="disabled" <% } %> >Enregistrer les modifications</a>
                 <div class="col-md-4">
                 </div>
             </div>

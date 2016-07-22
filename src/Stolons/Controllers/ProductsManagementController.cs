@@ -41,15 +41,22 @@ namespace Stolons.Controllers
             return View(products);
         }
 
-	    [Authorize(Roles = Configurations.UserType_Producer)]
-	    [HttpGet, ActionName("ProducerProducts"), Route("api/producerProducts")]
-	    public string JsonProducerProducts() {
-	        var appUser = GetCurrentUserSync();
-	        var products = _context.Products.Include(m => m.Familly).Include(m=>m.Familly.Type).Where(x => x.Producer.Email == appUser.Email).ToList();
-	        return JsonConvert.SerializeObject(products, Formatting.Indented, new JsonSerializerSettings() {
-		        ReferenceLoopHandling = ReferenceLoopHandling.Ignore
-			    });
+	[Authorize(Roles = Configurations.UserType_Producer)]
+	[HttpGet, ActionName("ProducerProducts"), Route("api/producerProducts")]
+	public string JsonProducerProducts() {
+	    var appUser = GetCurrentUserSync();
+	    List<ProductViewModel> vmProducts = new List<ProductViewModel>();
+	    var products = _context.Products.Include(m => m.Familly).Include(m=>m.Familly.Type).Where(x => x.Producer.Email == appUser.Email).ToList();
+	    foreach (var product in products)
+	    {
+		int orderedQty = 0;
+		_context.BillEntrys.Where(x => x.ProductId == product.Id).ToList().ForEach(x => orderedQty += x.Quantity);
+		vmProducts.Add(new ProductViewModel(product, orderedQty));
 	    }
+	    return JsonConvert.SerializeObject(vmProducts, Formatting.Indented, new JsonSerializerSettings() {
+		    ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+			});
+	}
 
         // GET: ProductsManagement/Details/5
         [Authorize(Roles = Configurations.UserType_Producer)]
