@@ -17,6 +17,8 @@ NICO
 - Mutualisé la l'ajout / édition des adhérents ( comme pour les producteurs )
 - On peut ajouter un produit sans Type, sans catégorie, c'est mal
 - Ajouter la chat box
+- Ajouter des transactions pour les modifs sur le stock
+- Ajouter validation lors de la modif producteur du stock en cours
 
 NOUS
 - Passer en Release 1.0.0.0
