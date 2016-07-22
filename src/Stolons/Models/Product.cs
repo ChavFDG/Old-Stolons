@@ -96,49 +96,90 @@ namespace Stolons.Models
         [Display(Name = "Prix (kg ou l)")]
         [Required]
         public float Price { get; set; }
-	[Display(Name = "Prix unitaire")]
-	[Required]
-	public float UnitPrice { get; set; }
+	    [Display(Name = "Prix unitaire")]
+	    [Required]
+	    public float UnitPrice { get; set; }
         [Display(Name = "Stock de la semaine")]
         public float WeekStock { get; set; }
         [Display(Name = "Stock restant")]
         public float RemainingStock { get; set; }
         [Display(Name = "Palier de poids (g ou ml)")]
-	[Required]
+	    [Required]
         public int QuantityStep { get; set; }
-	[NotMapped]
-	public string QuantityStepString
-	{
-	    get
+	    [NotMapped]
+	    public string QuantityStepString
 	    {
-		if (QuantityStep == 0)
-		{
-		    return " rien";
-		}
-		if (ProductUnit == Unit.Kg)
-		{
-		    if (QuantityStep >= 1000)
-		    {
-			return QuantityStep / 1000 + " kg";
-		    }
-		    else
-		    {
-			return QuantityStep  + " g";
-		    }
-		}
-		else
-		{
-		    if (QuantityStep >= 1000)
-		    {
-			return QuantityStep / 1000 + " l";
-		    }
-		    else
-		    {
-			return QuantityStep  + " ml";
-		    }
-		}
+	        get
+	        {
+		        if (QuantityStep == 0)
+		        {
+		            return " rien";
+		        }
+		        if (ProductUnit == Unit.Kg)
+		        {
+		            if (QuantityStep >= 1000)
+		            {
+			        return QuantityStep / 1000 + " kg";
+		            }
+		            else
+		            {
+			        return QuantityStep  + " g";
+		            }
+		        }
+		        else
+		        {
+		            if (QuantityStep >= 1000)
+		            {
+			        return QuantityStep / 1000 + " l";
+		            }
+		            else
+		            {
+			        return QuantityStep  + " ml";
+		            }
+		        }
+	        }
 	    }
-	}
+
+
+        public string GetQuantityString(int quantity)
+        {
+            if (Type == Product.SellType.Piece)
+            {
+                if (quantity == 1)
+                {
+                    return quantity + " pièce";
+                }
+                else
+                {
+                    return quantity + " pièces";
+                }
+            }
+            else
+            {
+                float qty = (quantity * QuantityStep);
+                if (ProductUnit == Product.Unit.Kg)
+                {
+                    string unit = " g";
+                    if (qty >= 1000)
+                    {
+                        qty /= 1000;
+                        unit = " Kg";
+                    }
+                    return qty + unit;
+                }
+                else
+                {
+                    string unit = " mL";
+                    if (qty >= 1000)
+                    {
+                        qty /= 1000;
+                        unit = " L";
+                    }
+                    return qty + unit;
+                }
+            }
+        }
+
         [Display(Name = "Quantité moyenne")]
         public int AverageQuantity { get; set; }
         [Display(Name = "Unité de mesure")]

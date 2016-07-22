@@ -352,9 +352,6 @@ namespace Stolons.Tools
                 //Add product informations
                 row++;
                 row++;
-                worksheetByProduct.Cells[row, 1].Value = "PRODUITS :";
-                worksheetByProduct.Cells[row, 1].Style.Font.Size = 18;
-                worksheetByProduct.Cells[row, 1].Style.Font.Bold = true;
                 //Create list of bill entry by product
                 Dictionary<Product, List<BillEntryConsumer>> products = new Dictionary<Product, List<BillEntryConsumer>>();
                 foreach (var billEntryConsumer in billEntries)
@@ -372,12 +369,12 @@ namespace Stolons.Tools
                     // - Add the headers
                     string typeDetail = prod.Key.Type == Product.SellType.Piece ? "" : " par " + prod.Key.QuantityStepString;
                     worksheetByProduct.Cells[row, 2].Value = EnumHelper<Product.SellType>.GetDisplayValue(prod.Key.Type) + typeDetail;
-                    worksheetByProduct.Cells[row, 3].Value = prod.Key.UnitPrice ;
-                    worksheetByProduct.Cells[row, 3].Style.Numberformat.Format = "0.00€";
-                    worksheetByProduct.Cells[row, 2, row, 3].Style.Font.Bold = true;
-                    worksheetByProduct.Cells[row, 2, row, 3].Style.Font.Size = 12;
-                    worksheetByProduct.Cells[row, 2, row, 3].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
-                    worksheetByProduct.Cells[row, 2, row, 3].Style.Border.BorderAround(ExcelBorderStyle.Thin);
+                    worksheetByProduct.Cells[row, 4].Value = prod.Key.UnitPrice;
+                    worksheetByProduct.Cells[row, 4].Style.Numberformat.Format = "0.00€";
+                    worksheetByProduct.Cells[row, 2, row, 4].Style.Font.Bold = true;
+                    worksheetByProduct.Cells[row, 2, row, 4].Style.Font.Size = 12;
+                    worksheetByProduct.Cells[row, 2, row, 4].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                    worksheetByProduct.Cells[row, 2, row, 4].Style.Border.BorderAround(ExcelBorderStyle.Thin);
                     int unitPriceRow = row;
                     row++;
                     worksheetByProduct.Cells[row - 1, 1, row, 1].Merge = true;
@@ -388,61 +385,69 @@ namespace Stolons.Tools
                     worksheetByProduct.Cells[row - 1, 1, row, 1].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
                     worksheetByProduct.Cells[row - 1, 1, row, 1].Style.Border.BorderAround(ExcelBorderStyle.Thin);
 
-                    worksheetByProduct.Cells[row, 2].Value = "Quantité";
-                    worksheetByProduct.Cells[row, 3].Value = "Prix total";
-                    worksheetByProduct.Cells[row, 2, row, 3].Style.Font.Bold = true;
-                    worksheetByProduct.Cells[row, 2, row, 3].Style.Font.Size = 12;
-                    worksheetByProduct.Cells[row, 2, row, 3].Style.Border.BorderAround(ExcelBorderStyle.Thin);
+                    worksheetByProduct.Cells[row, 2].Value = "Rien";
+                    worksheetByProduct.Cells[row, 3].Value = "Quantité";
+                    worksheetByProduct.Cells[row, 4].Value = "Prix total";
+                    worksheetByProduct.Cells[row, 2, row, 4].Style.Font.Bold = true;
+                    worksheetByProduct.Cells[row, 2, row, 4].Style.Font.Size = 12;
+                    worksheetByProduct.Cells[row, 2, row, 4].Style.Border.BorderAround(ExcelBorderStyle.Thin);
                     row++;
                     int productStartRow = row;
-                    foreach (var billEntryConsumer in prod.Value.OrderBy(x=>x.Consumer.Id))
+                    foreach (var billEntryConsumer in prod.Value.OrderBy(x => x.Consumer.Id))
                     {
                         worksheetByProduct.Cells[row, 1].Value = "• " + billEntryConsumer.Consumer.Id;
                         worksheetByProduct.Cells[row, 1].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
                         worksheetByProduct.Cells[row, 2].Value = billEntryConsumer.BillEntry.Quantity;
-                        worksheetByProduct.Cells[row, 3].Formula = new ExcelCellAddress(row, 2).Address + "*" + new ExcelCellAddress(unitPriceRow, 3).Address;
-                        worksheetByProduct.Cells[row, 3].Style.Numberformat.Format = "0.00€";
-                        worksheetByProduct.Cells[row, 4].Value = "☐";
-                        worksheetByProduct.Cells[row, 4].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                        worksheetByProduct.Cells[row, 3].Value = billEntryConsumer.BillEntry.QuantityString;
+                        worksheetByProduct.Cells[row, 3].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
+                        worksheetByProduct.Cells[row, 4].Formula = new ExcelCellAddress(row, 2).Address + "*" + new ExcelCellAddress(unitPriceRow, 3).Address;
+                        worksheetByProduct.Cells[row, 4].Style.Numberformat.Format = "0.00€";
+                        worksheetByProduct.Cells[row, 5].Value = "☐";
+                        worksheetByProduct.Cells[row, 5].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
 
                         row++;
                     }
-                    worksheetByProduct.Cells[productStartRow, 1,row,1].Style.Border.BorderAround(ExcelBorderStyle.Thin);
-                    worksheetByProduct.Cells[productStartRow, 2, row, 3].Style.Border.BorderAround(ExcelBorderStyle.Thin);
-                    worksheetByProduct.Cells[productStartRow, 2, row, 3].Style.Border.BorderAround(ExcelBorderStyle.Thin);
+                    worksheetByProduct.Cells[productStartRow, 1, row, 1].Style.Border.BorderAround(ExcelBorderStyle.Thin);
+                    worksheetByProduct.Cells[productStartRow, 2, row, 4].Style.Border.BorderAround(ExcelBorderStyle.Thin);
+                    worksheetByProduct.Cells[productStartRow, 2, row, 4].Style.Border.BorderAround(ExcelBorderStyle.Thin);
                     rowsTotal.Add(row);
                     //TOTAL SANS COMISSION
                     worksheetByProduct.Cells[row, 1].Value = "Total sans comission";
                     worksheetByProduct.Cells[row, 2].Formula = string.Format("SUBTOTAL(9,{0})", new ExcelAddress(productStartRow, 2, row - 1, 2).Address);
-                    worksheetByProduct.Cells[row, 3].Formula = new ExcelCellAddress(row, 2).Address + "*" + new ExcelCellAddress(unitPriceRow, 3).Address;
-                    worksheetByProduct.Cells[row, 3].Style.Numberformat.Format = "0.00€";
-                    worksheetByProduct.Cells[row, 1, row, 3].Style.Font.Size = 9;
-                    worksheetByProduct.Cells[row, 1, row, 3].Style.Font.Italic = true;
-                    worksheetByProduct.Cells[row, 1, row, 3].Style.Border.BorderAround(ExcelBorderStyle.Thin);
-                    worksheetByProduct.Cells[row, 1, row, 3].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
+                    worksheetByProduct.Cells[row, 3].Formula = string.Format("SUBTOTAL(9,{0})", new ExcelAddress(productStartRow, 2, row - 1, 2).Address);
+                    worksheetByProduct.Cells[row, 4].Formula = new ExcelCellAddress(row, 2).Address + "*" + new ExcelCellAddress(unitPriceRow, 4).Address;
+                    worksheetByProduct.Cells[row, 4].Style.Numberformat.Format = "0.00€";
+                    worksheetByProduct.Cells[row, 1, row, 4].Style.Font.Size = 9;
+                    worksheetByProduct.Cells[row, 1, row, 4].Style.Font.Italic = true;
+                    worksheetByProduct.Cells[row, 1, row, 4].Style.Border.BorderAround(ExcelBorderStyle.Thin);
+                    worksheetByProduct.Cells[row, 1, row, 4].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
                     row++;
                     //COMISSION
                     worksheetByProduct.Cells[row, 1].Value = "Comission";
                     worksheetByProduct.Cells[row, 2].Value = Configurations.ApplicationConfig.Comission + "%";
-                    worksheetByProduct.Cells[row, 3].Formula = new ExcelCellAddress(row, 2).Address + "*" + new ExcelCellAddress(row-1, 3).Address;
-                    worksheetByProduct.Cells[row, 3].Style.Numberformat.Format = "0.00€";
-                    worksheetByProduct.Cells[row, 1, row, 3].Style.Font.Size = 9;
-                    worksheetByProduct.Cells[row, 1, row, 3].Style.Font.Italic = true;
-                    worksheetByProduct.Cells[row, 1, row, 3].Style.Border.BorderAround(ExcelBorderStyle.Thin);
-                    worksheetByProduct.Cells[row, 1, row, 3].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
+                    worksheetByProduct.Cells[row, 3].Value = Configurations.ApplicationConfig.Comission + "%";
+                    worksheetByProduct.Cells[row, 4].Formula = new ExcelCellAddress(row, 2).Address + "*" + new ExcelCellAddress(row - 1, 4).Address;
+                    worksheetByProduct.Cells[row, 4].Style.Numberformat.Format = "0.00€";
+                    worksheetByProduct.Cells[row, 1, row, 4].Style.Font.Size = 9;
+                    worksheetByProduct.Cells[row, 1, row, 4].Style.Font.Italic = true;
+                    worksheetByProduct.Cells[row, 1, row, 4].Style.Border.BorderAround(ExcelBorderStyle.Thin);
+                    worksheetByProduct.Cells[row, 1, row, 4].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
                     row++;
                     //TOTAL AVEC COMISSION
                     worksheetByProduct.Cells[row, 1].Value = "TOTAL";
                     worksheetByProduct.Cells[row, 1].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
                     worksheetByProduct.Cells[row, 2].Formula = new ExcelCellAddress(row -2, 2).Address;
                     worksheetByProduct.Cells[row, 2].Style.Border.BorderAround(ExcelBorderStyle.Thin);
-                    worksheetByProduct.Cells[row, 3].Formula = new ExcelCellAddress(row - 2, 3).Address + "-" + new ExcelCellAddress(row - 1, 3).Address;
-                    worksheetByProduct.Cells[row, 3].Style.Numberformat.Format = "0.00€";
-                    worksheetByProduct.Cells[row, 1, row, 3].Style.Font.Bold = true;
-                    worksheetByProduct.Cells[row, 1, row, 3].Style.Border.BorderAround(ExcelBorderStyle.Thin);
-                    worksheetByProduct.Cells[row, 4].Value = "☐";
-                    worksheetByProduct.Cells[row, 1, row, 4].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
-                    worksheetByProduct.Cells[row, 1, row, 4].Style.Font.Size = 14;
+                    int totalQuantity = 0;
+                    prod.Value.ForEach(billEntry => totalQuantity += billEntry.BillEntry.Quantity);
+                    worksheetByProduct.Cells[row, 3].Value = prod.Key.GetQuantityString(totalQuantity);
+                    worksheetByProduct.Cells[row, 4].Formula = new ExcelCellAddress(row - 2, 4).Address + "-" + new ExcelCellAddress(row - 1, 4).Address;
+                    worksheetByProduct.Cells[row, 4].Style.Numberformat.Format = "0.00€";
+                    worksheetByProduct.Cells[row, 1, row, 4].Style.Font.Bold = true;
+                    worksheetByProduct.Cells[row, 1, row, 4].Style.Border.BorderAround(ExcelBorderStyle.Thin);
+                    worksheetByProduct.Cells[row, 5].Value = "☐";
+                    worksheetByProduct.Cells[row, 1, row, 5].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                    worksheetByProduct.Cells[row, 1, row, 5].Style.Font.Size = 14;
                     //
                     //Next product
                     row++;
@@ -453,40 +458,41 @@ namespace Stolons.Tools
                 string totalComission = "";
                 for (int cpt = 0; cpt<rowsTotal.Count;cpt++)
                 {
-                    totalWhitoutComissionFormula += new ExcelCellAddress(rowsTotal[cpt], 3).Address;
-                    totalComission += new ExcelCellAddress(rowsTotal[cpt] +1, 3).Address;
+                    totalWhitoutComissionFormula += new ExcelCellAddress(rowsTotal[cpt], 4).Address;
+                    totalComission += new ExcelCellAddress(rowsTotal[cpt] +1, 4).Address;
                     if (cpt != rowsTotal.Count -1)
                     {
                         totalWhitoutComissionFormula += "+";
                         totalComission += "+";
                     }
                 }
-                worksheetByProduct.Cells[row, 2].Value = "Total sans comission";
-                worksheetByProduct.Cells[row, 2].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
-                worksheetByProduct.Cells[row, 3].Formula = totalWhitoutComissionFormula;
-                worksheetByProduct.Cells[row, 3].Style.Numberformat.Format = "0.00€";
-                worksheetByProduct.Cells[row, 2, row, 3].Style.Font.Italic = true;
-                worksheetByProduct.Cells[row, 2, row, 3].Style.Font.Size = 9;
+                worksheetByProduct.Cells[row, 3].Value = "Total sans comission";
+                worksheetByProduct.Cells[row, 3].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
+                worksheetByProduct.Cells[row, 4].Formula = totalWhitoutComissionFormula;
+                worksheetByProduct.Cells[row, 4].Style.Numberformat.Format = "0.00€";
+                worksheetByProduct.Cells[row, 3, row, 4].Style.Font.Italic = true;
+                worksheetByProduct.Cells[row, 3, row, 4].Style.Font.Size = 9;
                 row++;
-                worksheetByProduct.Cells[row, 2].Value = "Total comission à " + Configurations.ApplicationConfig.Comission + "%";
-                worksheetByProduct.Cells[row, 2].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
-                worksheetByProduct.Cells[row, 3].Formula = totalComission;
-                worksheetByProduct.Cells[row, 3].Style.Numberformat.Format = "0.00€";
-                worksheetByProduct.Cells[row, 2, row, 3].Style.Font.Italic = true;
-                worksheetByProduct.Cells[row, 2, row, 3].Style.Font.Size = 9;
+                worksheetByProduct.Cells[row, 3].Value = "Total comission à " + Configurations.ApplicationConfig.Comission + "%";
+                worksheetByProduct.Cells[row, 3].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
+                worksheetByProduct.Cells[row, 4].Formula = totalComission;
+                worksheetByProduct.Cells[row, 4].Style.Numberformat.Format = "0.00€";
+                worksheetByProduct.Cells[row, 3, row, 4].Style.Font.Italic = true;
+                worksheetByProduct.Cells[row, 3, row, 4].Style.Font.Size = 9;
                 row++;
-                worksheetByProduct.Cells[row, 2].Value = "TOTAL :";
-                worksheetByProduct.Cells[row, 2].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
-                worksheetByProduct.Cells[row, 3].Formula = new ExcelCellAddress(row - 2, 3).Address + "-" + new ExcelCellAddress(row - 1, 3).Address;
-                worksheetByProduct.Cells[row, 3].Style.Numberformat.Format = "0.00€";
-                worksheetByProduct.Cells[row, 2, row, 3].Style.Font.Bold = true;
-                worksheetByProduct.Cells[row, 2, row ,3].Style.Font.Size = 18;
+                worksheetByProduct.Cells[row, 3].Value = "TOTAL :";
+                worksheetByProduct.Cells[row, 3].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
+                worksheetByProduct.Cells[row, 4].Formula = new ExcelCellAddress(row - 2, 4).Address + "-" + new ExcelCellAddress(row - 1, 4).Address;
+                worksheetByProduct.Cells[row, 4].Style.Numberformat.Format = "0.00€";
+                worksheetByProduct.Cells[row, 3, row, 4].Style.Font.Bold = true;
+                worksheetByProduct.Cells[row, 3, row ,4].Style.Font.Size = 18;
                 //
                 worksheetByProduct.View.PageLayoutView = true;
                 worksheetByProduct.Column(1).Width = (290 - 12 + 5) / 7d + 1;
-                worksheetByProduct.Column(2).Width = (130 - 12 + 5) / 7d + 1;
+                worksheetByProduct.Column(2).Width = 0;
                 worksheetByProduct.Column(3).Width = (130 - 12 + 5) / 7d + 1;
-                worksheetByProduct.Column(4).Width = (40 - 12 + 5) / 7d + 1;
+                worksheetByProduct.Column(4).Width = (130 - 12 + 5) / 7d + 1;
+                worksheetByProduct.Column(5).Width = (40 - 12 + 5) / 7d + 1;
                 #endregion Facture par produit
 
                 #region Facture par client
