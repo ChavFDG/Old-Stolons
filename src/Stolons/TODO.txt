@@ -8,14 +8,13 @@ Priorité 0 pour 1er Octobre :
 
 Priorité 1 : retour producteur
 DAMIEN
-- Mutualisé la l'ajout / édition des adhérents ( comme pour les producteurs )
 - Pouvoir reseter les mot de passe des adhérents => envoie d'un mail à l'adhérent
-- Corriger les fautes d'orthographe ! Et modifier les termes trops informatiques
 - Réduire automatiquement la taille des images importés
 - Voir pour envoyer les fichier en PDF !!! Voir XLS déjà
 - Quand on envoie un mail si ça plante faire sorte que tout ne plante pas ! Si c'est bien ça le bug
 
 NICO
+- Mutualisé la l'ajout / édition des adhérents ( comme pour les producteurs )
 - On peut ajouter un produit sans Type, sans catégorie, c'est mal
 - Ajouter la chat box
 
@@ -56,6 +55,7 @@ FAIT :
 - Correction d'un bug quand pas d'image dans le manage product
 - Correction du bug qui met les produits indisponibles lors du passage en commande
 - Ajout dans les factures producteurs par produits du Quantity string
+- Corriger les fautes d'orthographe ! Et modifier les termes trops informatiques
 
 
 - Corriger le bug du stock quand au poids
