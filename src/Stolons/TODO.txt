@@ -1,5 +1,11 @@
 ﻿A faire :
 
+APRES CORE :
+
+Priorité 0 pour 1er Octobre :
+- Gestion des adhérent sympatisant
+- Gestion des cotisations
+
 Priorité 1 : retour producteur
 DAMIEN
 - Pouvoir reseter les mot de passe des adhérents => envoie d'un mail à l'adhérent
@@ -10,6 +16,7 @@ DAMIEN
 
 NICO
 - On peut ajouter un produit sans Type, sans catégorie, c'est mal
+- Ajouter la chat box
 
 NOUS
 - Passer en Release 1.0.0.0
@@ -61,7 +68,9 @@ FAIT :
 
 
  => BUG
- EN commande, on ne peut pas modifier les stocks de la semaine
+ En STOCK que changer stock de la semaine => Ok
+ EN COMMANDE , que changer stock courent => à faire
  On peut mettre un stock restant en négatif
  Vérifier si dans Pièces, le S par sinon le mettre entre paraentehtehre
  Virer "éngagé dans le bio"
+

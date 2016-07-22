@@ -41,15 +41,15 @@ namespace Stolons.Controllers
             return View(products);
         }
 
-	[Authorize(Roles = Configurations.UserType_Producer)]
-	[HttpGet, ActionName("ProducerProducts"), Route("api/producerProducts")]
-	public string JsonProducerProducts() {
-	    var appUser = GetCurrentUserSync();
-	    var products = _context.Products.Include(m => m.Familly).Include(m=>m.Familly.Type).Where(x => x.Producer.Email == appUser.Email).ToList();
-	    return JsonConvert.SerializeObject(products, Formatting.Indented, new JsonSerializerSettings() {
-		    ReferenceLoopHandling = ReferenceLoopHandling.Ignore
-			});
-	}
+	    [Authorize(Roles = Configurations.UserType_Producer)]
+	    [HttpGet, ActionName("ProducerProducts"), Route("api/producerProducts")]
+	    public string JsonProducerProducts() {
+	        var appUser = GetCurrentUserSync();
+	        var products = _context.Products.Include(m => m.Familly).Include(m=>m.Familly.Type).Where(x => x.Producer.Email == appUser.Email).ToList();
+	        return JsonConvert.SerializeObject(products, Formatting.Indented, new JsonSerializerSettings() {
+		        ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+			    });
+	    }
 
         // GET: ProductsManagement/Details/5
         [Authorize(Roles = Configurations.UserType_Producer)]
