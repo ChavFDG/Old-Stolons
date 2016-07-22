@@ -385,7 +385,7 @@ namespace Stolons.Tools
                     worksheetByProduct.Cells[row - 1, 1, row, 1].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
                     worksheetByProduct.Cells[row - 1, 1, row, 1].Style.Border.BorderAround(ExcelBorderStyle.Thin);
 
-                    worksheetByProduct.Cells[row, 2].Value = "Rien";
+                    worksheetByProduct.Cells[row, 2].Value = "Gestion";
                     worksheetByProduct.Cells[row, 3].Value = "Quantité";
                     worksheetByProduct.Cells[row, 4].Value = "Prix total";
                     worksheetByProduct.Cells[row, 2, row, 4].Style.Font.Bold = true;
@@ -400,7 +400,7 @@ namespace Stolons.Tools
                         worksheetByProduct.Cells[row, 2].Value = billEntryConsumer.BillEntry.Quantity;
                         worksheetByProduct.Cells[row, 3].Value = billEntryConsumer.BillEntry.QuantityString;
                         worksheetByProduct.Cells[row, 3].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
-                        worksheetByProduct.Cells[row, 4].Formula = new ExcelCellAddress(row, 2).Address + "*" + new ExcelCellAddress(unitPriceRow, 3).Address;
+                        worksheetByProduct.Cells[row, 4].Formula = new ExcelCellAddress(row, 2).Address + "*" + new ExcelCellAddress(unitPriceRow, 4).Address;
                         worksheetByProduct.Cells[row, 4].Style.Numberformat.Format = "0.00€";
                         worksheetByProduct.Cells[row, 5].Value = "☐";
                         worksheetByProduct.Cells[row, 5].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
